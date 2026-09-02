@@ -1,0 +1,257 @@
+Name,ID
+,0
+Scatter Blaster,1
+Pistol,2
+Gauss Rifle,3
+Shotgun,4
+Gauss Autorifle,5
+Gauss Long Rifle,6
+Recoilless Rifle,7
+Laser Pistol,8
+Pulse Rifle,9
+Scatter Laser,10
+Pulse Autoblaster,11
+Pulse Sniper Rifle,12
+Plasma Pistol,13
+Plasma Carbine,14
+Plasma Rifle,15
+Alloy Cannon,16
+Plasma Novagun,17
+Plasma Sniper Rifle,18
+Blaster Launcher,19
+Alien Cannon,20
+Alien Pistol,21
+Kinetic Strike Module,22
+Flamethrower,23
+Grenade Launcher,24
+Restorative Mist,25
+Electro Pulse,26
+Proximity Mine Launcher,27
+Minigun,28
+Laser Lance,29
+Particle Cannon,30
+Alloy Jacketed Rounds,31
+Assault Carbine,32
+Alien Turret,33
+Marksman's Scope,34
+Chryssalid Claw,35
+Drone Beam,36
+Psi Amp,37
+Grapple,38
+Alien Cannon,39
+Enhanced Beam Optics,40
+Alien Pistol,41
+Alien Carbine,42
+Alien Carbine,43
+Alien Carbine,44
+Alien Rifle,45
+Alien Rifle,46
+Alien Heavy Weapon,47
+Plasma Stellerator,48
+Zombie Fist,49
+Psi Locus,50
+Muton Blade,51
+Alien Carbine,52
+Gauss Carbine,53
+Acid Spit,54
+Sectopod Cluster Bomb,55
+Seeker Tentacles,56
+Tac Vest,57
+Banshee Armor,58
+Tac Armor,59
+Carapace Armor,60
+Corsair Armor,61
+Titan Armor,62
+Archangel Armor,63
+Shadow Armor,64
+Vortex Armor,65
+Leather Jacket,66
+Seraph Armor,67
+Aurora Armor,68
+Medikit,69
+Combat Stims,70
+Mind Shield,71
+Chitin Plating,72
+Arc Thrower,73
+SCOPE,74
+Alloy Plating,75
+Respirator Implant,76
+Rocket,77
+Reaper Pack,78
+Laser Sight,79
+Hi Cap Mags,80
+HE Grenade,81
+Smoke Grenade,82
+Flashbang Grenade,83
+Alien Grenade,84
+Shadow Device,85
+Chem Grenade,86
+AP Grenade,87
+Mimic Beacon,88
+Shredder Rocket,89
+Battle Computer,90
+Alien Grenade,91
+Alien Grenade,92
+Alien Grenade,93
+Chameleon Suit,94
+Ceramic Plating,95
+Psi Grenade,96
+Battle Scanner,97
+Alien Trophy,98
+Reflex Cannon,99
+SHIV,100
+Alloy SHIV,101
+Hover SHIV,102
+Interceptor,103
+Firestorm,104
+Skyranger,105
+Satellite,106
+HEAT Ammo,107
+Holo-Targeter,108
+Autocannon,109
+Sentry Gun,110
+Superheavy Pulser,111
+Superheavy Plasma,112
+SHIV Chassis,113
+Alloy SHIV Chassis,114
+Hover SHIV Chassis,115
+Stingray Missiles,116
+Phoenix Cannon,117
+Avalanche Missiles,118
+Laser Cannon,119
+Plasma Cannon,120
+EMP Cannon,121
+Fusion Lance,122
+Drum Mags,123
+Smartshell Pod,124
+Defense Matrix (Dodge),125
+UFO Tracking (Boost),126
+Uplink Targeting (Aim),127
+Weapon Supercooler,128
+The Thumper,129
+AutoSentry Turret,130
+Adaptive Tracking Pod,131
+Core Armoring,132
+Damage Control Pod,133
+Sectoid Corpse,134
+Sectoid Commander Corpse,135
+Floater Corpse,136
+Heavy Floater Corpse,137
+Thin Man Corpse,138
+Muton Corpse,139
+Muton Elite Corpse,140
+Berserker Corpse,141
+Cyberdisc Wreck,142
+Ethereal Corpse,143
+Chryssalid Carcass,144
+MEC-3 Valiant,145
+Sectopod Wreck,146
+Drone Wreck,147
+MEC-5 Devastator,148
+Superheavy Laser,149
+Sectoid Captive,150
+Sectoid Commander Captive,151
+Floater Captive,152
+Heavy Floater Captive,153
+Thin Man Captive,154
+Muton Captive,155
+Muton Elite Captive,156
+Berserker Captive,157
+Ethereal Captive,158
+Phalanx Armor,159
+Aegis Armor,160
+Elerium,161
+Alien Alloys,162
+Weapon Fragment,163
+Meld,164
+Alien Entertainment,165
+Alien Food,166
+Alien Stasis Tank,167
+UFO Flight Computer,168
+Alien Surgery,169
+UFO Power Source,170
+Hyperwave Beacon,171
+Alien Entertainment (Damaged),172
+Alien Food (Damaged),173
+Alien Stasis Tank (Damaged),174
+UFO Flight Computer (Damaged),175
+Alien Surgery (Damaged),176
+UFO Power Source (Damaged),177
+Fuel Cell,178
+Fusion Core,179
+Ethereal Device,180
+EXALT Intelligence,181
+Kestrel Armor,182
+Outsider Shard,183
+Skeleton Key,184
+Alien Cannon,185
+Railgun,186
+Mechtoid Core,187
+Seeker Wreck,188
+Alloy Carbide Plating,189
+Pulse Lance,190
+MEC-6 Vanguard,191
+Base Augments,192
+MEC-1 Paladin,193
+MEC-2 Defender,194
+MEC-4 Dauntless,195
+Alloy Bipod,196
+Breaching Ammo,197
+Armor Piercing Ammo,198
+Advanced Suppression Module,199
+Impact Vest,200
+Tactical Sensors,201
+Walker Servos,202
+Neural Gunlink,203
+Shredder Ammo,204
+Psi Screen,205
+Rebuild SHIV,206
+Rebuild Alloy SHIV,207
+Rebuild Hover SHIV,208
+Illuminator Gunsight,209
+MEC-7 Vindicator,210
+Incinerator Module,211
+Assault Rifle,212
+Sniper Rifle,213
+SAW,214
+Laser Rifle,215
+Laser Sniper Rifle,216
+Autolaser,217
+Rocket Launcher,218
+Targeting Module,219
+Reinforced Armor,220
+Elerium Turbos,221
+Motion Tracker,222
+Cognitive Enhancer,223
+Neuroregulator,224
+Flak Ammo,225
+Marksman's Rifle,226
+Laser Strike Rifle,227
+Alloy Strike Rifle,228
+Blaster Rifle,229
+Reflex Rifle,230
+SMG,231
+Laser Shatterray,232
+Gauss Stuttergun,233
+Pulse Stengun,234
+Plasma Stormgun,235
+Machine Pistol,236
+Heater,237
+Gauss Autopistol,238
+Blaster,239
+Plasma Mauler,240
+Battle Rifle,241
+Heavy Laser Rifle,242
+Heavy Gauss Rifle,243
+Heavy Pulse Rifle,244
+Heavy Plasma Rifle,245
+LMG,246
+Gatling Laser,247
+Gauss Machine Gun,248
+Gatling Pulser,249
+Plasma Dragon,250
+Laser Carbine,251
+Pulse Carbine,252
+Arc Rifle,253
+Sawed-off Shotgun,254
+,255
