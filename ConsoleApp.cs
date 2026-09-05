@@ -4,10 +4,11 @@ using System.IO.Hashing;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Rosterizer
 {
-  public static class Program
+  public static class ConsoleApp
   {
     public static AppProperties _AppProperties;
     public static AppConfig _AppConfig;
@@ -19,7 +20,8 @@ namespace Rosterizer
     public static JsonRoot SaveParsed;
     public static DataTable PerkList;
     public static List<string> PerkNames;
-    public static Form1 Form1;
+    public static List<ListedPerk> SelectedSoldierPerks;
+    public static Rosterizer Form1;
 
     /// <summary>
     ///  The main entry point for the application.
@@ -87,7 +89,7 @@ namespace Rosterizer
       /////{
       //saveForAnalysis = new(savePath);
       SaveFile = new("..\\..\\..\\saveBackup\\save43");
-      BackupFile(SaveFile);
+      //BackupFile(SaveFile);
       /////}
       /////else ShowError("dir/file not found:", savePath);
 
@@ -114,20 +116,24 @@ namespace Rosterizer
 
       for (int i = 0; i < PerkList.Rows.Count; i++)
       {
-        string perkName = PerkList.Rows[i]["Name"].ToString() ?? "";
-        if (!string.IsNullOrWhiteSpace(perkName)) PerkNames.Add(perkName);
+        if (PerkList.Rows[i]["Enabled"].ToString() == "1")
+        {
+          string perkName = PerkList.Rows[i]["Name"].ToString() ?? "";
+          if (!string.IsNullOrWhiteSpace(perkName)) PerkNames.Add(perkName);
+        }
       }
 
       SaveParsed = JsonConvert.DeserializeObject<JsonRoot>(File.ReadAllText(jsonFilenameFull));
-      Roster = FillRoster(SaveParsed);
+      Roster = [.. FillRoster(SaveParsed).OrderByDescending(x => x.Xp)];
+      SelectedSoldierPerks = [];
 
       // output the results
-      OutputTSV(fullOutputPath, Roster);
+      //OutputTSV(fullOutputPath, Roster);
 
-      Console.WriteLine();
-      Console.WriteLine($"Output saved to: ");
-      Console.WriteLine(fullOutputPath);
-      Console.WriteLine("Press any key to exit...");
+      //Console.WriteLine();
+      //Console.WriteLine($"Output saved to: ");
+      //Console.WriteLine(fullOutputPath);
+      //Console.WriteLine("Press any key to exit...");
       //Console.ReadKey();
       //Environment.Exit(0);
 
@@ -137,6 +143,7 @@ namespace Rosterizer
         if (!Directory.Exists(todayBackupDir)) Directory.CreateDirectory(todayBackupDir);
         saveFile.CopyTo(Path.Combine(todayBackupDir, $"{execTime}.{saveFile.Name}"), overwrite: true);
       }
+
       void OutputTSV(string outPath, List<Soldier> roster)
       {
         string perkNames = "";
@@ -155,7 +162,7 @@ namespace Rosterizer
           ,"DEF"
           ,"WILL"
           ,"AIM"
-          ,perkNames[1..]
+          ,perkNames[0..]
         ]));
 
         // build soldier lines - iterate through roster
@@ -256,8 +263,11 @@ namespace Rosterizer
         return dt;
       }
 
+
       static List<Soldier> FillRoster(JsonRoot saveJson)
       {
+        List<Tuple<string, string, int, object?>> prope = [];
+        string propes = "";
         List<Soldier> roster = [];
         //----------------------------------------------------------------------------- mapping
         // in parsed json, step through the parts which relate to soldiers
@@ -269,6 +279,8 @@ namespace Rosterizer
             // properties both contain values (name, etc) and lists of more properties
             Property soldierProp = entity.Properties.Where(x => x.Name == "m_kSoldier").First();
             Property charProp = entity.Properties.Where(x => x.Name == "m_kChar").First();
+            Property classProp = ((soldierProp ?? new()).Properties ?? []).Where(x => x.Name == "kClass").First();
+            Property fatigueProp = entity.Properties.Where(x => x.Name == "m_iTurnsOut").First();
 
             if (soldierProp.Properties is not null)
             {
@@ -284,9 +296,20 @@ namespace Rosterizer
                 FName = StringProp(soldierProp, "strFirstName"),
                 Rank = LongProp(soldierProp, "iRank").GetValueOrDefault(),
                 Xp = LongProp(soldierProp, "iXP").GetValueOrDefault(),
+                Class = ((JObject)(classProp.Properties.First(x => x.Name == "strName").Value)).First.First.ToString().Trim("{}".ToCharArray()),
                 // status is in the parent entity
-                Status = ((entity.Properties.First(x => x.Name == "m_eStatus").Value ?? "").ToString() ?? "").TrimStart("eStatus_".ToCharArray())
+                Status = ((entity.Properties.First(x => x.Name == "m_eStatus").Value ?? "").ToString() ?? "").TrimStart("eStatus_".ToCharArray()),
+                IsDead = false,
+                IsBlueshirt = false,
+                FatigueHrs = ((long)fatigueProp.Value),
+                IsShiv = false,
+                IsWounded = false,
               };
+              prope.Add(new(thisSoldier.NName, thisSoldier.Status, (int)thisSoldier.FatigueHrs, charProp.Properties.First(x => x.Name == "aProperties").Int_values));
+              thisSoldier.IsDead = thisSoldier.Status.ToLower() == "dead";
+              thisSoldier.IsShiv = thisSoldier.Rank == -1;
+              thisSoldier.IsWounded = thisSoldier.Status.ToLower() == "healing";
+              thisSoldier.IsBlueshirt = !thisSoldier.IsShiv && thisSoldier.Rank <= 2;
 
               // get the perks taken
               // these are stored as an array of integers in aUpgrades, 176 of them (one per perk)
@@ -303,7 +326,7 @@ namespace Rosterizer
                     // step through the perk reference sheet until we find the perk which matches this index in the aUpgrades array
                     foreach (DataRow row in PerkList.Rows)
                     {
-                      if (Int32.Parse(row["ID"].ToString() ?? "") == i)
+                      if (row["Enabled"].ToString() == "1" && Int32.Parse(row["ID"].ToString() ?? "") == i)
                       {
                         thisSoldier.Perks.Add(new()
                         {
@@ -354,10 +377,15 @@ namespace Rosterizer
           }
         }
 
+        foreach (Tuple<string, string, int, object?> item in prope)
+        {
+          propes += $"{item.Item1}\t{item.Item2}\t{item.Item3}\t{string.Join("\t", (List<int>)item.Item4)}\r\n";
+        }
+        Console.WriteLine(propes);
         return roster;
       }
 
-      Application.Run(new Form1());
+      Application.Run(new Rosterizer());
     }
   }
 }

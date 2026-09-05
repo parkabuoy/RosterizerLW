@@ -5,12 +5,18 @@
       public required string FName { get; set; }
       public required string NName { get; set; }
       public required string LName { get; set; }
+      public required string Class { get; set; }
       public required long Id { get; set; }
       public required long Rank { get; set; }
       public required long Xp { get; set; }
       public required string Status { get; set; }
       public required List<Perk> Perks { get; set; }
       public required SoldierStats Stats { get; set; }
+      public required bool IsShiv { get; set; }
+      public required bool IsWounded { get; set; }
+      public required long FatigueHrs {get; set; }
+      public required bool IsBlueshirt { get; set; }
+      public required bool IsDead { get; set; }
     }
 
     public class SoldierStats
@@ -122,5 +128,12 @@
       public List<long>? Elements { get; set; }
       public required object Value { get; set; }
       public required List<List<XStruct>> Structs { get; set; }
+    }
+
+    public class ListedPerk
+    {
+      public required string Name { get; set; }
+      public required string Perk { get; set; }
+      public required int Count { get; set; }
     }
 }

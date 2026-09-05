@@ -33,7 +33,7 @@ namespace Rosterizer
     {
       try
       {
-        string innerXml = (Program._AppProperties.xmlConfig.GetElementsByTagName(tagName)[0]).InnerXml;
+        string innerXml = (ConsoleApp._AppProperties.xmlConfig.GetElementsByTagName(tagName)[0]).InnerXml;
 
         if (type == typeof(bool)) { return Convert.ToBoolean(innerXml); }
         else if (type == typeof(double)) { return Convert.ToDouble(innerXml); }
@@ -42,7 +42,7 @@ namespace Rosterizer
       }
       catch (Exception ex)
       {
-        Program._AppProperties.Logger.WriteException(Program._AppProperties, ex, Program._AppProperties.ShortTimeStamp(), $"Error loading {type.Name} \'{tagName}\' from config XML. Application could not run",
+        ConsoleApp._AppProperties.Logger.WriteException(ConsoleApp._AppProperties, ex, ConsoleApp._AppProperties.ShortTimeStamp(), $"Error loading {type.Name} \'{tagName}\' from config XML. Application could not run",
             true, typeof(AppConfig).Name, new StackTrace().GetFrame(0).GetMethod().Name);
         throw;
       }
