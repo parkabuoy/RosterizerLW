@@ -21,7 +21,6 @@ namespace Rosterizer
     public static DataTable PerkList;
     public static List<string> PerkNames;
     public static List<ListedPerk> SelectedSoldierPerks;
-    public static Rosterizer Form1;
 
     /// <summary>
     ///  The main entry point for the application.
@@ -61,9 +60,9 @@ namespace Rosterizer
 
       if (!x2jFile.Exists || hash != x2jHash) ShowError("invalid xcom2json exe!", x2jFile.FullName);
 
-      Console.WriteLine("Save directory:");
-      Console.WriteLine(savePath);
-      Console.Write("Use this dir? y/n: ");
+      //Console.WriteLine("Save directory:");
+      //Console.WriteLine(savePath);
+      //Console.Write("Use this dir? y/n: ");
 
       // if not 'y', asks for a file/directory
       //if (Console.ReadKey().KeyChar != 'y')
@@ -235,7 +234,7 @@ namespace Rosterizer
           //Console.ReadKey();
         }
 
-        //Environment.Exit(0);
+        Environment.Exit(0);
       }
 
       // converts a csv to a data table :)

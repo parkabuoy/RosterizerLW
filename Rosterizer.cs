@@ -82,17 +82,20 @@ namespace Rosterizer
           }
         }
 
-        if (filterPass.Length > 0 && filterPass.Any(x => x == false)) continue;
+        if (filterPass.Any(x => x == false)) continue;
+        
+        // this is dumb, redo this
         if (perkFilter.Any(x => !string.IsNullOrWhiteSpace(x)))
         {
           filterPass = new bool?[perkFilter.Length];
 
           for (int i = 0; i < 3; i++)
           {
+            if (string.IsNullOrWhiteSpace(perkFilter[i])) continue;
+
             if (i == 0 && perkComboBox1.SelectedIndex == -1) filterPass[i] = true;
             else if (i == 1 && perkComboBox2.SelectedIndex == -1) filterPass[i] = true;
             else if (i == 2 && perkComboBox3.SelectedIndex == -1) filterPass[i] = true;
-            
             
             bool perkFilterPass = false;
             foreach (string? sPerkName in s.Perks.Select(x => x.Name).Where(x => !string.IsNullOrWhiteSpace(x)))
@@ -107,11 +110,10 @@ namespace Rosterizer
           }
         }
 
-        if (filterPass.Any(x => x == true))
-        {
-          filteredSoldiersCount++;
-          filteredSoldiers.Add(s);
-        }
+        if (filterPass.Any(x => x == false)) continue;
+
+        filteredSoldiersCount++;
+        filteredSoldiers.Add(s);
       }
 
       int filteredSoldierIndex = 0;
@@ -306,6 +308,15 @@ namespace Rosterizer
         }
       }
     }
+
+    private void perkComboBox1_DrawItem(object sender, DrawItemEventArgs e)
+    {
+      using (Pen p = new(SystemColors.ControlDark, 1))
+      {
+        e.Graphics.DrawRectangle(p, e.Bounds);
+      }
+    }
+
     private void rosterGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
     {
 

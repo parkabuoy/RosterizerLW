@@ -83,7 +83,7 @@
       tableLayoutPanel1.Name = "tableLayoutPanel1";
       tableLayoutPanel1.RowCount = 1;
       tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-      tableLayoutPanel1.Size = new Size(1264, 636);
+      tableLayoutPanel1.Size = new Size(1264, 681);
       tableLayoutPanel1.TabIndex = 2;
       // 
       // rosterGridView
@@ -118,7 +118,8 @@
       dataGridViewCellStyle13.WrapMode = DataGridViewTriState.False;
       rosterGridView.DefaultCellStyle = dataGridViewCellStyle13;
       rosterGridView.Dock = DockStyle.Fill;
-      rosterGridView.GridColor = SystemColors.ControlLight;
+      rosterGridView.EnableHeadersVisualStyles = false;
+      rosterGridView.GridColor = SystemColors.GrayText;
       rosterGridView.ImeMode = ImeMode.NoControl;
       rosterGridView.Location = new Point(328, 0);
       rosterGridView.Margin = new Padding(0);
@@ -131,9 +132,8 @@
       rosterGridView.SelectionMode = DataGridViewSelectionMode.CellSelect;
       rosterGridView.ShowEditingIcon = false;
       rosterGridView.ShowRowErrors = false;
-      rosterGridView.Size = new Size(936, 636);
+      rosterGridView.Size = new Size(936, 681);
       rosterGridView.TabIndex = 5;
-      rosterGridView.EnableHeadersVisualStyles = false;
       rosterGridView.CellPainting += rosterGridView_CellPainting;
       // 
       // LName
@@ -146,7 +146,7 @@
       LName.Name = "LName";
       LName.ReadOnly = true;
       LName.Resizable = DataGridViewTriState.False;
-      LName.Width = 135;
+      LName.Width = 220;
       // 
       // NName
       // 
@@ -158,7 +158,7 @@
       NName.Name = "NName";
       NName.ReadOnly = true;
       NName.Resizable = DataGridViewTriState.False;
-      NName.Width = 135;
+      NName.Width = 220;
       // 
       // Status
       // 
@@ -175,11 +175,13 @@
       // 
       // SoldierClass
       // 
+      SoldierClass.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
       dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
       SoldierClass.DefaultCellStyle = dataGridViewCellStyle5;
       SoldierClass.HeaderText = "Class";
       SoldierClass.Name = "SoldierClass";
       SoldierClass.ReadOnly = true;
+      SoldierClass.Width = 80;
       // 
       // Def
       // 
@@ -187,11 +189,11 @@
       dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
       Def.DefaultCellStyle = dataGridViewCellStyle6;
       Def.HeaderText = "Def";
-      Def.MinimumWidth = 65;
+      Def.MinimumWidth = 40;
       Def.Name = "Def";
       Def.ReadOnly = true;
       Def.Resizable = DataGridViewTriState.False;
-      Def.Width = 65;
+      Def.Width = 40;
       // 
       // HP
       // 
@@ -199,11 +201,11 @@
       dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight;
       HP.DefaultCellStyle = dataGridViewCellStyle7;
       HP.HeaderText = "HP";
-      HP.MinimumWidth = 65;
+      HP.MinimumWidth = 40;
       HP.Name = "HP";
       HP.ReadOnly = true;
       HP.Resizable = DataGridViewTriState.False;
-      HP.Width = 65;
+      HP.Width = 40;
       // 
       // Mob
       // 
@@ -211,11 +213,11 @@
       dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight;
       Mob.DefaultCellStyle = dataGridViewCellStyle8;
       Mob.HeaderText = "Mob";
-      Mob.MinimumWidth = 65;
+      Mob.MinimumWidth = 40;
       Mob.Name = "Mob";
       Mob.ReadOnly = true;
       Mob.Resizable = DataGridViewTriState.False;
-      Mob.Width = 65;
+      Mob.Width = 40;
       // 
       // Will
       // 
@@ -223,11 +225,11 @@
       dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight;
       Will.DefaultCellStyle = dataGridViewCellStyle9;
       Will.HeaderText = "Will";
-      Will.MinimumWidth = 65;
+      Will.MinimumWidth = 40;
       Will.Name = "Will";
       Will.ReadOnly = true;
       Will.Resizable = DataGridViewTriState.False;
-      Will.Width = 65;
+      Will.Width = 40;
       // 
       // Aim
       // 
@@ -235,14 +237,15 @@
       dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight;
       Aim.DefaultCellStyle = dataGridViewCellStyle10;
       Aim.HeaderText = "Aim";
-      Aim.MinimumWidth = 65;
+      Aim.MinimumWidth = 40;
       Aim.Name = "Aim";
       Aim.ReadOnly = true;
       Aim.Resizable = DataGridViewTriState.False;
-      Aim.Width = 65;
+      Aim.Width = 40;
       // 
       // XP
       // 
+      XP.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
       dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight;
       XP.DefaultCellStyle = dataGridViewCellStyle11;
       XP.HeaderText = "EXP";
@@ -250,17 +253,17 @@
       XP.Name = "XP";
       XP.ReadOnly = true;
       XP.Resizable = DataGridViewTriState.False;
+      XP.Width = 75;
       // 
       // Rank
       // 
-      Rank.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      Rank.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
       dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleCenter;
       Rank.DefaultCellStyle = dataGridViewCellStyle12;
       Rank.HeaderText = "Rank";
       Rank.Name = "Rank";
       Rank.ReadOnly = true;
       Rank.Resizable = DataGridViewTriState.False;
-      Rank.Width = 81;
       // 
       // tableLayoutPanel3
       // 
@@ -268,13 +271,13 @@
       tableLayoutPanel3.ColumnCount = 2;
       tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
       tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-      tableLayoutPanel3.Controls.Add(shivCheckbox, 1, 11);
+      tableLayoutPanel3.Controls.Add(shivCheckbox, 1, 14);
       tableLayoutPanel3.Controls.Add(shownSoldierLabel, 1, 0);
       tableLayoutPanel3.Controls.Add(perkComboBox3, 0, 5);
       tableLayoutPanel3.Controls.Add(perkComboBox2, 0, 3);
-      tableLayoutPanel3.Controls.Add(blueCheckbox, 1, 10);
-      tableLayoutPanel3.Controls.Add(woundedCheckbox, 0, 10);
-      tableLayoutPanel3.Controls.Add(deadCheckbox, 0, 11);
+      tableLayoutPanel3.Controls.Add(blueCheckbox, 1, 13);
+      tableLayoutPanel3.Controls.Add(woundedCheckbox, 0, 13);
+      tableLayoutPanel3.Controls.Add(deadCheckbox, 0, 14);
       tableLayoutPanel3.Controls.Add(perkComboBox1, 0, 1);
       tableLayoutPanel3.Controls.Add(totalSoldierLabel, 0, 0);
       tableLayoutPanel3.Dock = DockStyle.Fill;
@@ -282,7 +285,7 @@
       tableLayoutPanel3.Location = new Point(0, 0);
       tableLayoutPanel3.Margin = new Padding(0);
       tableLayoutPanel3.Name = "tableLayoutPanel3";
-      tableLayoutPanel3.RowCount = 13;
+      tableLayoutPanel3.RowCount = 16;
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
@@ -296,7 +299,10 @@
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
-      tableLayoutPanel3.Size = new Size(328, 636);
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel3.Size = new Size(328, 681);
       tableLayoutPanel3.TabIndex = 4;
       // 
       // shivCheckbox
@@ -304,7 +310,7 @@
       shivCheckbox.AutoSize = true;
       shivCheckbox.Dock = DockStyle.Fill;
       shivCheckbox.FlatStyle = FlatStyle.Flat;
-      shivCheckbox.Location = new Point(164, 594);
+      shivCheckbox.Location = new Point(164, 653);
       shivCheckbox.Margin = new Padding(0);
       shivCheckbox.Name = "shivCheckbox";
       shivCheckbox.Padding = new Padding(10, 0, 0, 0);
@@ -339,7 +345,7 @@
       perkComboBox3.Depth = 0;
       perkComboBox3.Dock = DockStyle.Fill;
       perkComboBox3.DrawMode = DrawMode.OwnerDrawVariable;
-      perkComboBox3.DropDownHeight = 350;
+      perkComboBox3.DropDownHeight = 466;
       perkComboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
       perkComboBox3.DropDownWidth = 121;
       perkComboBox3.Font = new Font("Tahoma", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -349,7 +355,7 @@
       perkComboBox3.ItemHeight = 29;
       perkComboBox3.Location = new Point(4, 98);
       perkComboBox3.Margin = new Padding(4, 0, 4, 0);
-      perkComboBox3.MaxDropDownItems = 12;
+      perkComboBox3.MaxDropDownItems = 16;
       perkComboBox3.MouseState = MaterialSkin.MouseState.OUT;
       perkComboBox3.Name = "perkComboBox3";
       perkComboBox3.Size = new Size(320, 35);
@@ -368,7 +374,7 @@
       perkComboBox2.Depth = 0;
       perkComboBox2.Dock = DockStyle.Fill;
       perkComboBox2.DrawMode = DrawMode.OwnerDrawVariable;
-      perkComboBox2.DropDownHeight = 350;
+      perkComboBox2.DropDownHeight = 495;
       perkComboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
       perkComboBox2.DropDownWidth = 121;
       perkComboBox2.Font = new Font("Tahoma", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -378,7 +384,7 @@
       perkComboBox2.ItemHeight = 29;
       perkComboBox2.Location = new Point(4, 60);
       perkComboBox2.Margin = new Padding(4, 0, 4, 0);
-      perkComboBox2.MaxDropDownItems = 12;
+      perkComboBox2.MaxDropDownItems = 17;
       perkComboBox2.MouseState = MaterialSkin.MouseState.OUT;
       perkComboBox2.Name = "perkComboBox2";
       perkComboBox2.Size = new Size(320, 35);
@@ -394,11 +400,11 @@
       blueCheckbox.AutoSize = true;
       blueCheckbox.Dock = DockStyle.Fill;
       blueCheckbox.FlatStyle = FlatStyle.Flat;
-      blueCheckbox.Location = new Point(164, 575);
+      blueCheckbox.Location = new Point(164, 633);
       blueCheckbox.Margin = new Padding(0);
       blueCheckbox.Name = "blueCheckbox";
       blueCheckbox.Padding = new Padding(10, 0, 0, 0);
-      blueCheckbox.Size = new Size(164, 19);
+      blueCheckbox.Size = new Size(164, 20);
       blueCheckbox.TabIndex = 3;
       blueCheckbox.Text = "Blueshirt";
       blueCheckbox.UseVisualStyleBackColor = true;
@@ -411,11 +417,11 @@
       woundedCheckbox.CheckState = CheckState.Checked;
       woundedCheckbox.Dock = DockStyle.Fill;
       woundedCheckbox.FlatStyle = FlatStyle.Flat;
-      woundedCheckbox.Location = new Point(0, 575);
+      woundedCheckbox.Location = new Point(0, 633);
       woundedCheckbox.Margin = new Padding(0);
       woundedCheckbox.Name = "woundedCheckbox";
       woundedCheckbox.Padding = new Padding(10, 0, 0, 0);
-      woundedCheckbox.Size = new Size(164, 19);
+      woundedCheckbox.Size = new Size(164, 20);
       woundedCheckbox.TabIndex = 4;
       woundedCheckbox.Text = "Wounded";
       woundedCheckbox.UseVisualStyleBackColor = true;
@@ -426,7 +432,7 @@
       deadCheckbox.AutoSize = true;
       deadCheckbox.Dock = DockStyle.Fill;
       deadCheckbox.FlatStyle = FlatStyle.Flat;
-      deadCheckbox.Location = new Point(0, 594);
+      deadCheckbox.Location = new Point(0, 653);
       deadCheckbox.Margin = new Padding(0);
       deadCheckbox.Name = "deadCheckbox";
       deadCheckbox.Padding = new Padding(10, 0, 0, 0);
@@ -444,7 +450,7 @@
       perkComboBox1.Depth = 0;
       perkComboBox1.Dock = DockStyle.Fill;
       perkComboBox1.DrawMode = DrawMode.OwnerDrawVariable;
-      perkComboBox1.DropDownHeight = 350;
+      perkComboBox1.DropDownHeight = 524;
       perkComboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
       perkComboBox1.DropDownWidth = 121;
       perkComboBox1.FlatStyle = FlatStyle.Flat;
@@ -454,13 +460,14 @@
       perkComboBox1.ItemHeight = 29;
       perkComboBox1.Location = new Point(4, 22);
       perkComboBox1.Margin = new Padding(4, 0, 4, 0);
-      perkComboBox1.MaxDropDownItems = 12;
+      perkComboBox1.MaxDropDownItems = 18;
       perkComboBox1.MouseState = MaterialSkin.MouseState.OUT;
       perkComboBox1.Name = "perkComboBox1";
       perkComboBox1.Size = new Size(320, 35);
       perkComboBox1.StartIndex = 0;
       perkComboBox1.TabIndex = 6;
       perkComboBox1.UseTallSize = false;
+      perkComboBox1.DrawItem += perkComboBox1_DrawItem;
       perkComboBox1.SelectedIndexChanged += perkComboBox1_SelectedIndexChanged;
       perkComboBox1.KeyDown += perkComboBox1_KeyDown;
       // 
@@ -487,15 +494,15 @@
       AutoScaleMode = AutoScaleMode.Font;
       BackColor = SystemColors.ControlDarkDark;
       BackgroundImageLayout = ImageLayout.None;
-      ClientSize = new Size(1264, 636);
+      ClientSize = new Size(1264, 681);
       Controls.Add(tableLayoutPanel1);
       DoubleBuffered = true;
       Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
       FormBorderStyle = FormBorderStyle.FixedToolWindow;
       Margin = new Padding(0);
-      MaximumSize = new Size(1280, 675);
+      MaximumSize = new Size(1280, 720);
       MinimizeBox = false;
-      MinimumSize = new Size(1280, 675);
+      MinimumSize = new Size(1280, 720);
       Name = "Rosterizer";
       SizeGripStyle = SizeGripStyle.Hide;
       StartPosition = FormStartPosition.CenterScreen;
