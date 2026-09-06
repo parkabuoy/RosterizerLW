@@ -55,16 +55,16 @@
       XP = new DataGridViewTextBoxColumn();
       Rank = new DataGridViewTextBoxColumn();
       tableLayoutPanel3 = new TableLayoutPanel();
+      shownSoldierLabel = new Label();
+      totalSoldierLabel = new Label();
       fatiguedCheckbox = new CheckBox();
       shivCheckbox = new CheckBox();
-      shownSoldierLabel = new MaterialSkin.Controls.MaterialLabel();
       perkComboBox6 = new ComboBox();
       perkComboBox5 = new ComboBox();
       blueCheckbox = new CheckBox();
       woundedCheckbox = new CheckBox();
       deadCheckbox = new CheckBox();
       perkComboBox4 = new ComboBox();
-      totalSoldierLabel = new MaterialSkin.Controls.MaterialLabel();
       tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)rosterGridView).BeginInit();
       tableLayoutPanel3.SuspendLayout();
@@ -274,20 +274,20 @@
       // 
       // tableLayoutPanel3
       // 
-      tableLayoutPanel3.BackColor = SystemColors.ControlLight;
+      tableLayoutPanel3.BackColor = SystemColors.ButtonFace;
       tableLayoutPanel3.ColumnCount = 2;
       tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
       tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+      tableLayoutPanel3.Controls.Add(shownSoldierLabel, 1, 0);
+      tableLayoutPanel3.Controls.Add(totalSoldierLabel, 0, 0);
       tableLayoutPanel3.Controls.Add(fatiguedCheckbox, 0, 17);
       tableLayoutPanel3.Controls.Add(shivCheckbox, 1, 19);
-      tableLayoutPanel3.Controls.Add(shownSoldierLabel, 1, 0);
       tableLayoutPanel3.Controls.Add(perkComboBox6, 0, 5);
       tableLayoutPanel3.Controls.Add(perkComboBox5, 0, 3);
       tableLayoutPanel3.Controls.Add(blueCheckbox, 1, 18);
       tableLayoutPanel3.Controls.Add(woundedCheckbox, 0, 18);
       tableLayoutPanel3.Controls.Add(deadCheckbox, 0, 19);
       tableLayoutPanel3.Controls.Add(perkComboBox4, 0, 1);
-      tableLayoutPanel3.Controls.Add(totalSoldierLabel, 0, 0);
       tableLayoutPanel3.Dock = DockStyle.Fill;
       tableLayoutPanel3.ForeColor = SystemColors.ControlText;
       tableLayoutPanel3.Location = new Point(0, 0);
@@ -318,6 +318,28 @@
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.Size = new Size(328, 681);
       tableLayoutPanel3.TabIndex = 4;
+      // 
+      // shownSoldierLabel
+      // 
+      shownSoldierLabel.AutoSize = true;
+      shownSoldierLabel.Dock = DockStyle.Left;
+      shownSoldierLabel.FlatStyle = FlatStyle.Popup;
+      shownSoldierLabel.Location = new Point(167, 0);
+      shownSoldierLabel.Name = "shownSoldierLabel";
+      shownSoldierLabel.Size = new Size(49, 22);
+      shownSoldierLabel.TabIndex = 0;
+      shownSoldierLabel.Text = "Shown:";
+      shownSoldierLabel.TextAlign = ContentAlignment.MiddleLeft;
+      // 
+      // totalSoldierLabel
+      // 
+      totalSoldierLabel.Dock = DockStyle.Fill;
+      totalSoldierLabel.Location = new Point(3, 0);
+      totalSoldierLabel.Name = "totalSoldierLabel";
+      totalSoldierLabel.Size = new Size(158, 22);
+      totalSoldierLabel.TabIndex = 0;
+      totalSoldierLabel.Text = "Total:";
+      totalSoldierLabel.TextAlign = ContentAlignment.MiddleRight;
       // 
       // fatiguedCheckbox
       // 
@@ -350,23 +372,6 @@
       shivCheckbox.Text = "Shiv";
       shivCheckbox.UseVisualStyleBackColor = true;
       shivCheckbox.CheckedChanged += shivCheckBox_CheckedChanged;
-      // 
-      // shownSoldierLabel
-      // 
-      shownSoldierLabel.AutoSize = true;
-      shownSoldierLabel.Depth = 0;
-      shownSoldierLabel.Dock = DockStyle.Fill;
-      shownSoldierLabel.Font = new Font("Roboto", 12F, FontStyle.Regular, GraphicsUnit.Pixel);
-      shownSoldierLabel.FontType = MaterialSkin.MaterialSkinManager.fontType.Caption;
-      shownSoldierLabel.Location = new Point(168, 0);
-      shownSoldierLabel.Margin = new Padding(4, 0, 4, 0);
-      shownSoldierLabel.MouseState = MaterialSkin.MouseState.HOVER;
-      shownSoldierLabel.Name = "shownSoldierLabel";
-      shownSoldierLabel.Padding = new Padding(0, 0, 20, 0);
-      shownSoldierLabel.Size = new Size(156, 22);
-      shownSoldierLabel.TabIndex = 10;
-      shownSoldierLabel.Text = "Shown: 0";
-      shownSoldierLabel.TextAlign = ContentAlignment.MiddleCenter;
       // 
       // perkComboBox6
       // 
@@ -492,41 +497,27 @@
       perkComboBox4.SelectedIndexChanged += perkComboBox4_SelectedIndexChanged;
       perkComboBox4.MouseDown += perkComboBox4_MouseDown;
       // 
-      // totalSoldierLabel
-      // 
-      totalSoldierLabel.AutoSize = true;
-      totalSoldierLabel.Depth = 0;
-      totalSoldierLabel.Dock = DockStyle.Fill;
-      totalSoldierLabel.Font = new Font("Roboto", 12F, FontStyle.Regular, GraphicsUnit.Pixel);
-      totalSoldierLabel.FontType = MaterialSkin.MaterialSkinManager.fontType.Caption;
-      totalSoldierLabel.Location = new Point(4, 0);
-      totalSoldierLabel.Margin = new Padding(4, 0, 4, 0);
-      totalSoldierLabel.MouseState = MaterialSkin.MouseState.HOVER;
-      totalSoldierLabel.Name = "totalSoldierLabel";
-      totalSoldierLabel.Size = new Size(156, 22);
-      totalSoldierLabel.TabIndex = 9;
-      totalSoldierLabel.Text = "Total: 0";
-      totalSoldierLabel.TextAlign = ContentAlignment.MiddleCenter;
-      // 
       // Rosterizer
       // 
       AllowDrop = true;
       AutoScaleDimensions = new SizeF(7F, 14F);
       AutoScaleMode = AutoScaleMode.Font;
-      BackColor = SystemColors.ControlDarkDark;
+      BackColor = SystemColors.ControlDark;
       BackgroundImageLayout = ImageLayout.None;
       ClientSize = new Size(1264, 681);
       Controls.Add(tableLayoutPanel1);
       DoubleBuffered = true;
       Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-      FormBorderStyle = FormBorderStyle.FixedToolWindow;
+      FormBorderStyle = FormBorderStyle.FixedSingle;
       Margin = new Padding(0);
+      MaximizeBox = false;
       MaximumSize = new Size(1280, 720);
-      MinimizeBox = false;
       MinimumSize = new Size(1280, 720);
       Name = "Rosterizer";
+      ShowIcon = false;
       SizeGripStyle = SizeGripStyle.Hide;
       StartPosition = FormStartPosition.CenterScreen;
+      Load += Rosterizer_Load;
       DragDrop += Rosterizer_DragDrop;
       DragEnter += Rosterizer_DragEnter;
       tableLayoutPanel1.ResumeLayout(false);
@@ -542,8 +533,8 @@
     private CheckBox blueCheckbox;
     private CheckBox woundedCheckbox;
     private CheckBox deadCheckbox;
-    private MaterialSkin.Controls.MaterialLabel shownSoldierLabel;
-    private MaterialSkin.Controls.MaterialLabel totalSoldierLabel;
+    private Label shownSoldierLabel;
+    private Label totalSoldierLabel;
     private DataGridView rosterGridView;
     private CheckBox shivCheckbox;
     private DataGridViewTextBoxColumn LName;

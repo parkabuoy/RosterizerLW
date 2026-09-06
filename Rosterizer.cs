@@ -1,25 +1,34 @@
 using System.Data;
+using System.Runtime.InteropServices;
+using System.Security.Policy;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Rosterizer
 {
   public partial class Rosterizer : Form
   {
-
-    static readonly Color deadBg = Color.Coral;
-    static readonly Color deadFg = Color.DarkRed;
-    static readonly Color woundBg = Color.FromArgb(255, 255, 152, 114);
-    static readonly Color fatigueBg = Color.FromArgb(255, 194, 194, 194);
-    static readonly Color blueshirtBg = Color.FromArgb(255, 125, 180, 221);
-    static readonly Color shivBg = Color.FromArgb(255, 157, 157, 157);
-    static readonly Color maxBg = Color.FromArgb(255, 162, 198, 162);
-    static readonly Color hiBg = Color.FromArgb(255, 181, 221, 181);
-    static readonly Color loBg = Color.FromArgb(255, 227, 194, 194);
-    static readonly Color minBg = Color.FromArgb(255, 215, 168, 168);
+    // muted color scheme
+    static readonly Color deadBg = Color.FromArgb(144, 87, 97);
+    static readonly Color deadFg = Color.FromArgb(255, 255, 255);
+    static readonly Color woundBg = Color.FromArgb(182, 145, 152);
+    static readonly Color fatigueBg = Color.FromArgb(194, 194, 194);
+    static readonly Color blueshirtBg = Color.FromArgb(137, 144, 177);
+    static readonly Color shivBg = Color.FromArgb(157, 157, 157);
+    static readonly Color maxBg = Color.FromArgb(137, 177, 170);
+    static readonly Color hiBg = Color.FromArgb(172, 200, 195);
+    static readonly Color loBg = Color.FromArgb(205, 180, 185);
+    static readonly Color minBg = Color.FromArgb(184, 148, 155);
+    static readonly Color headerBg = Color.FromArgb(58, 92, 109);
+    static readonly Color headerFg = Color.FromArgb(222, 222, 222);
+    static readonly Color windowTitleBg = Color.FromArgb(69, 111, 132);
+    static readonly Color windowTitleFg = Color.FromArgb(222, 222, 222);
+    static readonly Color windowBg = Color.FromArgb(222, 222, 222);
 
     static readonly double indPct = 1.1;
     static readonly double indPct2 = 1.05;
     static readonly double indPct3 = 1.45;
-    static readonly int minHiLoListed = 6;
+    static readonly int minHiLoListSize = 7;
+    static readonly int minMinMaxListSize = 4;
 
     bool maxHp = false, hiHp = false, loHp = false, minHp = false;
     bool maxMob = false, hiMob = false, loMob = false, minMob = false;
@@ -31,7 +40,9 @@ namespace Rosterizer
       InitializeComponent();
       Text = $"{ConsoleApp.SaveFile.Name}  -  {(ConsoleApp.SaveParsed.Header.Save_description ?? new()).Str}";
       perkComboBox4.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x)]);
-
+      rosterGridView.ColumnHeadersDefaultCellStyle.BackColor = headerBg;
+      rosterGridView.ColumnHeadersDefaultCellStyle.ForeColor = headerFg;
+      tableLayoutPanel3.BackColor = windowBg;
       ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
     }
 
@@ -48,10 +59,10 @@ namespace Rosterizer
         perkFilter ??= [];
 
         if (!shivCheckbox.Checked && s.IsShiv) continue;
-        if (!woundedCheckbox.Checked && s.IsWounded) continue;
+        if (!woundedCheckbox.Checked && s.IsWounded && s.HoursOut > 8) continue;
         if (!blueCheckbox.Checked && s.IsBlueshirt) continue;
         if (!deadCheckbox.Checked && s.IsDead) continue;
-        if (!fatiguedCheckbox.Checked && s.IsFatigued) continue;
+        if (!fatiguedCheckbox.Checked && s.IsFatigued && s.HoursOut > 8) continue;
 
         // this is dumb, redo this
         if (perkFilter.Any(x => !string.IsNullOrWhiteSpace(x)))
@@ -95,7 +106,7 @@ namespace Rosterizer
 
       foreach (Soldier f in filteredSoldiers)
       {
-        if (filteredSoldiers.Count > 2)
+        if (filteredSoldiers.Count >= minMinMaxListSize)
         {
           maxHp = f.Stats.HP == filteredSoldiers.Max(x => x.Stats.HP);
           maxMob = f.Stats.Mobility == filteredSoldiers.Max(x => x.Stats.Mobility);
@@ -109,7 +120,7 @@ namespace Rosterizer
           minWill = !maxWill && f.Stats.Will == filteredSoldiers.Min(x => x.Stats.Will);
           minDef = !maxDef && f.Stats.Defense == filteredSoldiers.Min(x => x.Stats.Defense);
 
-          if (filteredSoldiers.Count >= minHiLoListed)
+          if (filteredSoldiers.Count >= minHiLoListSize)
           {
             hiHp = !minHp && !maxHp && f.Stats.HP * indPct >= filteredSoldiers.Max(x => x.Stats.HP);
             hiMob = !minMob && !maxMob && f.Stats.Mobility * indPct >= filteredSoldiers.Max(x => x.Stats.Mobility);
@@ -173,25 +184,34 @@ namespace Rosterizer
 
         if (f.LName == "TamTam") rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value = $"TamTam ♥";
         if (f.LName == "ParkaBuoy") rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value = $"Parkaboy {new string(' ', DateTime.Now.Second % 6)}{PokemonPicker()}";
-        if (!f.IsWounded && !f.IsBlueshirt && !f.IsDead && DateTime.Now.Microsecond % 100 == 0 && DateTime.Now.Millisecond % 10 == 0)
+        if (!f.IsWounded && !f.IsBlueshirt && !f.IsDead && DateTime.Now.Microsecond % 100 == 0 && DateTime.Now.Millisecond % 20 == 0)
         {
-          rosterGridView.Rows[filteredSoldierIndex].DefaultCellStyle = new() { 
-            ForeColor = Color.FromArgb(180, 0, 0, 0), 
-            BackColor = Color.FromArgb(255, 255, 215, 0), 
-            SelectionBackColor = Color.FromArgb(255, 255, 215, 0), 
-            Font = new(Font, FontStyle.Underline) 
+          rosterGridView.Rows[filteredSoldierIndex].DefaultCellStyle = new()
+          {
+            ForeColor = Color.FromArgb(180, 0, 0, 0),
+            BackColor = Color.FromArgb(255, 255, 215, 0),
+            SelectionBackColor = Color.FromArgb(255, 255, 215, 0),
+            Font = new(Font, FontStyle.Underline)
           };
           rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value = $"*~･ﾟ✧~  {rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value}  ~✧･ﾟ~*";
         }
 
-        if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg };
-        else if (f.IsFatigued) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg };
+        if (f.HoursOut <= 8)
+        {
+          if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg, Font = new(Font, FontStyle.Bold) };
+          else if (f.IsFatigued) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg, Font = new(Font, FontStyle.Bold) };
+        }
+        else
+        {
+          if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg };
+          else if (f.IsFatigued) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg };
+        }
+
         filteredSoldierIndex++;
       }
 
       totalSoldierLabel.Text = $"Total: {ConsoleApp.Roster.Count}";
       shownSoldierLabel.Text = $"Match: {filteredSoldiers.Count}";
-      shownSoldierLabel.BackColor = filteredSoldiers.Count == 0 ? Color.Coral : Color.Transparent;
     }
 
     private static string PokemonPicker()
@@ -213,6 +233,19 @@ namespace Rosterizer
         case 13: return "↜(╰ •ω•)╯";
         default: return "";
       }
+    }
+
+    // this sets the title bar colors
+    [DllImport("dwmapi.dll", PreserveSig = true)]
+    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+
+    private void Rosterizer_Load(object sender, EventArgs e)
+    {
+      int formHeaderBackgroundColorValue = (windowTitleBg.B << 16) | (windowTitleBg.G << 8) | windowTitleBg.R;
+      int formHeaderTextColorValue = (windowTitleFg.B << 16) | (windowTitleFg.G << 8) | windowTitleFg.R;
+
+      DwmSetWindowAttribute(this.Handle, 35, ref formHeaderBackgroundColorValue, Marshal.SizeOf(formHeaderBackgroundColorValue));
+      DwmSetWindowAttribute(this.Handle, 36, ref formHeaderTextColorValue, Marshal.SizeOf(formHeaderTextColorValue));
     }
 
     private void deadCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -308,7 +341,7 @@ namespace Rosterizer
       if (e.RowIndex == -1)
       {
         e.PaintBackground(e.CellBounds, false);
-        TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue),(e.CellStyle ?? new()).Font, e.CellBounds, e.CellStyle.ForeColor,TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter);
+        TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue), (e.CellStyle ?? new()).Font, e.CellBounds, e.CellStyle.ForeColor, TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter);
         e.Handled = true;
       }
     }
@@ -346,7 +379,7 @@ namespace Rosterizer
         ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
       }
     }
-    
+
     private void Rosterizer_DragDrop(object sender, DragEventArgs e)
     {
       try
@@ -385,7 +418,7 @@ namespace Rosterizer
               e.Effect = DragDropEffects.Copy;
             }
           }
-        }        
+        }
       }
       catch (Exception ex)
       {
