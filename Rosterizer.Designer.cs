@@ -55,14 +55,15 @@
       XP = new DataGridViewTextBoxColumn();
       Rank = new DataGridViewTextBoxColumn();
       tableLayoutPanel3 = new TableLayoutPanel();
+      fatiguedCheckbox = new CheckBox();
       shivCheckbox = new CheckBox();
       shownSoldierLabel = new MaterialSkin.Controls.MaterialLabel();
-      perkComboBox3 = new MaterialSkin.Controls.MaterialComboBox();
-      perkComboBox2 = new MaterialSkin.Controls.MaterialComboBox();
+      perkComboBox6 = new ComboBox();
+      perkComboBox5 = new ComboBox();
       blueCheckbox = new CheckBox();
       woundedCheckbox = new CheckBox();
       deadCheckbox = new CheckBox();
-      perkComboBox1 = new MaterialSkin.Controls.MaterialComboBox();
+      perkComboBox4 = new ComboBox();
       totalSoldierLabel = new MaterialSkin.Controls.MaterialLabel();
       tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)rosterGridView).BeginInit();
@@ -71,6 +72,7 @@
       // 
       // tableLayoutPanel1
       // 
+      tableLayoutPanel1.AllowDrop = true;
       tableLayoutPanel1.ColumnCount = 2;
       tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 328F));
       tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
@@ -85,9 +87,12 @@
       tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
       tableLayoutPanel1.Size = new Size(1264, 681);
       tableLayoutPanel1.TabIndex = 2;
+      tableLayoutPanel1.DragDrop += Rosterizer_DragDrop;
+      tableLayoutPanel1.DragEnter += Rosterizer_DragEnter;
       // 
       // rosterGridView
       // 
+      rosterGridView.AllowDrop = true;
       rosterGridView.AllowUserToAddRows = false;
       rosterGridView.AllowUserToDeleteRows = false;
       rosterGridView.AllowUserToResizeColumns = false;
@@ -135,6 +140,8 @@
       rosterGridView.Size = new Size(936, 681);
       rosterGridView.TabIndex = 5;
       rosterGridView.CellPainting += rosterGridView_CellPainting;
+      rosterGridView.DragDrop += Rosterizer_DragDrop;
+      rosterGridView.DragEnter += Rosterizer_DragEnter;
       // 
       // LName
       // 
@@ -271,46 +278,70 @@
       tableLayoutPanel3.ColumnCount = 2;
       tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
       tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-      tableLayoutPanel3.Controls.Add(shivCheckbox, 1, 14);
+      tableLayoutPanel3.Controls.Add(fatiguedCheckbox, 0, 17);
+      tableLayoutPanel3.Controls.Add(shivCheckbox, 1, 19);
       tableLayoutPanel3.Controls.Add(shownSoldierLabel, 1, 0);
-      tableLayoutPanel3.Controls.Add(perkComboBox3, 0, 5);
-      tableLayoutPanel3.Controls.Add(perkComboBox2, 0, 3);
-      tableLayoutPanel3.Controls.Add(blueCheckbox, 1, 13);
-      tableLayoutPanel3.Controls.Add(woundedCheckbox, 0, 13);
-      tableLayoutPanel3.Controls.Add(deadCheckbox, 0, 14);
-      tableLayoutPanel3.Controls.Add(perkComboBox1, 0, 1);
+      tableLayoutPanel3.Controls.Add(perkComboBox6, 0, 5);
+      tableLayoutPanel3.Controls.Add(perkComboBox5, 0, 3);
+      tableLayoutPanel3.Controls.Add(blueCheckbox, 1, 18);
+      tableLayoutPanel3.Controls.Add(woundedCheckbox, 0, 18);
+      tableLayoutPanel3.Controls.Add(deadCheckbox, 0, 19);
+      tableLayoutPanel3.Controls.Add(perkComboBox4, 0, 1);
       tableLayoutPanel3.Controls.Add(totalSoldierLabel, 0, 0);
       tableLayoutPanel3.Dock = DockStyle.Fill;
       tableLayoutPanel3.ForeColor = SystemColors.ControlText;
       tableLayoutPanel3.Location = new Point(0, 0);
       tableLayoutPanel3.Margin = new Padding(0);
       tableLayoutPanel3.Name = "tableLayoutPanel3";
-      tableLayoutPanel3.RowCount = 16;
+      tableLayoutPanel3.RowCount = 21;
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
-      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 401F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 300F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.Size = new Size(328, 681);
       tableLayoutPanel3.TabIndex = 4;
       // 
+      // fatiguedCheckbox
+      // 
+      fatiguedCheckbox.AutoSize = true;
+      fatiguedCheckbox.Checked = true;
+      fatiguedCheckbox.CheckState = CheckState.Checked;
+      fatiguedCheckbox.Dock = DockStyle.Fill;
+      fatiguedCheckbox.FlatStyle = FlatStyle.Flat;
+      fatiguedCheckbox.Location = new Point(0, 613);
+      fatiguedCheckbox.Margin = new Padding(0);
+      fatiguedCheckbox.Name = "fatiguedCheckbox";
+      fatiguedCheckbox.Padding = new Padding(10, 0, 0, 0);
+      fatiguedCheckbox.Size = new Size(164, 19);
+      fatiguedCheckbox.TabIndex = 13;
+      fatiguedCheckbox.Text = "Fatigued";
+      fatiguedCheckbox.UseVisualStyleBackColor = true;
+      fatiguedCheckbox.CheckedChanged += fatiguedCheckbox_CheckedChanged;
+      // 
       // shivCheckbox
       // 
       shivCheckbox.AutoSize = true;
       shivCheckbox.Dock = DockStyle.Fill;
       shivCheckbox.FlatStyle = FlatStyle.Flat;
-      shivCheckbox.Location = new Point(164, 653);
+      shivCheckbox.Location = new Point(164, 652);
       shivCheckbox.Margin = new Padding(0);
       shivCheckbox.Name = "shivCheckbox";
       shivCheckbox.Padding = new Padding(10, 0, 0, 0);
@@ -337,70 +368,64 @@
       shownSoldierLabel.Text = "Shown: 0";
       shownSoldierLabel.TextAlign = ContentAlignment.MiddleCenter;
       // 
-      // perkComboBox3
+      // perkComboBox6
       // 
-      perkComboBox3.AutoResize = false;
-      perkComboBox3.BackColor = Color.FromArgb(255, 255, 255);
-      tableLayoutPanel3.SetColumnSpan(perkComboBox3, 2);
-      perkComboBox3.Depth = 0;
-      perkComboBox3.Dock = DockStyle.Fill;
-      perkComboBox3.DrawMode = DrawMode.OwnerDrawVariable;
-      perkComboBox3.DropDownHeight = 466;
-      perkComboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
-      perkComboBox3.DropDownWidth = 121;
-      perkComboBox3.Font = new Font("Tahoma", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-      perkComboBox3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-      perkComboBox3.FormattingEnabled = true;
-      perkComboBox3.IntegralHeight = false;
-      perkComboBox3.ItemHeight = 29;
-      perkComboBox3.Location = new Point(4, 98);
-      perkComboBox3.Margin = new Padding(4, 0, 4, 0);
-      perkComboBox3.MaxDropDownItems = 16;
-      perkComboBox3.MouseState = MaterialSkin.MouseState.OUT;
-      perkComboBox3.Name = "perkComboBox3";
-      perkComboBox3.Size = new Size(320, 35);
-      perkComboBox3.StartIndex = 0;
-      perkComboBox3.TabIndex = 8;
-      perkComboBox3.UseTallSize = false;
-      perkComboBox3.Visible = false;
-      perkComboBox3.SelectedIndexChanged += perkComboBox3_SelectedIndexChanged;
-      perkComboBox3.KeyDown += perkComboBox3_KeyDown;
+      perkComboBox6.BackColor = SystemColors.ControlLight;
+      tableLayoutPanel3.SetColumnSpan(perkComboBox6, 2);
+      perkComboBox6.Dock = DockStyle.Fill;
+      perkComboBox6.DrawMode = DrawMode.OwnerDrawVariable;
+      perkComboBox6.DropDownHeight = 466;
+      perkComboBox6.DropDownStyle = ComboBoxStyle.DropDownList;
+      perkComboBox6.DropDownWidth = 121;
+      perkComboBox6.FlatStyle = FlatStyle.Flat;
+      perkComboBox6.Font = new Font("Tahoma", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      perkComboBox6.ForeColor = Color.FromArgb(222, 0, 0, 0);
+      perkComboBox6.FormattingEnabled = true;
+      perkComboBox6.IntegralHeight = false;
+      perkComboBox6.ItemHeight = 29;
+      perkComboBox6.Location = new Point(4, 98);
+      perkComboBox6.Margin = new Padding(4, 0, 4, 0);
+      perkComboBox6.MaxDropDownItems = 16;
+      perkComboBox6.Name = "perkComboBox6";
+      perkComboBox6.Size = new Size(320, 35);
+      perkComboBox6.TabIndex = 8;
+      perkComboBox6.Visible = false;
+      perkComboBox6.DrawItem += perkComboBox6_DrawItem;
+      perkComboBox6.SelectedIndexChanged += perkComboBox6_SelectedIndexChanged;
+      perkComboBox6.MouseDown += perkComboBox6_MouseDown;
       // 
-      // perkComboBox2
+      // perkComboBox5
       // 
-      perkComboBox2.AutoResize = false;
-      perkComboBox2.BackColor = Color.FromArgb(255, 255, 255);
-      tableLayoutPanel3.SetColumnSpan(perkComboBox2, 2);
-      perkComboBox2.Depth = 0;
-      perkComboBox2.Dock = DockStyle.Fill;
-      perkComboBox2.DrawMode = DrawMode.OwnerDrawVariable;
-      perkComboBox2.DropDownHeight = 495;
-      perkComboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
-      perkComboBox2.DropDownWidth = 121;
-      perkComboBox2.Font = new Font("Tahoma", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-      perkComboBox2.ForeColor = Color.FromArgb(222, 0, 0, 0);
-      perkComboBox2.FormattingEnabled = true;
-      perkComboBox2.IntegralHeight = false;
-      perkComboBox2.ItemHeight = 29;
-      perkComboBox2.Location = new Point(4, 60);
-      perkComboBox2.Margin = new Padding(4, 0, 4, 0);
-      perkComboBox2.MaxDropDownItems = 17;
-      perkComboBox2.MouseState = MaterialSkin.MouseState.OUT;
-      perkComboBox2.Name = "perkComboBox2";
-      perkComboBox2.Size = new Size(320, 35);
-      perkComboBox2.StartIndex = 0;
-      perkComboBox2.TabIndex = 7;
-      perkComboBox2.UseTallSize = false;
-      perkComboBox2.Visible = false;
-      perkComboBox2.SelectedIndexChanged += perkComboBox2_SelectedIndexChanged;
-      perkComboBox2.KeyDown += perkComboBox2_KeyDown;
+      perkComboBox5.BackColor = SystemColors.ControlLight;
+      tableLayoutPanel3.SetColumnSpan(perkComboBox5, 2);
+      perkComboBox5.Dock = DockStyle.Fill;
+      perkComboBox5.DrawMode = DrawMode.OwnerDrawVariable;
+      perkComboBox5.DropDownHeight = 495;
+      perkComboBox5.DropDownStyle = ComboBoxStyle.DropDownList;
+      perkComboBox5.DropDownWidth = 121;
+      perkComboBox5.FlatStyle = FlatStyle.Flat;
+      perkComboBox5.Font = new Font("Tahoma", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      perkComboBox5.ForeColor = SystemColors.ActiveCaptionText;
+      perkComboBox5.FormattingEnabled = true;
+      perkComboBox5.IntegralHeight = false;
+      perkComboBox5.ItemHeight = 29;
+      perkComboBox5.Location = new Point(4, 60);
+      perkComboBox5.Margin = new Padding(4, 0, 4, 0);
+      perkComboBox5.MaxDropDownItems = 17;
+      perkComboBox5.Name = "perkComboBox5";
+      perkComboBox5.Size = new Size(320, 35);
+      perkComboBox5.TabIndex = 7;
+      perkComboBox5.Visible = false;
+      perkComboBox5.DrawItem += perkComboBox5_DrawItem;
+      perkComboBox5.SelectedIndexChanged += perkComboBox5_SelectedIndexChanged;
+      perkComboBox5.MouseDown += perkComboBox5_MouseDown;
       // 
       // blueCheckbox
       // 
       blueCheckbox.AutoSize = true;
       blueCheckbox.Dock = DockStyle.Fill;
       blueCheckbox.FlatStyle = FlatStyle.Flat;
-      blueCheckbox.Location = new Point(164, 633);
+      blueCheckbox.Location = new Point(164, 632);
       blueCheckbox.Margin = new Padding(0);
       blueCheckbox.Name = "blueCheckbox";
       blueCheckbox.Padding = new Padding(10, 0, 0, 0);
@@ -417,7 +442,7 @@
       woundedCheckbox.CheckState = CheckState.Checked;
       woundedCheckbox.Dock = DockStyle.Fill;
       woundedCheckbox.FlatStyle = FlatStyle.Flat;
-      woundedCheckbox.Location = new Point(0, 633);
+      woundedCheckbox.Location = new Point(0, 632);
       woundedCheckbox.Margin = new Padding(0);
       woundedCheckbox.Name = "woundedCheckbox";
       woundedCheckbox.Padding = new Padding(10, 0, 0, 0);
@@ -432,7 +457,7 @@
       deadCheckbox.AutoSize = true;
       deadCheckbox.Dock = DockStyle.Fill;
       deadCheckbox.FlatStyle = FlatStyle.Flat;
-      deadCheckbox.Location = new Point(0, 653);
+      deadCheckbox.Location = new Point(0, 652);
       deadCheckbox.Margin = new Padding(0);
       deadCheckbox.Name = "deadCheckbox";
       deadCheckbox.Padding = new Padding(10, 0, 0, 0);
@@ -442,34 +467,30 @@
       deadCheckbox.UseVisualStyleBackColor = true;
       deadCheckbox.CheckedChanged += deadCheckbox_CheckedChanged;
       // 
-      // perkComboBox1
+      // perkComboBox4
       // 
-      perkComboBox1.AutoResize = false;
-      perkComboBox1.BackColor = Color.White;
-      tableLayoutPanel3.SetColumnSpan(perkComboBox1, 2);
-      perkComboBox1.Depth = 0;
-      perkComboBox1.Dock = DockStyle.Fill;
-      perkComboBox1.DrawMode = DrawMode.OwnerDrawVariable;
-      perkComboBox1.DropDownHeight = 524;
-      perkComboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-      perkComboBox1.DropDownWidth = 121;
-      perkComboBox1.FlatStyle = FlatStyle.Flat;
-      perkComboBox1.Font = new Font("Tahoma", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-      perkComboBox1.ForeColor = Color.FromArgb(222, 0, 0, 0);
-      perkComboBox1.IntegralHeight = false;
-      perkComboBox1.ItemHeight = 29;
-      perkComboBox1.Location = new Point(4, 22);
-      perkComboBox1.Margin = new Padding(4, 0, 4, 0);
-      perkComboBox1.MaxDropDownItems = 18;
-      perkComboBox1.MouseState = MaterialSkin.MouseState.OUT;
-      perkComboBox1.Name = "perkComboBox1";
-      perkComboBox1.Size = new Size(320, 35);
-      perkComboBox1.StartIndex = 0;
-      perkComboBox1.TabIndex = 6;
-      perkComboBox1.UseTallSize = false;
-      perkComboBox1.DrawItem += perkComboBox1_DrawItem;
-      perkComboBox1.SelectedIndexChanged += perkComboBox1_SelectedIndexChanged;
-      perkComboBox1.KeyDown += perkComboBox1_KeyDown;
+      perkComboBox4.BackColor = SystemColors.ControlLight;
+      tableLayoutPanel3.SetColumnSpan(perkComboBox4, 2);
+      perkComboBox4.Dock = DockStyle.Fill;
+      perkComboBox4.DrawMode = DrawMode.OwnerDrawVariable;
+      perkComboBox4.DropDownHeight = 524;
+      perkComboBox4.DropDownStyle = ComboBoxStyle.DropDownList;
+      perkComboBox4.DropDownWidth = 121;
+      perkComboBox4.FlatStyle = FlatStyle.Flat;
+      perkComboBox4.Font = new Font("Tahoma", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      perkComboBox4.ForeColor = SystemColors.ActiveCaptionText;
+      perkComboBox4.FormattingEnabled = true;
+      perkComboBox4.IntegralHeight = false;
+      perkComboBox4.ItemHeight = 29;
+      perkComboBox4.Location = new Point(4, 22);
+      perkComboBox4.Margin = new Padding(4, 0, 4, 0);
+      perkComboBox4.MaxDropDownItems = 18;
+      perkComboBox4.Name = "perkComboBox4";
+      perkComboBox4.Size = new Size(320, 35);
+      perkComboBox4.TabIndex = 6;
+      perkComboBox4.DrawItem += perkComboBox4_DrawItem;
+      perkComboBox4.SelectedIndexChanged += perkComboBox4_SelectedIndexChanged;
+      perkComboBox4.MouseDown += perkComboBox4_MouseDown;
       // 
       // totalSoldierLabel
       // 
@@ -507,6 +528,7 @@
       SizeGripStyle = SizeGripStyle.Hide;
       StartPosition = FormStartPosition.CenterScreen;
       DragDrop += Rosterizer_DragDrop;
+      DragEnter += Rosterizer_DragEnter;
       tableLayoutPanel1.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)rosterGridView).EndInit();
       tableLayoutPanel3.ResumeLayout(false);
@@ -515,32 +537,15 @@
     }
 
     #endregion
-    private DataGridViewTextBoxColumn lNameDataGridViewTextBoxColumn;
-    private DataGridViewTextBoxColumn nNameDataGridViewTextBoxColumn;
-    private DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
-    private DataGridViewTextBoxColumn rankDataGridViewTextBoxColumn;
-    private DataGridViewTextBoxColumn xpDataGridViewTextBoxColumn;
     private TableLayoutPanel tableLayoutPanel1;
     private TableLayoutPanel tableLayoutPanel3;
     private CheckBox blueCheckbox;
     private CheckBox woundedCheckbox;
     private CheckBox deadCheckbox;
-    private MaterialSkin.Controls.MaterialComboBox perkComboBox1;
-    private MaterialSkin.Controls.MaterialComboBox perkComboBox2;
-    private MaterialSkin.Controls.MaterialComboBox perkComboBox3;
-    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-    private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
-    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
     private MaterialSkin.Controls.MaterialLabel shownSoldierLabel;
     private MaterialSkin.Controls.MaterialLabel totalSoldierLabel;
     private DataGridView rosterGridView;
-    private TabPage rosterTab;
-    private TabPage perksTab;
-    private TabPage itemsTab;
     private CheckBox shivCheckbox;
-    private BindingSource jsonRootBindingSource;
     private DataGridViewTextBoxColumn LName;
     private DataGridViewTextBoxColumn NName;
     private DataGridViewTextBoxColumn Status;
@@ -552,5 +557,9 @@
     private DataGridViewTextBoxColumn Aim;
     private DataGridViewTextBoxColumn XP;
     private DataGridViewTextBoxColumn Rank;
+    private CheckBox fatiguedCheckbox;
+    private ComboBox perkComboBox4;
+    private ComboBox perkComboBox6;
+    private ComboBox perkComboBox5;
   }
 }

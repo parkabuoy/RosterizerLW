@@ -1,8 +1,7 @@
 using System.Data;
 using System.Diagnostics;
 using System.IO.Hashing;
-using System.Security.Cryptography.X509Certificates;
-using System.Text.RegularExpressions;
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -15,6 +14,8 @@ namespace Rosterizer
     public static bool _HasArgs;
     public static bool _ValidArgs;
     public static List<string> _Args;
+    public static List<string> ConsoleErrors;
+    public static List<string> ConsoleMsgs;
     public static List<Soldier> Roster;
     public static FileInfo SaveFile;
     public static JsonRoot SaveParsed;
@@ -22,15 +23,12 @@ namespace Rosterizer
     public static List<string> PerkNames;
     public static List<ListedPerk> SelectedSoldierPerks;
 
-    /// <summary>
-    ///  The main entry point for the application.
-    /// </summary>
     [STAThread]
     static void Main()
     {
       // To customize application configuration such as set high DPI settings or default font,
       // see https://aka.ms/applicationconfiguration.
-      ApplicationConfiguration.Initialize();
+      //ApplicationConfiguration.Initialize();
 
       // --------------------------------------------------------------------------------------------------------------------------------------------- DA CONFIG ZONE
       string outputDir = "..\\..\\..\\output\\"; // the output dir
@@ -87,7 +85,10 @@ namespace Rosterizer
       /////else if (File.Exists(savePath))
       /////{
       //saveForAnalysis = new(savePath);
-      SaveFile = new("..\\..\\..\\saveBackup\\save43");
+      SaveFile ??= new("..\\..\\..\\saveBackup\\save43");
+      // build datatable out of csv file (directly copied from swf's id reference sheets)
+      PerkList ??= ConvertCSVtoDataTable("..\\..\\..\\csv\\Long War ID reference - Perks.csv");
+
       //BackupFile(SaveFile);
       /////}
       /////else ShowError("dir/file not found:", savePath);
@@ -105,13 +106,10 @@ namespace Rosterizer
       // if parsing failed, cry
       if (!File.Exists(jsonFilenameFull)) ShowError("json parsing failure!", saveFilenameFull);
 
-      // build datatable out of csv file (directly copied from swf's id reference sheets)
-      PerkList = ConvertCSVtoDataTable("..\\..\\..\\csv\\Long War ID reference - Perks.csv");
-
       string outputLedger = "";
       string fullOutputPath = Path.Combine(todayOutputDir, $"{execTime}.{saveFilename}.tsv");
 
-      PerkNames = [];
+      PerkNames ??= [];
 
       for (int i = 0; i < PerkList.Rows.Count; i++)
       {
@@ -122,7 +120,8 @@ namespace Rosterizer
         }
       }
 
-      SaveParsed = JsonConvert.DeserializeObject<JsonRoot>(File.ReadAllText(jsonFilenameFull));
+      string rawJson = File.ReadAllText(jsonFilenameFull);
+      SaveParsed = JsonConvert.DeserializeObject<JsonRoot>(rawJson) ?? new() { Actor_table = [], Checkpoints = [], Header = new() };
       Roster = [.. FillRoster(SaveParsed).OrderByDescending(x => x.Xp)];
       SelectedSoldierPerks = [];
 
@@ -179,16 +178,16 @@ namespace Rosterizer
           // write the line for this soldier
           Show(string.Join("\t", [
             thisSoldier.Id
-      ,thisSoldier.LName
-      ,thisSoldier.NName
-      ,thisSoldier.Rank
-      ,thisSoldier.Status
-      ,thisSoldier.Stats.Mobility
-      ,thisSoldier.Stats.HP
-      ,thisSoldier.Stats.Defense
-      ,thisSoldier.Stats.Will
-      ,thisSoldier.Stats.Aim
-      ,perkFlags[1..]
+            ,thisSoldier.LName
+            ,thisSoldier.NName
+            ,thisSoldier.Rank
+            ,thisSoldier.Status
+            ,thisSoldier.Stats.Mobility
+            ,thisSoldier.Stats.HP
+            ,thisSoldier.Stats.Defense
+            ,thisSoldier.Stats.Will
+            ,thisSoldier.Stats.Aim
+            ,perkFlags[1..]
           ]));
         }
 
@@ -218,23 +217,17 @@ namespace Rosterizer
       // output to console and global string so it can be saved to a file
       void Show(string line)
       {
-        Console.WriteLine(line);
+        ConsoleMsgs ??= [];
+        ConsoleMsgs.Add(line);
         outputLedger += line + Environment.NewLine;
       }
 
       // output an error message
       void ShowError(string msg1, string msg2, bool anyKey = true)
       {
-        Console.WriteLine(msg1);
-        Console.WriteLine(msg2);
-
-        if (anyKey)
-        {
-          Console.WriteLine("Press any key to exit...");
-          //Console.ReadKey();
-        }
-
-        Environment.Exit(0);
+        ConsoleErrors ??= [];
+        ConsoleErrors.Add(msg1);
+        ConsoleErrors.Add(msg2);
       }
 
       // converts a csv to a data table :)
@@ -262,11 +255,8 @@ namespace Rosterizer
         return dt;
       }
 
-
       static List<Soldier> FillRoster(JsonRoot saveJson)
       {
-        List<Tuple<string, string, int, object?>> prope = [];
-        string propes = "";
         List<Soldier> roster = [];
         //----------------------------------------------------------------------------- mapping
         // in parsed json, step through the parts which relate to soldiers
@@ -300,14 +290,16 @@ namespace Rosterizer
                 Status = ((entity.Properties.First(x => x.Name == "m_eStatus").Value ?? "").ToString() ?? "").TrimStart("eStatus_".ToCharArray()),
                 IsDead = false,
                 IsBlueshirt = false,
-                FatigueHrs = ((long)fatigueProp.Value),
+                HoursOut = ((long)fatigueProp.Value),
                 IsShiv = false,
+                HealStatus = entity.Properties.FirstOrDefault(x => x.Name == "m_eStatus" && (string?)x.Value == "eStatus_Healing", new()).Number ?? -1,
                 IsWounded = false,
+                IsFatigued = false,
               };
-              prope.Add(new(thisSoldier.NName, thisSoldier.Status, (int)thisSoldier.FatigueHrs, charProp.Properties.First(x => x.Name == "aProperties").Int_values));
-              thisSoldier.IsDead = thisSoldier.Status.ToLower() == "dead";
+              thisSoldier.IsDead = thisSoldier.Status == "Dead";
               thisSoldier.IsShiv = thisSoldier.Rank == -1;
-              thisSoldier.IsWounded = thisSoldier.Status.ToLower() == "healing";
+              thisSoldier.IsWounded = thisSoldier.HealStatus == 0;
+              thisSoldier.IsFatigued = thisSoldier.HealStatus == 1;
               thisSoldier.IsBlueshirt = !thisSoldier.IsShiv && thisSoldier.Rank <= 2;
 
               // get the perks taken
@@ -376,15 +368,43 @@ namespace Rosterizer
           }
         }
 
-        foreach (Tuple<string, string, int, object?> item in prope)
-        {
-          propes += $"{item.Item1}\t{item.Item2}\t{item.Item3}\t{string.Join("\t", (List<int>)item.Item4)}\r\n";
-        }
-        Console.WriteLine(propes);
         return roster;
       }
+      try
+      {
+        if (Application.OpenForms.Count >= 1)
+        {
+          for (int i = 0; i < Application.OpenForms.Count; i++)
+          {
+            Application.OpenForms[i].Close();
+          }
+        }
 
-      Application.Run(new Rosterizer());
+        using (Form f = Application.OpenForms.OfType<Rosterizer>().FirstOrDefault(new Rosterizer()))
+        {
+          //f.Visible = false;
+          f.ShowDialog(new Rosterizer());
+        }
+//
+//        if (Application.OpenForms.Count == 1)
+//        {
+//
+//        }
+//        else
+//        {
+//          Application.Run(new Rosterizer());
+//        }
+      }
+      catch (Exception ex)
+      {
+        int k = 0;
+      }
+    }
+    public static void Reinitialize(FileInfo saveInput)
+    {
+      SaveFile = saveInput;
+      Roster = [];
+      Main();
     }
   }
 }

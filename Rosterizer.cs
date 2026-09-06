@@ -1,15 +1,4 @@
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Diagnostics;
-using System.Drawing.Design;
-using System.Reflection.Metadata.Ecma335;
-using System.Text.RegularExpressions;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Forms.VisualStyles;
-using Microsoft.VisualBasic.Logging;
-using Newtonsoft.Json;
-
 
 namespace Rosterizer
 {
@@ -18,14 +7,15 @@ namespace Rosterizer
 
     static readonly Color deadBg = Color.Coral;
     static readonly Color deadFg = Color.DarkRed;
-    static readonly Color woundBg = Color.FromArgb(255, 221, 221, 181);
+    static readonly Color woundBg = Color.FromArgb(255, 255, 152, 114);
+    static readonly Color fatigueBg = Color.FromArgb(255, 194, 194, 194);
     static readonly Color blueshirtBg = Color.FromArgb(255, 125, 180, 221);
     static readonly Color shivBg = Color.FromArgb(255, 157, 157, 157);
     static readonly Color maxBg = Color.FromArgb(255, 162, 198, 162);
     static readonly Color hiBg = Color.FromArgb(255, 181, 221, 181);
     static readonly Color loBg = Color.FromArgb(255, 227, 194, 194);
     static readonly Color minBg = Color.FromArgb(255, 215, 168, 168);
-    
+
     static readonly double indPct = 1.1;
     static readonly double indPct2 = 1.05;
     static readonly double indPct3 = 1.45;
@@ -40,9 +30,7 @@ namespace Rosterizer
     {
       InitializeComponent();
       Text = $"{ConsoleApp.SaveFile.Name}  -  {(ConsoleApp.SaveParsed.Header.Save_description ?? new()).Str}";
-      perkComboBox1.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x)]);
-      perkComboBox2.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x)]);
-      perkComboBox3.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x)]);
+      perkComboBox4.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x)]);
 
       ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
     }
@@ -59,31 +47,12 @@ namespace Rosterizer
         bool?[] filterPass = [];
         perkFilter ??= [];
 
-        if (boolFilters is not null && boolFilters.Length > 0)
-        {
-          filterPass = new bool?[boolFilters.Length];
-          for (int i = 0; i < boolFilters.Length; i++)
-          {
-            switch (boolFilters[i])
-            {
-              case "wounded":
-                filterPass[i] = !s.IsWounded;
-                break;
-              case "blue":
-                filterPass[i] = !s.IsBlueshirt;
-                break;
-              case "dead":
-                filterPass[i] = !s.IsDead;
-                break;
-              case "shiv":
-                filterPass[i] = !s.IsShiv;
-                break;
-            }
-          }
-        }
+        if (!shivCheckbox.Checked && s.IsShiv) continue;
+        if (!woundedCheckbox.Checked && s.IsWounded) continue;
+        if (!blueCheckbox.Checked && s.IsBlueshirt) continue;
+        if (!deadCheckbox.Checked && s.IsDead) continue;
+        if (!fatiguedCheckbox.Checked && s.IsFatigued) continue;
 
-        if (filterPass.Any(x => x == false)) continue;
-        
         // this is dumb, redo this
         if (perkFilter.Any(x => !string.IsNullOrWhiteSpace(x)))
         {
@@ -93,10 +62,10 @@ namespace Rosterizer
           {
             if (string.IsNullOrWhiteSpace(perkFilter[i])) continue;
 
-            if (i == 0 && perkComboBox1.SelectedIndex == -1) filterPass[i] = true;
-            else if (i == 1 && perkComboBox2.SelectedIndex == -1) filterPass[i] = true;
-            else if (i == 2 && perkComboBox3.SelectedIndex == -1) filterPass[i] = true;
-            
+            if (i == 0 && perkComboBox4.SelectedIndex == -1) filterPass[i] = true;
+            else if (i == 1 && perkComboBox5.SelectedIndex == -1) filterPass[i] = true;
+            else if (i == 2 && perkComboBox6.SelectedIndex == -1) filterPass[i] = true;
+
             bool perkFilterPass = false;
             foreach (string? sPerkName in s.Perks.Select(x => x.Name).Where(x => !string.IsNullOrWhiteSpace(x)))
             {
@@ -160,7 +129,7 @@ namespace Rosterizer
         {
           f.LName,
           f.NName,
-          f.Status == "Healing" ? ((f.FatigueHrs / 24) > 0 ? $"{f.FatigueHrs / 24}d " : "") + $"{f.FatigueHrs % 24}h" : f.Status,
+          f.IsFatigued || f.IsWounded ? ((f.HoursOut / 24) > 0 ? $"{f.HoursOut / 24}d " : "") + $"{f.HoursOut % 24}h" : f.Status,
           f.Class,
           f.Stats.Defense,
           f.Stats.HP,
@@ -172,45 +141,78 @@ namespace Rosterizer
         };
 
         rosterGridView.Rows.Add(dgvrVals);
-        if (f.Status == "Healing")        
 
         if (maxAim) rosterGridView.Rows[filteredSoldierIndex].Cells["Aim"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
         else if (minAim) rosterGridView.Rows[filteredSoldierIndex].Cells["Aim"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
         else if (hiAim) rosterGridView.Rows[filteredSoldierIndex].Cells["Aim"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
         else if (loAim) rosterGridView.Rows[filteredSoldierIndex].Cells["Aim"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
-        
+
         if (maxMob) rosterGridView.Rows[filteredSoldierIndex].Cells["Mob"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
         else if (minMob) rosterGridView.Rows[filteredSoldierIndex].Cells["Mob"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
         else if (hiMob) rosterGridView.Rows[filteredSoldierIndex].Cells["Mob"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
         else if (loMob) rosterGridView.Rows[filteredSoldierIndex].Cells["Mob"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
-        
+
         if (maxHp) rosterGridView.Rows[filteredSoldierIndex].Cells["HP"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
         else if (minHp) rosterGridView.Rows[filteredSoldierIndex].Cells["HP"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
         else if (hiHp) rosterGridView.Rows[filteredSoldierIndex].Cells["HP"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
         else if (loHp) rosterGridView.Rows[filteredSoldierIndex].Cells["HP"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
-        
+
         if (maxWill) rosterGridView.Rows[filteredSoldierIndex].Cells["Will"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
         else if (minWill) rosterGridView.Rows[filteredSoldierIndex].Cells["Will"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
         else if (hiWill) rosterGridView.Rows[filteredSoldierIndex].Cells["Will"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
         else if (loWill) rosterGridView.Rows[filteredSoldierIndex].Cells["Will"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
-        
+
         if (maxDef) rosterGridView.Rows[filteredSoldierIndex].Cells["Def"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
         else if (minDef) rosterGridView.Rows[filteredSoldierIndex].Cells["Def"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
         else if (hiDef) rosterGridView.Rows[filteredSoldierIndex].Cells["Def"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
         else if (loDef) rosterGridView.Rows[filteredSoldierIndex].Cells["Def"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
-        
+
         if (f.IsShiv) rosterGridView.Rows[filteredSoldierIndex].DefaultCellStyle = new() { BackColor = shivBg, SelectionBackColor = shivBg };
         else if (f.IsDead) rosterGridView.Rows[filteredSoldierIndex].DefaultCellStyle = new() { BackColor = deadBg, ForeColor = deadFg, SelectionBackColor = deadBg };
         else if (f.IsBlueshirt) rosterGridView.Rows[filteredSoldierIndex].DefaultCellStyle = new() { BackColor = blueshirtBg, SelectionBackColor = blueshirtBg };
-        //else if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].DefaultCellStyle = new() { BackColor = woundBg, SelectionBackColor = woundBg };
-        else if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg };
 
+        if (f.LName == "TamTam") rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value = $"TamTam ♥";
+        if (f.LName == "ParkaBuoy") rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value = $"Parkaboy {new string(' ', DateTime.Now.Second % 6)}{PokemonPicker()}";
+        if (!f.IsWounded && !f.IsBlueshirt && !f.IsDead && DateTime.Now.Microsecond % 100 == 0 && DateTime.Now.Millisecond % 10 == 0)
+        {
+          rosterGridView.Rows[filteredSoldierIndex].DefaultCellStyle = new() { 
+            ForeColor = Color.FromArgb(180, 0, 0, 0), 
+            BackColor = Color.FromArgb(255, 255, 215, 0), 
+            SelectionBackColor = Color.FromArgb(255, 255, 215, 0), 
+            Font = new(Font, FontStyle.Underline) 
+          };
+          rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value = $"*~･ﾟ✧~  {rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value}  ~✧･ﾟ~*";
+        }
+
+        if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg };
+        else if (f.IsFatigued) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg };
         filteredSoldierIndex++;
       }
 
       totalSoldierLabel.Text = $"Total: {ConsoleApp.Roster.Count}";
       shownSoldierLabel.Text = $"Match: {filteredSoldiers.Count}";
       shownSoldierLabel.BackColor = filteredSoldiers.Count == 0 ? Color.Coral : Color.Transparent;
+    }
+
+    private static string PokemonPicker()
+    {
+      switch (DateTime.Now.Millisecond % 30)
+      {
+        case 1: return "ฅ(^•ﻌ•^ฅ)";
+        case 2: return "ʕ •ᴥ•ʔ";
+        case 3: return "ヽ༼ຈل͜ຈ༽ﾉ";
+        case 4: return "(´･ω･`)";
+        case 5: return "♪┏(・o･)┛♪";
+        case 6: return ">:3c";
+        case 7: return "(ﾉ◕ヮ◕)ﾉ*:･ ﾟ✧";
+        case 8: return "=＾● ⋏ ●＾=";
+        case 9: return "༼◥▶ل͜◀◤༽";
+        case 10: return "ლↂ‿‿ↂლ";
+        case 11: return "⊙︿⊙";
+        case 12: return "（＞д＜）ง ▬ι═══ﺤ";
+        case 13: return "↜(╰ •ω•)╯";
+        default: return "";
+      }
     }
 
     private void deadCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -232,101 +234,163 @@ namespace Rosterizer
     {
       ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
     }
+    private void fatiguedCheckbox_CheckedChanged(object sender, EventArgs e)
+    {
+      ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
+    }
 
     private string[] GetFilters()
     {
-      return [(deadCheckbox.Checked ? "" : "dead"), (woundedCheckbox.Checked ? "" : "wounded"), (blueCheckbox.Checked ? "" : "blue"), (shivCheckbox.Checked ? "" : "shiv")];
+      return [(deadCheckbox.Checked ? "" : "dead"), (woundedCheckbox.Checked ? "" : "wounded"), (blueCheckbox.Checked ? "" : "blue"), (shivCheckbox.Checked ? "" : "shiv"), (fatiguedCheckbox.Checked ? "" : "fatigued")];
     }
 
     private string[] GetPerkFilters()
     {
-      perkComboBox2.Visible = perkComboBox1.SelectedIndex != -1;
-      perkComboBox3.Visible = perkComboBox2.Visible && perkComboBox2.SelectedIndex != -1;
+      perkComboBox5.Visible = perkComboBox4.SelectedIndex != -1;
+      perkComboBox6.Visible = perkComboBox5.Visible && perkComboBox5.SelectedIndex != -1;
 
-      return [(string)(perkComboBox1.SelectedItem ?? ""), (string)(perkComboBox2.SelectedItem ?? ""), (string)(perkComboBox3.SelectedItem ?? "")];
+      return [(string)(perkComboBox4.SelectedItem ?? ""), (string)(perkComboBox5.SelectedItem ?? ""), (string)(perkComboBox6.SelectedItem ?? "")];
     }
 
-    private void perkComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+    private void perkComboBox4_SelectedIndexChanged(object sender, EventArgs e)
     {
-      perkComboBox2.Items.Clear();
-      perkComboBox3.Items.Clear();
-
-      perkComboBox2.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x).Where(x => x != (perkComboBox1.SelectedItem ?? "").ToString())]);
-      perkComboBox3.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x).Where(x => x != (perkComboBox1.SelectedItem ?? "").ToString())]);
+      perkComboBox5.SelectedIndex = -1;
+      perkComboBox5.Items.Clear();
+      perkComboBox5.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x).Where(x => x != (perkComboBox4.SelectedItem ?? "").ToString())]);
 
       ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
     }
 
-    private void perkComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+    private void perkComboBox5_SelectedIndexChanged(object sender, EventArgs e)
     {
-      perkComboBox3.Items.Clear();
-
-      perkComboBox3.Items.AddRange([.. ConsoleApp.PerkNames.Where(x => x != (perkComboBox2.SelectedItem ?? "").ToString() && x != (perkComboBox1.SelectedItem ?? "").ToString())]);
+      perkComboBox6.SelectedIndex = -1;
+      perkComboBox6.Items.Clear();
+      perkComboBox6.Items.AddRange([.. ConsoleApp.PerkNames.Where(x => x != (perkComboBox5.SelectedItem ?? "").ToString() && x != (perkComboBox4.SelectedItem ?? "").ToString())]);
 
       ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
     }
 
-    private void perkComboBox3_SelectedIndexChanged(object sender, EventArgs e)
+    private void perkComboBox6_SelectedIndexChanged(object sender, EventArgs e)
     {
       ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
     }
 
-    private void perkComboBox1_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
-      {
-        perkComboBox1.SelectedIndex = -1;
-        ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
-      }
-    }
-
-    private void perkComboBox2_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
-      {
-        perkComboBox2.SelectedIndex = -1;
-        ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
-      }
-    }
-
-    private void perkComboBox3_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
-      {
-        perkComboBox3.SelectedIndex = -1;
-        ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
-      }
-    }
-
-    private void Rosterizer_DragDrop(object sender, DragEventArgs e)
-    {
-      if (e.Data.GetDataPresent(DataFormats.FileDrop))
-      {
-        foreach (string file in (e.Data.GetData(DataFormats.FileDrop) as string[])) 
-        {
-          int x = 2; 
-        }
-      }
-    }
-
-    private void perkComboBox1_DrawItem(object sender, DrawItemEventArgs e)
+    private void perkComboBox4_DrawItem(object sender, DrawItemEventArgs e)
     {
       using (Pen p = new(SystemColors.ControlDark, 1))
       {
-        e.Graphics.DrawRectangle(p, e.Bounds);
+        //e.Graphics.DrawRectangle(p, e.Bounds);
+        e.DrawBackground();
+        if (e.Index > -1) TextRenderer.DrawText(e.Graphics, (string?)((ComboBox)sender).Items[e.Index], e.Font, e.Bounds, e.ForeColor, e.BackColor, TextFormatFlags.VerticalCenter | TextFormatFlags.Left);
       }
     }
-
+    private void perkComboBox5_DrawItem(object sender, DrawItemEventArgs e)
+    {
+      using (Pen p = new(SystemColors.ControlDark, 1))
+      {
+        //e.Graphics.DrawRectangle(p, e.Bounds);
+        e.DrawBackground();
+        if (e.Index > -1) TextRenderer.DrawText(e.Graphics, (string?)((ComboBox)sender).Items[e.Index], e.Font, e.Bounds, e.ForeColor, e.BackColor, TextFormatFlags.VerticalCenter | TextFormatFlags.Left);
+      }
+    }
+    private void perkComboBox6_DrawItem(object sender, DrawItemEventArgs e)
+    {
+      using (Pen p = new(SystemColors.ControlDark, 1))
+      {
+        //e.Graphics.DrawRectangle(p, e.Bounds);
+        e.DrawBackground();
+        if (e.Index > -1) TextRenderer.DrawText(e.Graphics, (string?)((ComboBox)sender).Items[e.Index], e.Font, e.Bounds, e.ForeColor, e.BackColor, TextFormatFlags.VerticalCenter | TextFormatFlags.Left);
+      }
+    }
     private void rosterGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
     {
 
       if (e.RowIndex == -1)
       {
         e.PaintBackground(e.CellBounds, false);
-        TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue),
-            e.CellStyle.Font, e.CellBounds, e.CellStyle.ForeColor,
-            TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter);
+        TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue),(e.CellStyle ?? new()).Font, e.CellBounds, e.CellStyle.ForeColor,TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter);
         e.Handled = true;
+      }
+    }
+
+    private void perkComboBox4_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Right)
+      {
+        perkComboBox4.SelectedIndex = -1;
+        perkComboBox4.Items.Clear();
+        perkComboBox4.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x)]);
+
+        ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
+      }
+    }
+    private void perkComboBox5_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Right)
+      {
+        perkComboBox5.SelectedIndex = -1;
+        perkComboBox5.Items.Clear();
+        perkComboBox5.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x).Where(x => x != (perkComboBox4.SelectedItem ?? "").ToString())]);
+
+        ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
+      }
+    }
+    private void perkComboBox6_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Right)
+      {
+        perkComboBox6.SelectedIndex = -1;
+        perkComboBox6.Items.Clear();
+        perkComboBox6.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x).Where(x => x != (perkComboBox4.SelectedItem ?? "").ToString() && x != (perkComboBox5.SelectedItem ?? "").ToString())]);
+
+        ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
+      }
+    }
+    
+    private void Rosterizer_DragDrop(object sender, DragEventArgs e)
+    {
+      try
+      {
+        if ((e.Data ?? throw new("No file data")).GetDataPresent(DataFormats.FileDrop))
+        {
+          if (e.Data.GetDataPresent(DataFormats.FileDrop))
+          {
+            foreach (string file in (e.Data.GetData(DataFormats.FileDrop) as string[] ?? []))
+            {
+              string[]? files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
+              perkComboBox4.SelectedIndex = -1;
+              ConsoleApp.Reinitialize(new((files ?? [])[0]));
+              ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
+            }
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        if (MessageBox.Show(ex.Message) == DialogResult.OK) Application.Exit();
+
+      }
+    }
+
+    private void Rosterizer_DragEnter(object sender, DragEventArgs e)
+    {
+      try
+      {
+        if ((e.Data ?? throw new("No file data")).GetDataPresent(DataFormats.FileDrop))
+        {
+          foreach (string file in (e.Data.GetData(DataFormats.FileDrop) as string[] ?? []))
+          {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+              e.Effect = DragDropEffects.Copy;
+            }
+          }
+        }        
+      }
+      catch (Exception ex)
+      {
+        if (MessageBox.Show(ex.Message) == DialogResult.OK) Application.Exit();
+
       }
     }
   }

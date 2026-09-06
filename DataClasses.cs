@@ -14,9 +14,11 @@
       public required SoldierStats Stats { get; set; }
       public required bool IsShiv { get; set; }
       public required bool IsWounded { get; set; }
-      public required long FatigueHrs {get; set; }
+      public required bool IsFatigued { get; set; }
+      public required long HoursOut {get; set; }
       public required bool IsBlueshirt { get; set; }
       public required bool IsDead { get; set; }
+      public required int HealStatus { get; set; }
     }
 
     public class SoldierStats
