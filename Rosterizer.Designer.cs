@@ -1,4 +1,4 @@
-﻿namespace Rosterizer
+﻿namespace RosterizerLW
 {
   partial class Rosterizer
   {
@@ -41,6 +41,7 @@
       DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Rosterizer));
       tableLayoutPanel1 = new TableLayoutPanel();
       rosterGridView = new DataGridView();
       LName = new DataGridViewTextBoxColumn();
@@ -65,6 +66,7 @@
       woundedCheckbox = new CheckBox();
       deadCheckbox = new CheckBox();
       perkComboBox4 = new ComboBox();
+      vScrollBar1 = new VScrollBar();
       tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)rosterGridView).BeginInit();
       tableLayoutPanel3.SuspendLayout();
@@ -73,12 +75,13 @@
       // tableLayoutPanel1
       // 
       tableLayoutPanel1.AllowDrop = true;
-      tableLayoutPanel1.ColumnCount = 2;
+      tableLayoutPanel1.ColumnCount = 3;
       tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 328F));
       tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-      tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 0F));
       tableLayoutPanel1.Controls.Add(rosterGridView, 1, 0);
       tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 0, 0);
+      tableLayoutPanel1.Controls.Add(vScrollBar1, 2, 0);
       tableLayoutPanel1.Dock = DockStyle.Fill;
       tableLayoutPanel1.Location = new Point(0, 0);
       tableLayoutPanel1.Margin = new Padding(0);
@@ -133,7 +136,7 @@
       rosterGridView.RowHeadersVisible = false;
       rosterGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       rosterGridView.RowTemplate.ReadOnly = true;
-      rosterGridView.ScrollBars = ScrollBars.Vertical;
+      rosterGridView.ScrollBars = ScrollBars.None;
       rosterGridView.SelectionMode = DataGridViewSelectionMode.CellSelect;
       rosterGridView.ShowEditingIcon = false;
       rosterGridView.ShowRowErrors = false;
@@ -165,7 +168,7 @@
       NName.Name = "NName";
       NName.ReadOnly = true;
       NName.Resizable = DataGridViewTriState.False;
-      NName.Width = 220;
+      NName.Width = 200;
       // 
       // Status
       // 
@@ -497,6 +500,15 @@
       perkComboBox4.SelectedIndexChanged += perkComboBox4_SelectedIndexChanged;
       perkComboBox4.MouseDown += perkComboBox4_MouseDown;
       // 
+      // vScrollBar1
+      // 
+      vScrollBar1.Dock = DockStyle.Fill;
+      vScrollBar1.Location = new Point(1264, 0);
+      vScrollBar1.Name = "vScrollBar1";
+      vScrollBar1.Size = new Size(1, 681);
+      vScrollBar1.TabIndex = 14;
+      vScrollBar1.Visible = false;
+      // 
       // Rosterizer
       // 
       AllowDrop = true;
@@ -509,6 +521,7 @@
       DoubleBuffered = true;
       Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      Icon = (Icon)resources.GetObject("$this.Icon");
       Margin = new Padding(0);
       MaximizeBox = false;
       MaximumSize = new Size(1280, 720);
@@ -537,6 +550,11 @@
     private Label totalSoldierLabel;
     private DataGridView rosterGridView;
     private CheckBox shivCheckbox;
+    private CheckBox fatiguedCheckbox;
+    private ComboBox perkComboBox4;
+    private ComboBox perkComboBox6;
+    private ComboBox perkComboBox5;
+    private VScrollBar vScrollBar1;
     private DataGridViewTextBoxColumn LName;
     private DataGridViewTextBoxColumn NName;
     private DataGridViewTextBoxColumn Status;
@@ -548,9 +566,5 @@
     private DataGridViewTextBoxColumn Aim;
     private DataGridViewTextBoxColumn XP;
     private DataGridViewTextBoxColumn Rank;
-    private CheckBox fatiguedCheckbox;
-    private ComboBox perkComboBox4;
-    private ComboBox perkComboBox6;
-    private ComboBox perkComboBox5;
   }
 }

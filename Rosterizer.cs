@@ -1,9 +1,12 @@
+using System.CodeDom;
 using System.Data;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Policy;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using Microsoft.VisualBasic;
+using RosterizerLW.Properties;
 
-namespace Rosterizer
+namespace RosterizerLW
 {
   public partial class Rosterizer : Form
   {
@@ -23,7 +26,37 @@ namespace Rosterizer
     static readonly Color windowTitleBg = Color.FromArgb(69, 111, 132);
     static readonly Color windowTitleFg = Color.FromArgb(222, 222, 222);
     static readonly Color windowBg = Color.FromArgb(222, 222, 222);
+    static readonly Color windowFg = Color.FromArgb(0, 0, 0);
+    static readonly Color gridCellBg = Color.FromArgb(222, 222, 222);
+    static readonly Color gridCellFg = Color.FromArgb(0, 0, 0);
+    static readonly Color comboBg = Color.FromArgb(222, 222, 222);
+    static readonly Color comboFg = Color.FromArgb(0, 0, 0);
+    static readonly bool darkMode = false;
+    static readonly DataGridViewCellBorderStyle cellBorders = DataGridViewCellBorderStyle.Raised;
+    static readonly FlatStyle flatStyle = FlatStyle.System;
 
+    /*  // blue color test
+        static readonly Color deadBg = Color.Blue;
+        static readonly Color deadFg = Color.Blue;
+        static readonly Color woundBg = Color.Blue;
+        static readonly Color fatigueBg = Color.Blue;
+        static readonly Color blueshirtBg = Color.Blue;
+        static readonly Color shivBg = Color.Blue;
+        static readonly Color maxBg = Color.Blue;
+        static readonly Color hiBg = Color.Blue;
+        static readonly Color loBg = Color.Blue;
+        static readonly Color minBg = Color.Blue;
+        static readonly Color headerBg = Color.Blue;
+        static readonly Color headerFg = Color.Blue;
+        static readonly Color windowTitleBg = Color.Blue;
+        static readonly Color windowTitleFg = Color.Blue;
+        static readonly Color windowBg = Color.Blue;
+        static readonly Color windowFg = Color.Blue;
+        static readonly Color gridCellBg = Color.Blue;
+        static readonly Color gridCellFg = Color.Blue;
+        static readonly Color comboBg = Color.Blue;
+        static readonly Color comboFg = Color.Blue;
+    */
     static readonly double indPct = 1.1;
     static readonly double indPct2 = 1.05;
     static readonly double indPct3 = 1.45;
@@ -38,11 +71,23 @@ namespace Rosterizer
     public Rosterizer()
     {
       InitializeComponent();
+
+      // set colors
+      rosterGridView.ColumnHeadersDefaultCellStyle.BackColor = rosterGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = headerBg;
+      rosterGridView.ColumnHeadersDefaultCellStyle.ForeColor = rosterGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = headerFg;
+      tableLayoutPanel3.BackColor = windowBg;
+      blueCheckbox.ForeColor = shivCheckbox.ForeColor = deadCheckbox.ForeColor = fatiguedCheckbox.ForeColor = woundedCheckbox.ForeColor = windowFg;
+      shownSoldierLabel.ForeColor = totalSoldierLabel.ForeColor = windowFg;
+      rosterGridView.DefaultCellStyle.BackColor = rosterGridView.DefaultCellStyle.SelectionBackColor = gridCellBg;
+      rosterGridView.DefaultCellStyle.ForeColor = rosterGridView.DefaultCellStyle.SelectionForeColor = gridCellFg;
+      perkComboBox4.BackColor = perkComboBox5.BackColor = perkComboBox6.BackColor = comboBg;
+      perkComboBox4.ForeColor = perkComboBox5.ForeColor = perkComboBox6.ForeColor = comboFg;
+      perkComboBox4.FlatStyle = perkComboBox5.FlatStyle = perkComboBox6.FlatStyle = flatStyle;
+      rosterGridView.CellBorderStyle = cellBorders;
+
       Text = $"{ConsoleApp.SaveFile.Name}  -  {(ConsoleApp.SaveParsed.Header.Save_description ?? new()).Str}";
       perkComboBox4.Items.AddRange([.. ConsoleApp.PerkNames.OrderBy(x => x)]);
-      rosterGridView.ColumnHeadersDefaultCellStyle.BackColor = headerBg;
-      rosterGridView.ColumnHeadersDefaultCellStyle.ForeColor = headerFg;
-      tableLayoutPanel3.BackColor = windowBg;
+
       ListRoster(boolFilters: GetFilters(), perkFilter: GetPerkFilters());
     }
 
@@ -140,7 +185,7 @@ namespace Rosterizer
         {
           f.LName,
           f.NName,
-          f.IsFatigued || f.IsWounded ? ((f.HoursOut / 24) > 0 ? $"{f.HoursOut / 24}d " : "") + $"{f.HoursOut % 24}h" : f.Status,
+          (f.IsFatigued || f.IsWounded) && !f.IsDead ? ((f.HoursOut / 24) > 0 ? $"{f.HoursOut / 24}d " : "") + $"{f.HoursOut % 24}h" : f.Status,
           f.Class,
           f.Stats.Defense,
           f.Stats.HP,
@@ -196,15 +241,18 @@ namespace Rosterizer
           rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value = $"*~･ﾟ✧~  {rosterGridView.Rows[filteredSoldierIndex].Cells["LName"].Value}  ~✧･ﾟ~*";
         }
 
-        if (f.HoursOut <= 8)
+        if (!f.IsDead)
         {
-          if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg, Font = new(Font, FontStyle.Bold) };
-          else if (f.IsFatigued) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg, Font = new(Font, FontStyle.Bold) };
-        }
-        else
-        {
-          if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg };
-          else if (f.IsFatigued) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg };
+          if (f.HoursOut <= 8)
+          {
+            if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg, Font = new(Font, FontStyle.Bold) };
+            else if (f.IsFatigued) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg, Font = new(Font, FontStyle.Bold) };
+          }
+          else
+          {
+            if (f.IsWounded) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg };
+            else if (f.IsFatigued) rosterGridView.Rows[filteredSoldierIndex].Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg };
+          }
         }
 
         filteredSoldierIndex++;
@@ -212,6 +260,10 @@ namespace Rosterizer
 
       totalSoldierLabel.Text = $"Total: {ConsoleApp.Roster.Count}";
       shownSoldierLabel.Text = $"Match: {filteredSoldiers.Count}";
+
+      int rowsShowingOnDgv = 16; // vibes-based; do this programatically by dividing rowheight by dgv height or whatever. too low cuts off list items, too high adds scroll padding
+      vScrollBar1.Value = 0;
+      vScrollBar1.Maximum = rosterGridView.RowCount > rowsShowingOnDgv ? rosterGridView.RowCount - rowsShowingOnDgv : rosterGridView.RowCount;
     }
 
     private static string PokemonPicker()
@@ -241,11 +293,30 @@ namespace Rosterizer
 
     private void Rosterizer_Load(object sender, EventArgs e)
     {
+      int trueValue = 0x01;
+
+      if (darkMode) Application.SetColorMode(SystemColorMode.Dark);
+      else Application.SetColorMode(SystemColorMode.Classic);
+
+      Action<Control> Theme = control =>
+      {
+        int threeValue = 0x03;
+        //Application.SetColorMode(SystemColorMode.Dark);
+        //DwmSetWindowAttribute(control.Handle, 20, ref trueValue, Marshal.SizeOf(typeof(int)));
+        //DwmSetWindowAttribute(control.Handle, 33, ref threeValue, Marshal.SizeOf(typeof(int)));
+        //DwmSetWindowAttribute(control.Handle, 1029, ref trueValue, Marshal.SizeOf(typeof(int)));
+      };
+      //Theme(this);
+      //
+      //Theme(vScrollBar1);
+
       int formHeaderBackgroundColorValue = (windowTitleBg.B << 16) | (windowTitleBg.G << 8) | windowTitleBg.R;
       int formHeaderTextColorValue = (windowTitleFg.B << 16) | (windowTitleFg.G << 8) | windowTitleFg.R;
 
-      DwmSetWindowAttribute(this.Handle, 35, ref formHeaderBackgroundColorValue, Marshal.SizeOf(formHeaderBackgroundColorValue));
-      DwmSetWindowAttribute(this.Handle, 36, ref formHeaderTextColorValue, Marshal.SizeOf(formHeaderTextColorValue));
+      DwmSetWindowAttribute(Handle, 20, ref trueValue, Marshal.SizeOf(trueValue));
+      DwmSetWindowAttribute(Handle, 35, ref formHeaderBackgroundColorValue, Marshal.SizeOf(formHeaderBackgroundColorValue));
+      DwmSetWindowAttribute(Handle, 36, ref formHeaderTextColorValue, Marshal.SizeOf(formHeaderTextColorValue));
+
     }
 
     private void deadCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -424,6 +495,57 @@ namespace Rosterizer
       {
         if (MessageBox.Show(ex.Message) == DialogResult.OK) Application.Exit();
 
+      }
+    }
+
+    protected override void OnMouseWheel(MouseEventArgs e)
+    {
+      base.OnMouseWheel(e);
+
+      int visibleRows = rosterGridView.Rows.GetRowCount(DataGridViewElementStates.Displayed);
+
+      if ( visibleRows > 0)
+      {
+        ScrollControl(WheelHelper.WheelScrollLines(Handle, e.Delta, visibleRows, true));
+      }
+    }
+
+    void ScrollControl(int lines)
+    {
+      int value;
+
+      try
+      {
+        value = checked(vScrollBar1.Value + lines);
+      }
+      catch (OverflowException)
+      {
+        if (lines < 0)
+        {
+          value = 0;
+        }
+        else
+        {
+          value = rosterGridView.RowCount;
+        }
+      }
+
+      this.SetScrollValue(value);
+    }
+
+    void SetScrollValue(int value)
+    {
+      value = Math.Min(value, vScrollBar1.Maximum - (vScrollBar1.LargeChange - 1));
+
+      if (value < 0)
+      {
+        value = 0;
+      }
+      
+      if (rosterGridView.RowCount > 1)
+      {
+        vScrollBar1.Value = value;
+        rosterGridView.FirstDisplayedScrollingRowIndex = value;
       }
     }
   }

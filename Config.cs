@@ -6,7 +6,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Xml;
 
-namespace Rosterizer
+namespace RosterizerLW
 {
   [SupportedOSPlatform("windows")] // shut up warning CA1416
   #pragma warning disable CS8602 

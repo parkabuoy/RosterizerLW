@@ -1,4 +1,4 @@
-﻿namespace Rosterizer
+﻿namespace RosterizerLW
 {
     public class Soldier
     {
@@ -18,7 +18,6 @@
       public required long HoursOut {get; set; }
       public required bool IsBlueshirt { get; set; }
       public required bool IsDead { get; set; }
-      public required int HealStatus { get; set; }
     }
 
     public class SoldierStats

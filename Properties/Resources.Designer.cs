@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Rosterizer.Properties {
+namespace RosterizerLW.Properties {
     using System;
     
     

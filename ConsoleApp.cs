@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Rosterizer
+namespace RosterizerLW
 {
   public static class ConsoleApp
   {
@@ -292,14 +292,13 @@ namespace Rosterizer
                 IsBlueshirt = false,
                 HoursOut = ((long)fatigueProp.Value),
                 IsShiv = false,
-                HealStatus = entity.Properties.FirstOrDefault(x => x.Name == "m_eStatus" && (string?)x.Value == "eStatus_Healing", new()).Number ?? -1,
                 IsWounded = false,
                 IsFatigued = false,
               };
               thisSoldier.IsDead = thisSoldier.Status == "Dead";
               thisSoldier.IsShiv = thisSoldier.Rank == -1;
-              thisSoldier.IsWounded = thisSoldier.HealStatus == 0;
-              thisSoldier.IsFatigued = thisSoldier.HealStatus == 1;
+              thisSoldier.IsWounded = (entity.Properties.FirstOrDefault(x => x.Name == "m_eStatus" && (string?)x.Value == "eStatus_Healing", new()).Number ?? -1) == 0;
+              thisSoldier.IsFatigued = thisSoldier.HoursOut > 0 && !thisSoldier.IsWounded;
               thisSoldier.IsBlueshirt = !thisSoldier.IsShiv && thisSoldier.Rank <= 2;
 
               // get the perks taken
