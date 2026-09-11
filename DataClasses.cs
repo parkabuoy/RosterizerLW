@@ -7,7 +7,8 @@
       public required string LName { get; set; }
       public required string Class { get; set; }
       public required long Id { get; set; }
-      public required long Rank { get; set; }
+      public required long RankId { get; set; }
+      public required string RankName { get; set; }
       public required long Xp { get; set; }
       public required string Status { get; set; }
       public required List<Perk> Perks { get; set; }
@@ -18,6 +19,8 @@
       public required long HoursOut {get; set; }
       public required bool IsBlueshirt { get; set; }
       public required bool IsDead { get; set; }
+      public required bool InSquad { get; set; }
+      public required bool HasChecklistPerk { get; set; }
     }
 
     public class SoldierStats
@@ -134,7 +137,21 @@
     public class ListedPerk
     {
       public required string Name { get; set; }
-      public required string Perk { get; set; }
       public required int Count { get; set; }
+    }
+
+    public enum RosterSort
+    { 
+      LName,
+      NName,
+      Status,
+      Class,
+      Def,
+      HP,
+      Mob,
+      Will,
+      Aim,
+      Xp,
+      Rank
     }
 }

@@ -1,7 +1,6 @@
 using System.Data;
 using System.Diagnostics;
 using System.IO.Hashing;
-using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,8 +19,19 @@ namespace RosterizerLW
     public static FileInfo SaveFile;
     public static JsonRoot SaveParsed;
     public static DataTable PerkList;
+    public static DataTable ChecklistPerksDatatable;
     public static List<string> PerkNames;
-    public static List<ListedPerk> SelectedSoldierPerks;
+    public static List<string> SelectedSoldierPerks = [];
+    public static Dictionary<string, int> SquadPerks = [];
+    public static Dictionary<string, int> RosterPerks = [];
+    public static int RecoverableHrs = 8;
+    public static RosterSort[] DefaultSorting = [RosterSort.Rank, RosterSort.Xp];
+    public static RosterSort[] Sorting = DefaultSorting;
+    public static int BlueshirtLvl = 1;
+    public static long[] XpLvls = [120, 350, 700, 1200, 2000, 3000, 4200]; // xp levels per DefaultGameCore.ini ~ln. 900
+    public static Dictionary<string, int> ChecklistPerks = [];
+    public static bool ChecklistPass = false;
+    public static bool NavFromChecklist = false;
 
     [STAThread]
     static void Main()
@@ -31,6 +41,7 @@ namespace RosterizerLW
       //ApplicationConfiguration.Initialize();
 
       // --------------------------------------------------------------------------------------------------------------------------------------------- DA CONFIG ZONE
+      // *not the only config zone apparently
       string outputDir = "..\\..\\..\\output\\"; // the output dir
       string backupDir = "..\\..\\..\\saveBackup\\"; // path where saves will be backed up
       string x2jPath = "..\\..\\..\\exe\\xcom2json.exe"; // the path to xcom2json.exe, CRC 
@@ -88,6 +99,7 @@ namespace RosterizerLW
       SaveFile ??= new("..\\..\\..\\saveBackup\\save43");
       // build datatable out of csv file (directly copied from swf's id reference sheets)
       PerkList ??= ConvertCSVtoDataTable("..\\..\\..\\csv\\Long War ID reference - Perks.csv");
+      ChecklistPerksDatatable ??= ConvertCSVtoDataTable("..\\..\\..\\csv\\Checklist - Perks.csv");
 
       //BackupFile(SaveFile);
       /////}
@@ -120,6 +132,15 @@ namespace RosterizerLW
         }
       }
 
+      for (int i = 0; i < ChecklistPerksDatatable.Rows.Count; i++)
+      {
+        if (ChecklistPerksDatatable.Rows[i]["Enabled"].ToString() == "1")
+        {
+          string perkName = ChecklistPerksDatatable.Rows[i]["Name"].ToString() ?? "";
+          if (!string.IsNullOrWhiteSpace(perkName)) ChecklistPerks.Add(perkName,0);
+        }
+      }
+
       string rawJson = File.ReadAllText(jsonFilenameFull);
       SaveParsed = JsonConvert.DeserializeObject<JsonRoot>(rawJson) ?? new() { Actor_table = [], Checkpoints = [], Header = new() };
       Roster = [.. FillRoster(SaveParsed).OrderByDescending(x => x.Xp)];
@@ -142,7 +163,25 @@ namespace RosterizerLW
         saveFile.CopyTo(Path.Combine(todayBackupDir, $"{execTime}.{saveFile.Name}"), overwrite: true);
       }
 
-      void OutputTSV(string outPath, List<Soldier> roster)
+    // do this with an enum
+    static string RankMap(long rankId)
+    {
+        return rankId switch
+      {
+        -1 => "SHIV",
+        0 => "SQ",
+        1 => "SPC",
+        2 => "LCPL",
+        3 => "CPL",
+        4 => "SGT",
+        5 => "TSGT",
+        6 => "GSGT",
+        7 => "MSGT",
+        _ => "",
+      };
+    }
+
+    void OutputTSV(string outPath, List<Soldier> roster)
       {
         string perkNames = "";
 
@@ -180,7 +219,7 @@ namespace RosterizerLW
             thisSoldier.Id
             ,thisSoldier.LName
             ,thisSoldier.NName
-            ,thisSoldier.Rank
+            ,thisSoldier.RankId
             ,thisSoldier.Status
             ,thisSoldier.Stats.Mobility
             ,thisSoldier.Stats.HP
@@ -258,6 +297,7 @@ namespace RosterizerLW
       static List<Soldier> FillRoster(JsonRoot saveJson)
       {
         List<Soldier> roster = [];
+
         //----------------------------------------------------------------------------- mapping
         // in parsed json, step through the parts which relate to soldiers
         foreach (CheckpointTable entity in ((saveJson).Checkpoints[0].Checkpoint_table ?? []).Where(x => x.Class_name == "XComStrategyGame.XGStrategySoldier"))
@@ -283,7 +323,8 @@ namespace RosterizerLW
                 LName = StringProp(soldierProp, "strLastName"),
                 NName = StringProp(soldierProp, "strNickName"),
                 FName = StringProp(soldierProp, "strFirstName"),
-                Rank = LongProp(soldierProp, "iRank").GetValueOrDefault(),
+                RankId = LongProp(soldierProp, "iRank").GetValueOrDefault(),
+                RankName = "",
                 Xp = LongProp(soldierProp, "iXP").GetValueOrDefault(),
                 Class = ((JObject)(classProp.Properties.First(x => x.Name == "strName").Value)).First.First.ToString().Trim("{}".ToCharArray()),
                 // status is in the parent entity
@@ -294,12 +335,15 @@ namespace RosterizerLW
                 IsShiv = false,
                 IsWounded = false,
                 IsFatigued = false,
+                InSquad = false,
+                HasChecklistPerk = false,
               };
               thisSoldier.IsDead = thisSoldier.Status == "Dead";
-              thisSoldier.IsShiv = thisSoldier.Rank == -1;
+              thisSoldier.IsShiv = thisSoldier.RankId == -1;
               thisSoldier.IsWounded = (entity.Properties.FirstOrDefault(x => x.Name == "m_eStatus" && (string?)x.Value == "eStatus_Healing", new()).Number ?? -1) == 0;
               thisSoldier.IsFatigued = thisSoldier.HoursOut > 0 && !thisSoldier.IsWounded;
-              thisSoldier.IsBlueshirt = !thisSoldier.IsShiv && thisSoldier.Rank <= 2;
+              thisSoldier.IsBlueshirt = !thisSoldier.IsShiv && thisSoldier.RankId <= BlueshirtLvl;
+              thisSoldier.RankName = RankMap(thisSoldier.RankId);
 
               // get the perks taken
               // these are stored as an array of integers in aUpgrades, 176 of them (one per perk)
@@ -325,6 +369,7 @@ namespace RosterizerLW
                           // 1 is a chosen perk, 2 and 3 are something else apparently. medals?
                           Type = aUpgrades[i]
                         });
+
                         break;
                       }
                     }
@@ -366,7 +411,9 @@ namespace RosterizerLW
             }
           }
         }
-
+        
+        // add 0-soldier perks to roster perks list
+        foreach (DataRow row in PerkList.Rows) if (row["Enabled"].ToString() == "1") RosterPerks.TryAdd(row["Name"].ToString() ?? "", 0);
         return roster;
       }
       try
@@ -378,21 +425,7 @@ namespace RosterizerLW
             Application.OpenForms[i].Close();
           }
         }
-
-        using (Form f = Application.OpenForms.OfType<Rosterizer>().FirstOrDefault(new Rosterizer()))
-        {
-          //f.Visible = false;
-          f.ShowDialog(new Rosterizer());
-        }
-//
-//        if (Application.OpenForms.Count == 1)
-//        {
-//
-//        }
-//        else
-//        {
-//          Application.Run(new Rosterizer());
-//        }
+        Application.Run(new Rosterizer());
       }
       catch (Exception ex)
       {
