@@ -1,6 +1,9 @@
 using System.Data;
 using System.Diagnostics;
+using System.IO.Hashing;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace RosterizerLW
@@ -109,9 +112,113 @@ namespace RosterizerLW
     bool maxAim = false, hiAim = false, loAim = false, minAim = false;
     bool maxWill = false, hiWill = false, loWill = false, minWill = false;
     bool maxDef = false, hiDef = false, loDef = false, minDef = false;
+
+    public static AppConfig _AppConfig;
+    public static bool _HasArgs;
+    public static bool _ValidArgs;
+    public static List<string> _Args;
+    public static List<string> ConsoleErrors;
+    public static List<string> ConsoleMsgs;
+    public static List<Soldier> Roster;
+    //public static FileInfo SaveFile;
+    public static JsonRoot SaveParsed;
+    public static DataTable PerkList;
+    public static DataTable ChecklistPerksDatatable;
+    public static List<string> PerkNames;
+    public static List<string> SelectedSoldierPerks = [];
+    public static Dictionary<string, int> SquadPerks = [];
+    public static Dictionary<string, int> RosterPerks = [];
+    public static int RecoverableHrs = 8;
+    //public static RosterSort[] DefaultSorting = [RosterSort.Rank, RosterSort.Xp];
+    //public static RosterSort[] Sorting = DefaultSorting;
+    public static int BlueshirtLvl = 2;
+    public static long[] XpLvls = [120, 350, 700, 1200, 2000, 3000, 4200]; // xp levels per DefaultGameCore.ini ~ln. 900
+    public static Dictionary<string, int> ChecklistPerks = [];
+    public static bool ChecklistPass = false;
+    public static bool NavFromChecklist = false;
+
+    public static List<List<int>> SortArray = [[]];
+    public static int[] DefaultSortArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0];
+    public static int MaxSortDepth = 5;
+    static string overrideSavePath = "..\\..\\..\\saveBackup\\save43";
+    //static string overrideSavePath = "..\\..\\..\\saveBackup\\20260828.1802.save20";
+    static string outputDir = "..\\..\\..\\output\\"; // the output dir
+    static string backupDir = "..\\..\\..\\saveBackup\\"; // path where saves will be backed up
+    static string x2jPath = "..\\..\\..\\exe\\xcom2json.exe"; // the path to xcom2json.exe, CRC 
+    static string perkListPath = "..\\..\\..\\csv\\Long War ID reference - Perks.csv";
+    static string perkChecklistPath = "..\\..\\..\\csv\\Checklist - Perks.csv";
+    public static FileInfo saveFile;
+
+    UInt64 x2jHash = 550290084522337840; // ensure the expected xcom2json version
+
+    // xcom save dir from which the most recent save file will be selected
+    string autoSavePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\My Games\\XCOM - Enemy Within\\XComGame\\SaveData";
+
+    // ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    string saveFilenameFull = "";
+    string saveFilename = "";
+    string jsonFilenameFull = "";
+    string saveNameRegex = "^save\\d{1,3}\\Z"; // regex: starts with "save", has 1-3 numbers after it, then ends
+    string todayBackupDir = Path.Combine(backupDir, $"{DateTime.Now:yyyyMMdd}");
+    string todayOutputDir = Path.Combine(outputDir, $"{DateTime.Now:yyyyMMdd}");
+
+    string execTime = $"{DateTime.Now:yyyyMMdd.HHmm}";
+
+    FileInfo x2jFile = new(x2jPath);
+    UInt64 hash = Crc64.HashToUInt64(File.ReadAllBytes(x2jPath));
+
     public Rosterizer()
     {
       InitializeComponent();
+
+      if (!x2jFile.Exists || hash != x2jHash) ShowError("invalid xcom2json exe!", x2jFile.FullName);
+
+      saveFile ??= new(overrideSavePath);
+      // build datatable out of csv file (directly copied from swf's id reference sheets)
+      PerkList ??= ConvertCSVtoDataTable(perkListPath);
+      ChecklistPerksDatatable ??= ConvertCSVtoDataTable(perkChecklistPath);
+
+      if (!saveFile.Exists)
+      {
+        if (Directory.Exists(autoSavePath))
+        {
+          foreach (FileInfo saveFile in new DirectoryInfo(autoSavePath)
+            .GetFiles()
+            .Where(x => Regex.IsMatch(x.Name, saveNameRegex)) // match "save[123]" regex
+            .OrderByDescending(x => x.LastWriteTime)) // get the most recent files
+          {
+            Rosterizer.saveFile ??= saveFile; // pluck first one (most recent) for analysis (assign to it if it's null)
+            break; // only want one
+          }
+        }
+        else ShowError("dir/file not found:", autoSavePath);
+      }
+
+      BackupFile(saveFile); // back files up
+
+      saveFilenameFull = (saveFile ?? new("")).FullName;
+      saveFilename = (saveFile ?? new("")).Name;
+
+      // build full filename of output json
+      if (!Directory.Exists(todayOutputDir)) Directory.CreateDirectory(todayOutputDir);
+
+      jsonFilenameFull = Path.Combine(todayOutputDir, $"{execTime}.{saveFilename}.json");
+
+      // run xcom2json exe on save file
+      Process.Start("cmd", $"/C {x2jPath} -o \"{jsonFilenameFull}\" \"{saveFilenameFull}\"").WaitForExit();
+
+      // if parsing failed, cry
+      if (!File.Exists(jsonFilenameFull)) ShowError("json parsing failure!", saveFilenameFull);
+
+      PopulatePerkList();
+
+      string rawJson = File.ReadAllText(jsonFilenameFull);
+      SaveParsed = JsonConvert.DeserializeObject<JsonRoot>(rawJson) ?? new() { Actor_table = [], Checkpoints = [], Header = new() };
+      Roster = [.. FillRoster(SaveParsed).OrderByDescending(x => x.Xp)];
+      SelectedSoldierPerks = [];
+
+      DefaultSorting();
 
       // set colors
       rosterGridView.ColumnHeadersDefaultCellStyle.BackColor = rosterGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = rosterHeaderBg;
@@ -142,19 +249,58 @@ namespace RosterizerLW
 
       rosterPerkList.AutoGenerateColumns = false;
 
-      Text = $"{ConsoleApp.SaveFile.Name}  -  {(ConsoleApp.SaveParsed.Header.Save_description ?? new()).Str}";
+      Text = $"{saveFile?.Name}  -  {(SaveParsed.Header.Save_description ?? new()).Str}";
 
       this.tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
       this.tabControl1.DrawItem += new DrawItemEventHandler(this.tabControl1_DrawItem);
+
       ListRoster();
       ResetRosterPerkList();
       PopupateSoldierPerks(0);
+
+      trackBar1.Value = BlueshirtLvl;
+    }
+
+    public void DefaultSorting()
+    {
+      SortArray.Clear();
+      SortArray.Add([.. DefaultSortArray]);
+    }
+
+    // back files up
+    public void BackupFile(FileInfo saveFile)
+    {
+      if (!Directory.Exists(todayBackupDir)) Directory.CreateDirectory(todayBackupDir);
+      saveFile.CopyTo(Path.Combine(todayBackupDir, $"{execTime}.{saveFile.Name}"), overwrite: true);
+    }
+
+    public void PopulatePerkList()
+    {
+      PerkNames ??= [];
+
+      for (int i = 0; i < PerkList.Rows.Count; i++)
+      {
+        if (PerkList.Rows[i]["Enabled"].ToString() == "1")
+        {
+          string perkName = PerkList.Rows[i]["Name"].ToString() ?? "";
+          if (!string.IsNullOrWhiteSpace(perkName)) PerkNames.Add(perkName);
+        }
+      }
+
+      for (int i = 0; i < ChecklistPerksDatatable.Rows.Count; i++)
+      {
+        if (ChecklistPerksDatatable.Rows[i]["Enabled"].ToString() == "1")
+        {
+          string perkName = ChecklistPerksDatatable.Rows[i]["Name"].ToString() ?? "";
+          if (!string.IsNullOrWhiteSpace(perkName)) ChecklistPerks.Add(perkName, 0);
+        }
+      }
     }
 
     public void ResetChecklist()
     {
       checklistGridView.Rows.Clear();
-      ConsoleApp.ChecklistPerks.ToList().ForEach(x => checklistGridView.Rows.Add(x.Key, x.Value));
+      ChecklistPerks.ToList().ForEach(x => checklistGridView.Rows.Add(x.Key, x.Value));
 
       int checklistOk = 0;
       foreach (DataGridViewRow cr in checklistGridView.Rows)
@@ -175,26 +321,26 @@ namespace RosterizerLW
           : new() { BackColor = loBg, SelectionBackColor = loBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg };
       }
 
-      ConsoleApp.ChecklistPass = checklistOk == ConsoleApp.ChecklistPerks.Count;
-      string checkMark = ConsoleApp.ChecklistPass ? "✓" : "ⅹ";
-      (tabControl1.TabPages[3] ?? new()).Text = $"{checklistOk}/{ConsoleApp.ChecklistPerks.Count} {checkMark}";
+      ChecklistPass = checklistOk == ChecklistPerks.Count;
+      string checkMark = ChecklistPass ? "✓" : "ⅹ";
+      (tabControl1.TabPages[3] ?? new()).Text = $"{checklistOk}/{ChecklistPerks.Count} {checkMark}";
     }
 
     public void ListRoster(bool squadOnly = false)
     {
       rosterGridView.Rows.Clear();
       squadPerkList.Rows.Clear();
-      ConsoleApp.SquadPerks.Clear();
+      SquadPerks.Clear();
 
       List<Soldier> filteredSoldiers = [];
 
-      foreach (Soldier s in ConsoleApp.Roster)
+      foreach (Soldier s in Roster)
       {
         if (!shivCheckbox.Checked && s.IsShiv) continue;
-        if (!woundedCheckbox.Checked && s.IsWounded && s.HoursOut > ConsoleApp.RecoverableHrs) continue;
+        if (!woundedCheckbox.Checked && s.IsWounded && s.HoursOut > RecoverableHrs) continue;
         if (s.IsBlueshirt && !s.IsShiv) continue;
         if (!deadCheckbox.Checked && s.IsDead) continue;
-        if (!fatiguedCheckbox.Checked && s.IsFatigued && s.HoursOut > ConsoleApp.RecoverableHrs) continue;
+        if (!fatiguedCheckbox.Checked && s.IsFatigued && s.HoursOut > RecoverableHrs) continue;
 
         if (rosterPerkList.SelectedRows.Count > 0 && (rosterPerkList.SelectedRows[0].Cells[0].Value ?? "").ToString() != "[ANY]")
         {
@@ -223,13 +369,13 @@ namespace RosterizerLW
         {
           foreach (Perk p in s.Perks)
           {
-            if (ConsoleApp.SquadPerks.TryAdd(p.Name, 1)) continue;
-            else ConsoleApp.SquadPerks[p.Name]++;
+            if (SquadPerks.TryAdd(p.Name, 1)) continue;
+            else SquadPerks[p.Name]++;
           }
         }
       }
 
-      foreach (var p in ConsoleApp.SquadPerks) squadPerkList.Rows.Add([p.Key, p.Value]);
+      foreach (var p in SquadPerks) squadPerkList.Rows.Add([p.Key, p.Value]);
 
       int filteredSoldierIndex = 0;
 
@@ -241,58 +387,56 @@ namespace RosterizerLW
 
       int inSquad = filteredSoldiers.Where(x => x.InSquad).Count();
 
-      RosterSort thisSort = ConsoleApp.Sorting[0];
-      RosterSort lastSort = ConsoleApp.Sorting[1];
-      bool invertSort = false;
-
-      // do this better
-      //for (int i = ConsoleApp.Sorting.Length - 1; i > 0; i--)
-      for (int i = 1; i < ConsoleApp.Sorting.Length; i++)
+      for (int i = 0; i < SortArray.Count; i++) // iterate through sorting arrays
       {
-        if (ConsoleApp.Sorting[i] == ConsoleApp.Sorting[i - 1])
+        for (int j = 0; j < SortArray[i].Count; j++) // iterate through columns to sort
         {
-          invertSort = true;
-          i++;
+          if (SortArray[i][j] == 0) continue; // not sorting by this if it's 0
+
+          bool isInverted = SortArray[i][j] < 0;
+
+          switch (j)
+          {
+            case 0:
+              filteredSoldiers = [.. (isInverted ? filteredSoldiers.OrderBy(x => x.LName) : filteredSoldiers.OrderByDescending(x => x.LName))];
+              break;
+            case 1:
+              filteredSoldiers = [.. (isInverted ? filteredSoldiers.OrderBy(x => x.NName) : filteredSoldiers.OrderByDescending(x => x.NName))];
+              break;
+            case 2:
+              filteredSoldiers = isInverted
+                ? [.. filteredSoldiers.OrderBy(x => x.IsFatigued).ThenBy(x => x.HoursOut).ThenBy(x => x.IsDead)]
+                : [.. filteredSoldiers.OrderByDescending(x => x.IsDead).ThenByDescending(x => x.IsFatigued).ThenByDescending(x => x.HoursOut)];
+              break;
+            case 3:
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderByDescending(x => x.Class)] : [.. filteredSoldiers.OrderBy(x => x.Class)];
+              break;
+            case 4:
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderByDescending(x => x.Stats.Defense)] : [.. filteredSoldiers.OrderBy(x => x.Stats.Defense)];
+              break;
+            case 5:
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderByDescending(x => x.Stats.HP)] : [.. filteredSoldiers.OrderBy(x => x.Stats.HP)];
+              break;
+            case 6:
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderByDescending(x => x.Stats.Mobility)] : [.. filteredSoldiers.OrderBy(x => x.Stats.Mobility)];
+              break;
+            case 7:
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderByDescending(x => x.Stats.Will)] : [.. filteredSoldiers.OrderBy(x => x.Stats.Will)];
+              break;
+            case 8:
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderByDescending(x => x.Stats.Aim)] : [.. filteredSoldiers.OrderBy(x => x.Stats.Aim)];
+              break;
+            case 9:
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderBy(x => x.Xp)] : [.. filteredSoldiers.OrderByDescending(x => x.Xp)];
+              break;
+            case 10:
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderBy(x => x.Xp)] : [.. filteredSoldiers.OrderByDescending(x => x.Xp)];
+              break;
+            case 11:
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderBy(x => x.RankId)] : [.. filteredSoldiers.OrderByDescending(x => x.RankId)];
+              break;
+          }
         }
-        switch (thisSort)
-        {
-          case RosterSort.LName:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderByDescending(x => x.LName)] : [.. filteredSoldiers.OrderBy(x => x.LName)];
-            break;
-          case RosterSort.NName:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderByDescending(x => x.NName)] : [.. filteredSoldiers.OrderBy(x => x.NName)];
-            break;
-          case RosterSort.Status:
-            if (invertSort) filteredSoldiers = [.. filteredSoldiers.OrderByDescending(x => x.Status).ThenByDescending(x => x.IsWounded).ThenByDescending(x => x.HoursOut)];
-            else filteredSoldiers = [.. filteredSoldiers.OrderBy(x => x.Status).ThenBy(x => x.IsWounded).ThenBy(x => x.HoursOut)];
-            break;
-          case RosterSort.Class:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderByDescending(x => x.Class)] : [.. filteredSoldiers.OrderBy(x => x.Class)];
-            break;
-          case RosterSort.Def:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderBy(x => x.Stats.Defense)] : [.. filteredSoldiers.OrderByDescending(x => x.Stats.Defense)];
-            break;
-          case RosterSort.HP:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderBy(x => x.Stats.HP)] : [.. filteredSoldiers.OrderByDescending(x => x.Stats.HP)];
-            break;
-          case RosterSort.Mob:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderBy(x => x.Stats.Mobility)] : [.. filteredSoldiers.OrderByDescending(x => x.Stats.Mobility)];
-            break;
-          case RosterSort.Will:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderBy(x => x.Stats.Will)] : [.. filteredSoldiers.OrderByDescending(x => x.Stats.Will)];
-            break;
-          case RosterSort.Aim:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderBy(x => x.Stats.Aim)] : [.. filteredSoldiers.OrderByDescending(x => x.Stats.Aim)];
-            break;
-          case RosterSort.Xp:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderBy(x => x.Xp)] : [.. filteredSoldiers.OrderByDescending(x => x.Xp)];
-            break;
-          case RosterSort.Rank:
-            filteredSoldiers = invertSort ? [.. filteredSoldiers.OrderBy(x => x.RankId)] : [.. filteredSoldiers.OrderByDescending(x => x.RankId)];
-            break;
-        }
-        lastSort = thisSort;
-        invertSort = false;
       }
 
       foreach (Soldier f in filteredSoldiers.OrderByDescending(x => x.InSquad))
@@ -335,7 +479,7 @@ namespace RosterizerLW
           maxDef = hiDef = loDef = minDef = false;
         }
 
-        long toNext = f.RankId > 0 && f.RankId < ConsoleApp.XpLvls.Length ? ConsoleApp.XpLvls[f.RankId] - f.Xp : 0;
+        long toNext = f.RankId > 0 && f.RankId < XpLvls.Length ? XpLvls[f.RankId] - f.Xp : 0;
 
         object[] dgvrVals =
         {
@@ -376,11 +520,11 @@ namespace RosterizerLW
             thisRow.DividerHeight = 4;
           }
         }
-        else if (!f.IsDead && ((!f.IsWounded && !f.IsFatigued) || f.HoursOut <= ConsoleApp.RecoverableHrs))
+        else if (!f.IsDead && ((!f.IsWounded && !f.IsFatigued) || f.HoursOut <= RecoverableHrs))
         {
           foreach (Perk p in f.Perks)
           {
-            if (ConsoleApp.ChecklistPerks.ContainsKey(p.Name ?? ""))
+            if (ChecklistPerks.ContainsKey(p.Name ?? ""))
             {
               f.HasChecklistPerk = true;
               break;
@@ -418,7 +562,7 @@ namespace RosterizerLW
 
         if (f.LName == "TamTam") thisRow.Cells["LName"].Value = $"TamTam ♥";
         if (f.LName == "ParkaBuoy") thisRow.Cells["LName"].Value = $"ParkaBuoy {new string(' ', DateTime.Now.Second % 5)}{PokemonPicker(f.InSquad ? 1 : 0)}";
-        if (!f.IsWounded && !f.IsBlueshirt && !f.IsDead && !f.IsFatigued && !f.InSquad && DateTime.Now.Microsecond % 100 == 0 && DateTime.Now.Millisecond % 50 == 0)
+        if (!f.IsWounded && !f.IsBlueshirt && !f.IsDead && !f.IsFatigued && !f.InSquad && DateTime.Now.Microsecond % 100 == 0 && DateTime.Now.Millisecond % 100 == 0)
         {
           thisRow.DefaultCellStyle = new()
           {
@@ -428,12 +572,22 @@ namespace RosterizerLW
             Font = new(Font, FontStyle.Bold),
             WrapMode = DataGridViewTriState.True
           };
-          thisRow.Cells["LName"].Value = $"*~･ﾟ✧~  {thisRow.Cells["LName"].Value}  ~✧･ﾟ~*";
+          thisRow.Cells["LName"].Style = new()
+          {
+            ForeColor = Color.FromArgb(180, 0, 0, 0),
+            BackColor = Color.FromArgb(255, 255, 215, 0),
+            SelectionBackColor = Color.FromArgb(255, 255, 215, 0),
+            Font = new(Font, FontStyle.Bold),
+            WrapMode = DataGridViewTriState.True,
+            Alignment = DataGridViewContentAlignment.MiddleRight
+          };
+          thisRow.Cells["LName"].Value = $"*~･ﾟ✧~     {thisRow.Cells["LName"].Value}";
+          thisRow.Cells["NName"].Value = $"{thisRow.Cells["NName"].Value}     ~✧･ﾟ~*";
         }
 
         if (!f.IsDead)
         {
-          if (f.HoursOut <= ConsoleApp.RecoverableHrs)
+          if (f.HoursOut <= RecoverableHrs)
           {
             if (f.IsWounded) thisRow.Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg, Font = new(Font, FontStyle.Bold) };
             else if (f.IsFatigued) thisRow.Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg, Font = new(Font, FontStyle.Bold) };
@@ -453,28 +607,28 @@ namespace RosterizerLW
 
     private void ResetRosterPerkList()
     {
-      ConsoleApp.RosterPerks.Clear();
+      RosterPerks.Clear();
       rosterPerkList.Rows.Clear();
 
       rosterPerkList.Rows.Add("[ANY]", 0);
       rosterPerkList.Rows[0].Height = rosterPerkList.Rows[0].Height + 4;
       rosterPerkList.Rows[0].DividerHeight += 4;
 
-      foreach (Soldier thisSoldier in ConsoleApp.Roster)
+      foreach (Soldier thisSoldier in Roster)
       {
-        if (!thisSoldier.IsDead && (!thisSoldier.IsWounded || thisSoldier.HoursOut <= ConsoleApp.RecoverableHrs) && !thisSoldier.IsBlueshirt)
+        if (!thisSoldier.IsDead && (!thisSoldier.IsWounded || thisSoldier.HoursOut <= RecoverableHrs) && !thisSoldier.IsBlueshirt)
         {
           foreach (Perk p in thisSoldier.Perks)
           {
-            if (ConsoleApp.RosterPerks.TryAdd(p.Name ?? "", 1)) continue;
-            else ConsoleApp.RosterPerks[p.Name ?? ""]++;
+            if (RosterPerks.TryAdd(p.Name ?? "", 1)) continue;
+            else RosterPerks[p.Name ?? ""]++;
           }
         }
       }
 
-      foreach (string p in ConsoleApp.PerkNames.OrderBy(x => x))
+      foreach (string p in PerkNames.OrderBy(x => x))
       {
-        ConsoleApp.RosterPerks.TryGetValue(p, out int perkCount);
+        RosterPerks.TryGetValue(p, out int perkCount);
         rosterPerkList.Rows.Add([p, perkCount]);
       }
     }
@@ -530,6 +684,199 @@ namespace RosterizerLW
 
     }
 
+    // deserialize a string property
+    static string StringProp(Property prop, string name)
+    {
+      foreach (Property stringProp in (prop.Properties ?? []).Where(x => x.Name == name))
+      {
+        return (JsonConvert.DeserializeObject<XValue>((stringProp.Value ?? "").ToString() ?? "") ?? new XValue()).Str ?? "";
+      }
+
+      return "";
+    }
+
+    // deserialize a long property
+    static long? LongProp(Property prop, string name)
+    {
+      if ((prop.Properties ?? []).Exists(x => x.Name == name))
+        return (long)((prop.Properties ?? []).First(x => x.Name == name).Value ?? "-1");
+      else return null;
+    }
+
+    void ShowError(string msg1, string msg2, bool anyKey = true)
+    {
+      if (MessageBox.Show(msg1 + Environment.NewLine + msg2) == DialogResult.OK)
+      {
+        //todo:log
+        Environment.Exit(0);
+      }
+    }
+
+    static DataTable ConvertCSVtoDataTable(string strFilePath)
+    {
+      DataTable dt = new();
+      using (StreamReader sr = new(strFilePath))
+      {
+        string[] headers = (sr.ReadLine() ?? "").Split(',');
+        foreach (string header in headers)
+        {
+          dt.Columns.Add(header);
+        }
+        while (!sr.EndOfStream)
+        {
+          string[] rows = (sr.ReadLine() ?? "").Split(',');
+          DataRow dr = dt.NewRow();
+          for (int i = 0; i < headers.Length; i++)
+          {
+            dr[i] = rows[i];
+          }
+          dt.Rows.Add(dr);
+        }
+      }
+      return dt;
+    }
+
+    static List<Soldier> FillRoster(JsonRoot saveJson)
+    {
+      List<Soldier> roster = [];
+
+      //----------------------------------------------------------------------------- mapping
+      // in parsed json, step through the parts which relate to soldiers
+      foreach (CheckpointTable entity in ((saveJson).Checkpoints[0].Checkpoint_table ?? []).Where(x => x.Class_name == "XComStrategyGame.XGStrategySoldier"))
+      {
+        if (entity.Properties is not null)
+        {
+          // get soldier/character property arrays
+          // properties both contain values (name, etc) and lists of more properties
+          Property soldierProp = entity.Properties.Where(x => x.Name == "m_kSoldier").First();
+          Property charProp = entity.Properties.Where(x => x.Name == "m_kChar").First();
+          Property classProp = ((soldierProp ?? new()).Properties ?? []).Where(x => x.Name == "kClass").First();
+          Property fatigueProp = entity.Properties.Where(x => x.Name == "m_iTurnsOut").First();
+
+          if (soldierProp.Properties is not null)
+          {
+            // build soldier
+            Soldier thisSoldier = new()
+            {
+              Id = (long)(soldierProp.Properties.First(x => x.Name == "iID").Value ?? -1),
+              Perks = [],
+              Stats = new(),
+              // use helpers to make this a little cleaner
+              LName = StringProp(soldierProp, "strLastName"),
+              NName = StringProp(soldierProp, "strNickName"),
+              FName = StringProp(soldierProp, "strFirstName"),
+              RankId = LongProp(soldierProp, "iRank").GetValueOrDefault(),
+              RankName = "",
+              Xp = LongProp(soldierProp, "iXP").GetValueOrDefault(),
+              Class = ((JObject)(classProp.Properties.First(x => x.Name == "strName").Value)).First.First.ToString().Trim("{}".ToCharArray()),
+              // status is in the parent entity
+              Status = ((entity.Properties.First(x => x.Name == "m_eStatus").Value ?? "").ToString() ?? "").TrimStart("eStatus_".ToCharArray()),
+              IsDead = false,
+              IsBlueshirt = false,
+              HoursOut = ((long)fatigueProp.Value),
+              IsShiv = false,
+              IsWounded = false,
+              IsFatigued = false,
+              InSquad = false,
+              HasChecklistPerk = false,
+            };
+            thisSoldier.IsDead = thisSoldier.Status == "Dead";
+            thisSoldier.IsShiv = thisSoldier.RankId == -1;
+            thisSoldier.IsWounded = (entity.Properties.FirstOrDefault(x => x.Name == "m_eStatus" && (string?)x.Value == "eStatus_Healing", new()).Number ?? -1) == 0;
+            thisSoldier.IsFatigued = thisSoldier.HoursOut > 0 && !thisSoldier.IsWounded;
+            thisSoldier.IsBlueshirt = !thisSoldier.IsShiv && thisSoldier.RankId <= BlueshirtLvl;
+            thisSoldier.RankName = RankMap(thisSoldier.RankId);
+
+            // get the perks taken
+            // these are stored as an array of integers in aUpgrades, 176 of them (one per perk)
+            int[] aUpgrades = [];
+            if ((charProp.Properties ?? []).Any(x => x.Name == "aUpgrades"))
+            {
+              // get the upgrades array and walk through it
+              aUpgrades = [.. (charProp.Properties ?? []).First(x => x.Name == "aUpgrades").Int_values ?? []];
+              for (int i = 0; i < aUpgrades.Length; i++)
+              {
+                // if the array value is 0, they don't have that perk
+                if (aUpgrades[i] > 0)
+                {
+                  // step through the perk reference sheet until we find the perk which matches this index in the aUpgrades array
+                  foreach (DataRow row in PerkList.Rows)
+                  {
+                    if (row["Enabled"].ToString() == "1" && Int32.Parse(row["ID"].ToString() ?? "") == i)
+                    {
+                      thisSoldier.Perks.Add(new()
+                      {
+                        Id = i,
+                        Name = row["Name"].ToString() ?? "",
+                        // 1 is a chosen perk, 2 and 3 are something else apparently. medals?
+                        Type = aUpgrades[i]
+                      });
+
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+
+            // get stats
+            int[] aStats = [];
+            if ((charProp.Properties ?? []).Any(x => x.Name == "aStats"))
+            {
+              // int values stored in an array whose index corresponds to hp, will, etc
+              aStats = [.. (charProp.Properties ?? []).First(x => x.Name == "aStats").Int_values ?? []];
+              for (int statIndex = 0; statIndex < aStats.Length; statIndex++)
+              {
+                switch (statIndex)
+                {
+                  case 0:
+                    thisSoldier.Stats.HP = aStats[statIndex];
+                    break;
+                  case 1:
+                    thisSoldier.Stats.Aim = aStats[statIndex];
+                    break;
+                  case 2:
+                    thisSoldier.Stats.Defense = aStats[statIndex];
+                    break;
+                  case 3:
+                    thisSoldier.Stats.Mobility = aStats[statIndex];
+                    break;
+                  case 7:
+                    thisSoldier.Stats.Will = aStats[statIndex];
+                    break;
+                }
+              }
+            }
+
+            // add the soldier to the roster
+            roster.Add(thisSoldier);
+          }
+        }
+      }
+
+      // add 0-soldier perks to roster perks list
+      foreach (DataRow row in PerkList.Rows) if (row["Enabled"].ToString() == "1") RosterPerks.TryAdd(row["Name"].ToString() ?? "", 0);
+      return roster;
+    }
+
+    // do this with an enum
+    static string RankMap(long rankId)
+    {
+      return rankId switch
+      {
+        -1 => "SHIV",
+        0 => "SQ",
+        1 => "SPC",
+        2 => "LCPL",
+        3 => "CPL",
+        4 => "SGT",
+        5 => "TSGT",
+        6 => "GSGT",
+        7 => "MSGT",
+        _ => "",
+      };
+    }
+
     private void deadCheckbox_CheckedChanged(object sender, EventArgs e)
     {
       ListRoster();
@@ -566,6 +913,8 @@ namespace RosterizerLW
       }
     }
 
+
+
     private void rosterGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
     {
       if (e.Button == MouseButtons.Right)
@@ -575,8 +924,8 @@ namespace RosterizerLW
           DataGridViewRow r = rosterGridView.Rows[e.RowIndex];
           if (r is not null)
           {
-            Soldier? s = ConsoleApp.Roster.FirstOrDefault(x => ((r.Cells["LName"].Value ?? "").ToString() ?? "").Contains(x.LName));
-            if (s is not null && !s.IsDead && (!s.IsWounded || s.HoursOut <= ConsoleApp.RecoverableHrs))
+            Soldier? s = Roster.FirstOrDefault(x => ((r.Cells["LName"].Value ?? "").ToString() ?? "").Contains(x.LName));
+            if (s is not null && !s.IsDead && (!s.IsWounded || s.HoursOut <= RecoverableHrs))
             {
               s?.InSquad = !s.InSquad;
               ListRoster();
@@ -585,7 +934,7 @@ namespace RosterizerLW
         }
         else
         {
-          ConsoleApp.Sorting = ConsoleApp.DefaultSorting;
+          DefaultSorting();
           ListRoster();
         }
       }
@@ -593,45 +942,38 @@ namespace RosterizerLW
       {
         if (e.RowIndex == -1)
         {
-          switch (e.ColumnIndex)
+          if (SortArray.Count() > 5) SortArray = [.. SortArray.Take(MaxSortDepth)];
+
+          // looks like this
+          // 0 [0,0,0,0,0,0,0,0,0,1,0,0] - sort by third-to-last column (XP)
+          // 1 [0,-1,0,0,0,0,0,0,0,0,0,0] - sort by second column ascending
+          // etc
+          // iterate through superarray, i.e. previous sorts, up to MaxSortDepth
+          bool wasInvert = false;
+          for (int i = 0; i < SortArray.Count(); i++)
           {
-            case 0:
-              AddSort(RosterSort.LName);
-              break;
-            case 1:
-              AddSort(RosterSort.NName);
-              break;
-            case 2:
-              AddSort(RosterSort.Status);
-              break;
-            case 3:
-              AddSort(RosterSort.Class);
-              break;
-            case 4:
-              AddSort(RosterSort.Def);
-              break;
-            case 5:
-              AddSort(RosterSort.HP);
-              break;
-            case 6:
-              AddSort(RosterSort.Mob);
-              break;
-            case 7:
-              AddSort(RosterSort.Will);
-              break;
-            case 8:
-              AddSort(RosterSort.Aim);
-              break;
-            case 9:
-              AddSort(RosterSort.Xp);
-              break;
-            case 10:
-              AddSort(RosterSort.Xp);
-              return;
-            case 11:
-              AddSort(RosterSort.Rank);
-              break;
+            bool isInvert = false;
+            // iterate through subarrays, each with current sorting
+            for (int j = 0; j < SortArray[i].Count(); j++)
+            {
+              if (e.ColumnIndex == j)
+              {
+                if (SortArray[i][j] != 0)
+                {
+                  SortArray[i][j] *= -1;
+                  isInvert = true;
+                }
+              }
+            }
+            wasInvert = isInvert;
           }
+          if (!wasInvert)
+          {
+            int[] newSort = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            newSort[e.ColumnIndex] = 1;
+            SortArray.Add([.. newSort]);
+          }
+
           ListRoster();
         }
         else PopupateSoldierPerks(e.RowIndex);
@@ -644,7 +986,7 @@ namespace RosterizerLW
       if (r is not null)
       {
         soldierPerksGridView.Rows.Clear();
-        Soldier? s = ConsoleApp.Roster.FirstOrDefault(x => ((r.Cells["LName"].Value ?? "").ToString() ?? "").Contains(x.LName));
+        Soldier? s = Roster.FirstOrDefault(x => ((r.Cells["LName"].Value ?? "").ToString() ?? "").Contains(x.LName));
         soldierPerksGridView.Rows.Add($"{s.LName} - {s.RankName}");
         soldierPerksGridView.Rows[0].Cells[0].Style = new()
         {
@@ -657,12 +999,6 @@ namespace RosterizerLW
         };
         foreach (Perk p in s.Perks.OrderBy(x => x.Name)) soldierPerksGridView.Rows.Add([p.Name ?? ""]);
       }
-    }
-
-    private void AddSort(RosterSort sort)
-    {
-      ConsoleApp.Sorting = [.. ConsoleApp.Sorting.Prepend(sort)];
-      if (ConsoleApp.Sorting.Length > 5) ConsoleApp.Sorting = [.. ConsoleApp.Sorting.SkipLast(1)];
     }
 
     private void rosterPerkList_SelectionChanged(object sender, EventArgs e)
@@ -690,7 +1026,7 @@ namespace RosterizerLW
       {
         if (tabControl1.SelectedIndex == 3)
         {
-          ConsoleApp.NavFromChecklist = true;
+          NavFromChecklist = true;
 
           tabControl1.SelectedIndex = 0;
           foreach (DataGridViewRow row in rosterPerkList.Rows)
@@ -735,9 +1071,9 @@ namespace RosterizerLW
         }
       }
 
-      if (ConsoleApp.NavFromChecklist)
+      if (NavFromChecklist)
       {
-        ConsoleApp.NavFromChecklist = false;
+        NavFromChecklist = false;
         tabControl1.SelectedIndex = 3;
       }
       else ListRoster();
@@ -822,7 +1158,7 @@ namespace RosterizerLW
         }
         else if (i == 3) // checklist
         {
-          if (ConsoleApp.ChecklistPass)
+          if (ChecklistPass)
           {
             if (bSelected)
             {
@@ -906,7 +1242,7 @@ namespace RosterizerLW
     {
       if (e.Button == MouseButtons.Left)
       {
-        ConsoleApp.NavFromChecklist = true;
+        NavFromChecklist = true;
         RosterSearch((((DataGridView)sender).Rows[e.RowIndex].Cells[0].Value ?? "").ToString() ?? "");
       }
 
@@ -921,7 +1257,7 @@ namespace RosterizerLW
         timerRunning = true;
         timerStartStopButton.Text = "Stop";
       }
-      else 
+      else
       {
         timer2.Stop();
         timerLabel.Text = "";
@@ -939,10 +1275,10 @@ namespace RosterizerLW
 
       elapsedTime = TimeSpan.Zero;
 
-      ConsoleApp.ChecklistPass = false;
+      ChecklistPass = false;
       timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
       timerLabel.ForeColor = windowTitleFg;
-      foreach (Soldier s in ConsoleApp.Roster) s.InSquad = false;
+      foreach (Soldier s in Roster) s.InSquad = false;
       tabControl1.SelectedIndex = 0;
       ResetRosterPerkList();
       ListRoster();
@@ -950,7 +1286,7 @@ namespace RosterizerLW
 
     private void timer1_Tick(object sender, EventArgs e)
     {
-      if (ConsoleApp.ChecklistPass)
+      if (ChecklistPass)
       {
         timerLabel.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
         timerLabel.ForeColor = maxBg;
@@ -967,13 +1303,6 @@ namespace RosterizerLW
           elapsedTime = timer2.Elapsed;
         }
       timerLabel.Text = elapsedTime.ToString("G").Substring(0, 14);
-    }
-
-    private void trackBar1_Scroll(object sender, EventArgs e)
-    {
-      ConsoleApp.BlueshirtLvl = ((TrackBar)sender).Value;
-      ConsoleApp.Roster.ForEach(x => x.IsBlueshirt = x.RankId <= ConsoleApp.BlueshirtLvl);
-      ListRoster();
     }
 
     private void rosterPerkList_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
@@ -998,6 +1327,13 @@ namespace RosterizerLW
         e.PaintBackground(e.CellBounds, false);
         e.Handled = true;
       }
+    }
+
+    private void trackBar1_ValueChanged(object sender, EventArgs e)
+    {
+      BlueshirtLvl = ((TrackBar)sender).Value;
+      Roster.ForEach(x => x.IsBlueshirt = x.RankId <= BlueshirtLvl);
+      ListRoster();
     }
   }
 }

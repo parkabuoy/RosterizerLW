@@ -809,7 +809,7 @@
       trackBar1.Size = new Size(183, 34);
       trackBar1.TabIndex = 24;
       trackBar1.TickStyle = TickStyle.TopLeft;
-      trackBar1.Scroll += trackBar1_Scroll;
+      trackBar1.ValueChanged += trackBar1_ValueChanged;
       // 
       // panel1
       // 
