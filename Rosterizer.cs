@@ -14,6 +14,7 @@ namespace RosterizerLW
     static readonly Color deadBg = Color.FromArgb(144, 87, 97);
     static readonly Color deadFg = Color.FromArgb(255, 255, 255);
     static readonly Color woundBg = Color.FromArgb(182, 145, 152);
+    static readonly Color woundStatBg = Color.FromArgb(212, 165, 172);
     static readonly Color fatigueBg = Color.FromArgb(194, 194, 194);
     static readonly Color shivBg = Color.FromArgb(157, 157, 157);
     static readonly Color maxBg = Color.FromArgb(137, 177, 170);
@@ -398,10 +399,10 @@ namespace RosterizerLW
           switch (j)
           {
             case 0:
-              filteredSoldiers = [.. (isInverted ? filteredSoldiers.OrderBy(x => x.LName) : filteredSoldiers.OrderByDescending(x => x.LName))];
+              filteredSoldiers = [.. (isInverted ? filteredSoldiers.OrderByDescending(x => x.LName) : filteredSoldiers.OrderBy(x => x.LName))];
               break;
             case 1:
-              filteredSoldiers = [.. (isInverted ? filteredSoldiers.OrderBy(x => x.NName) : filteredSoldiers.OrderByDescending(x => x.NName))];
+              filteredSoldiers = [.. (isInverted ? filteredSoldiers.OrderByDescending(x => x.NName) : filteredSoldiers.OrderBy(x => x.NName))];
               break;
             case 2:
               filteredSoldiers = isInverted
@@ -430,7 +431,7 @@ namespace RosterizerLW
               filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderBy(x => x.Xp)] : [.. filteredSoldiers.OrderByDescending(x => x.Xp)];
               break;
             case 10:
-              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderBy(x => x.Xp)] : [.. filteredSoldiers.OrderByDescending(x => x.Xp)];
+              filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderByDescending(x => x.ToNext)] : [.. filteredSoldiers.OrderBy(x => x.ToNext)];
               break;
             case 11:
               filteredSoldiers = isInverted ? [.. filteredSoldiers.OrderBy(x => x.RankId)] : [.. filteredSoldiers.OrderByDescending(x => x.RankId)];
@@ -479,8 +480,6 @@ namespace RosterizerLW
           maxDef = hiDef = loDef = minDef = false;
         }
 
-        long toNext = f.RankId > 0 && f.RankId < XpLvls.Length ? XpLvls[f.RankId] - f.Xp : 0;
-
         object[] dgvrVals =
         {
           f.LName,
@@ -493,7 +492,7 @@ namespace RosterizerLW
           f.Stats.Will,
           f.Stats.Aim,
           f.Xp,
-          toNext,
+          f.ToNext,
           f.RankName,
           f.RankId,
           f.Id,
@@ -531,37 +530,51 @@ namespace RosterizerLW
             }
           }
         }
+        if (f.IsWounded || f.IsShiv)
+        {
+          thisRow.Cells["Aim"].Style =
+          thisRow.Cells["Mob"].Style =
+          thisRow.Cells["HP"].Style =
+          thisRow.Cells["Will"].Style =
+          thisRow.Cells["Def"].Style =
+            //new() { BackColor = woundStatBg, SelectionBackColor = woundStatBg, ForeColor = deadFg, SelectionForeColor = deadFg };
+            new() { ForeColor = f.IsShiv ? gridCellFg : squadHeaderBg, SelectionForeColor = f.IsShiv ? gridCellFg : squadHeaderBg, Font = new(Font, FontStyle.Italic) };
+        }
+        else 
+        { 
+          if (maxAim) thisRow.Cells["Aim"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
+          else if (minAim) thisRow.Cells["Aim"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
+          else if (hiAim) thisRow.Cells["Aim"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
+          else if (loAim) thisRow.Cells["Aim"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
 
-        if (maxAim) thisRow.Cells["Aim"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
-        else if (minAim) thisRow.Cells["Aim"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
-        else if (hiAim) thisRow.Cells["Aim"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
-        else if (loAim) thisRow.Cells["Aim"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
+          if (maxMob) thisRow.Cells["Mob"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
+          else if (minMob) thisRow.Cells["Mob"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
+          else if (hiMob) thisRow.Cells["Mob"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
+          else if (loMob) thisRow.Cells["Mob"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
 
-        if (maxMob) thisRow.Cells["Mob"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
-        else if (minMob) thisRow.Cells["Mob"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
-        else if (hiMob) thisRow.Cells["Mob"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
-        else if (loMob) thisRow.Cells["Mob"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
+          if (maxHp) thisRow.Cells["HP"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
+          else if (minHp) thisRow.Cells["HP"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
+          else if (hiHp) thisRow.Cells["HP"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
+          else if (loHp) thisRow.Cells["HP"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
 
-        if (maxHp) thisRow.Cells["HP"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
-        else if (minHp) thisRow.Cells["HP"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
-        else if (hiHp) thisRow.Cells["HP"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
-        else if (loHp) thisRow.Cells["HP"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
+          if (maxWill) thisRow.Cells["Will"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
+          else if (minWill) thisRow.Cells["Will"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
+          else if (hiWill) thisRow.Cells["Will"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
+          else if (loWill) thisRow.Cells["Will"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
 
-        if (maxWill) thisRow.Cells["Will"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
-        else if (minWill) thisRow.Cells["Will"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
-        else if (hiWill) thisRow.Cells["Will"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
-        else if (loWill) thisRow.Cells["Will"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
-
-        if (maxDef) thisRow.Cells["Def"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
-        else if (minDef) thisRow.Cells["Def"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
-        else if (hiDef) thisRow.Cells["Def"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
-        else if (loDef) thisRow.Cells["Def"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };
+          if (maxDef) thisRow.Cells["Def"].Style = new() { BackColor = maxBg, SelectionBackColor = maxBg };
+          else if (minDef) thisRow.Cells["Def"].Style = new() { BackColor = minBg, SelectionBackColor = minBg };
+          else if (hiDef) thisRow.Cells["Def"].Style = new() { BackColor = hiBg, SelectionBackColor = hiBg };
+          else if (loDef) thisRow.Cells["Def"].Style = new() { BackColor = loBg, SelectionBackColor = loBg };        
+        }
 
         if (f.IsShiv) thisRow.DefaultCellStyle = new() { BackColor = shivBg, SelectionBackColor = shivBg };
-        else if (f.IsDead) thisRow.DefaultCellStyle = new() { BackColor = deadBg, ForeColor = deadFg, SelectionBackColor = deadBg };
+        else if (f.IsDead) thisRow.DefaultCellStyle = new() { BackColor = deadBg, ForeColor = deadFg, SelectionBackColor = deadBg, SelectionForeColor = deadFg };
 
         if (f.LName == "TamTam") thisRow.Cells["LName"].Value = $"TamTam ♥";
         if (f.LName == "ParkaBuoy") thisRow.Cells["LName"].Value = $"ParkaBuoy {new string(' ', DateTime.Now.Second % 5)}{PokemonPicker(f.InSquad ? 1 : 0)}";
+        
+        // lucky dip
         if (!f.IsWounded && !f.IsBlueshirt && !f.IsDead && !f.IsFatigued && !f.InSquad && DateTime.Now.Microsecond % 100 == 0 && DateTime.Now.Millisecond % 100 == 0)
         {
           thisRow.DefaultCellStyle = new()
@@ -589,12 +602,12 @@ namespace RosterizerLW
         {
           if (f.HoursOut <= RecoverableHrs)
           {
-            if (f.IsWounded) thisRow.Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg, Font = new(Font, FontStyle.Bold) };
+            if (f.IsWounded) thisRow.Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg, Font = new(Font, FontStyle.Bold), ForeColor = deadFg, SelectionForeColor = deadFg };
             else if (f.IsFatigued) thisRow.Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg, Font = new(Font, FontStyle.Bold) };
           }
           else
           {
-            if (f.IsWounded) thisRow.Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg };
+            if (f.IsWounded) thisRow.Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg, ForeColor = deadFg, SelectionForeColor = deadFg };
             else if (f.IsFatigued) thisRow.Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg };
           }
         }
@@ -768,6 +781,7 @@ namespace RosterizerLW
               RankId = LongProp(soldierProp, "iRank").GetValueOrDefault(),
               RankName = "",
               Xp = LongProp(soldierProp, "iXP").GetValueOrDefault(),
+              ToNext = 0,
               Class = ((JObject)(classProp.Properties.First(x => x.Name == "strName").Value)).First.First.ToString().Trim("{}".ToCharArray()),
               // status is in the parent entity
               Status = ((entity.Properties.First(x => x.Name == "m_eStatus").Value ?? "").ToString() ?? "").TrimStart("eStatus_".ToCharArray()),
@@ -786,6 +800,8 @@ namespace RosterizerLW
             thisSoldier.IsFatigued = thisSoldier.HoursOut > 0 && !thisSoldier.IsWounded;
             thisSoldier.IsBlueshirt = !thisSoldier.IsShiv && thisSoldier.RankId <= BlueshirtLvl;
             thisSoldier.RankName = RankMap(thisSoldier.RankId);
+            thisSoldier.ToNext = thisSoldier.IsShiv || thisSoldier.RankId == 7 ? 99999 : thisSoldier.RankId > 0 && thisSoldier.RankId < XpLvls.Length ? XpLvls[thisSoldier.RankId] - thisSoldier.Xp : 0;
+            if (thisSoldier.IsShiv) thisSoldier.Class = "Shiv";
 
             // get the perks taken
             // these are stored as an array of integers in aUpgrades, 176 of them (one per perk)
@@ -905,8 +921,8 @@ namespace RosterizerLW
         e.Handled = true;
       }
 
-      // don't draw zeroes for nextlvl (shiv/msgt)
-      else if (e.RowIndex >= 0 && e.ColumnIndex == 10 && ((long?)e.Value ?? 0) == 0)
+      // don't draw zeroes for tonext (shiv/msgt)
+      else if (e.RowIndex >= 0 && e.ColumnIndex == 10 && ((long?)e.Value ?? 0) == 99999)
       {
         e.PaintBackground(e.CellBounds, false);
         e.Handled = true;

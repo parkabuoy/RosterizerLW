@@ -10,6 +10,7 @@
       public required long RankId { get; set; }
       public required string RankName { get; set; }
       public required long Xp { get; set; }
+      public required long ToNext { get; set; }
       public required string Status { get; set; }
       public required List<Perk> Perks { get; set; }
       public required SoldierStats Stats { get; set; }
