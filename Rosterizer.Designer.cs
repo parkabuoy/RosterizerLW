@@ -49,6 +49,7 @@
       DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Rosterizer));
       tableLayoutPanel1 = new TableLayoutPanel();
       rosterGridView = new DataGridView();
@@ -84,8 +85,6 @@
       dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
       tabPage8 = new TabPage();
       checklistGridView = new DataGridView();
-      checkName = new DataGridViewTextBoxColumn();
-      checkCount = new DataGridViewTextBoxColumn();
       tabPage7 = new TabPage();
       tableLayoutPanel4 = new TableLayoutPanel();
       trackBar2 = new TrackBar();
@@ -107,6 +106,8 @@
       tabPage5 = new TabPage();
       tabPage6 = new TabPage();
       timer1 = new System.Windows.Forms.Timer(components);
+      checkName = new DataGridViewTextBoxColumn();
+      checkCount = new DataGridViewTextBoxColumn();
       tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)rosterGridView).BeginInit();
       tableLayoutPanel3.SuspendLayout();
@@ -223,11 +224,12 @@
       NName.DefaultCellStyle = dataGridViewCellStyle3;
       NName.Frozen = true;
       NName.HeaderText = "Nickname";
+      NName.MinimumWidth = 195;
       NName.Name = "NName";
       NName.ReadOnly = true;
       NName.Resizable = DataGridViewTriState.False;
       NName.SortMode = DataGridViewColumnSortMode.NotSortable;
-      NName.Width = 200;
+      NName.Width = 195;
       // 
       // Status
       // 
@@ -286,12 +288,12 @@
       dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight;
       Mob.DefaultCellStyle = dataGridViewCellStyle8;
       Mob.HeaderText = "Mob";
-      Mob.MinimumWidth = 40;
+      Mob.MinimumWidth = 45;
       Mob.Name = "Mob";
       Mob.ReadOnly = true;
       Mob.Resizable = DataGridViewTriState.False;
       Mob.SortMode = DataGridViewColumnSortMode.NotSortable;
-      Mob.Width = 40;
+      Mob.Width = 45;
       // 
       // Will
       // 
@@ -666,21 +668,6 @@
       checklistGridView.TabStop = false;
       checklistGridView.CellMouseClick += checklistGridView_CellContentClick;
       // 
-      // checkName
-      // 
-      checkName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      checkName.DefaultCellStyle = dataGridViewCellStyle20;
-      checkName.HeaderText = "Name";
-      checkName.Name = "checkName";
-      checkName.ReadOnly = true;
-      // 
-      // checkCount
-      // 
-      checkCount.HeaderText = "Count";
-      checkCount.Name = "checkCount";
-      checkCount.ReadOnly = true;
-      // 
       // tabPage7
       // 
       tabPage7.BorderStyle = BorderStyle.Fixed3D;
@@ -987,6 +974,26 @@
       timer1.Interval = 10;
       timer1.Tick += timer1_Tick;
       // 
+      // checkName
+      // 
+      dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      checkName.DefaultCellStyle = dataGridViewCellStyle20;
+      checkName.FillWeight = 194.923859F;
+      checkName.HeaderText = "Name";
+      checkName.Name = "checkName";
+      checkName.ReadOnly = true;
+      checkName.Width = 200;
+      // 
+      // checkCount
+      // 
+      checkCount.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleRight;
+      checkCount.DefaultCellStyle = dataGridViewCellStyle21;
+      checkCount.FillWeight = 5.07614136F;
+      checkCount.HeaderText = "Count";
+      checkCount.Name = "checkCount";
+      checkCount.ReadOnly = true;
+      // 
       // Rosterizer
       // 
       AllowDrop = true;
@@ -1071,6 +1078,19 @@
     private DataGridView soldierPerksGridView;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
     private Panel panel1;
+    private TabPage tabPage8;
+    private DataGridView checklistGridView;
+    private TableLayoutPanel tableLayoutPanel5;
+    private System.Windows.Forms.Timer timer1;
+    private Label timerLabel;
+    private Button timerResetButton;
+    private TrackBar trackBar1;
+    private TableLayoutPanel tableLayoutPanel6;
+    private TextBox searchTextBox;
+    private Label scoreLabel;
+    private CheckBox nonRosterPerksCheckbox;
+    private TrackBar trackBar2;
+    private Label label1;
     private DataGridViewTextBoxColumn LName;
     private DataGridViewTextBoxColumn NName;
     private DataGridViewTextBoxColumn Status;
@@ -1085,20 +1105,7 @@
     private DataGridViewTextBoxColumn RankName;
     private DataGridViewTextBoxColumn Id;
     private DataGridViewTextBoxColumn RankId;
-    private TabPage tabPage8;
-    private DataGridView checklistGridView;
     private DataGridViewTextBoxColumn checkName;
     private DataGridViewTextBoxColumn checkCount;
-    private TableLayoutPanel tableLayoutPanel5;
-    private System.Windows.Forms.Timer timer1;
-    private Label timerLabel;
-    private Button timerResetButton;
-    private TrackBar trackBar1;
-    private TableLayoutPanel tableLayoutPanel6;
-    private TextBox searchTextBox;
-    private Label scoreLabel;
-    private CheckBox nonRosterPerksCheckbox;
-    private TrackBar trackBar2;
-    private Label label1;
   }
 }

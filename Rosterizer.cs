@@ -2,6 +2,7 @@ using System.ComponentModel.Design;
 using System.Data;
 using System.Diagnostics;
 using System.IO.Hashing;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
@@ -52,8 +53,9 @@ namespace RosterizerLW
     static readonly Color gridSelectedCellFg = Color.FromArgb(0, 0, 0);
     static readonly bool darkMode = false;
     static readonly DataGridViewCellBorderStyle rosterCellBorders = DataGridViewCellBorderStyle.Raised;
-    static readonly DataGridViewCellBorderStyle squadCellBorders = DataGridViewCellBorderStyle.Raised;
+    static readonly DataGridViewCellBorderStyle squadCellBorders = DataGridViewCellBorderStyle.Sunken;
     static readonly DataGridViewCellBorderStyle soldierCellBorders = DataGridViewCellBorderStyle.Raised;
+    static readonly DataGridViewCellBorderStyle checklistCellBorders = DataGridViewCellBorderStyle.Sunken;
 
     /*
         // muted color scheme
@@ -157,6 +159,8 @@ namespace RosterizerLW
     static string PerkListPath = "..\\..\\..\\csv\\Long War ID reference - Perks.csv";
     static string PerkChecklistPath = "..\\..\\..\\csv\\Checklist - Perks.csv";
     public static FileInfo SaveFile;
+    public static string SoldierSelectedIdXP = "";
+    public static long number_of_times_we_have_called_this_bullshit = 0;
 
     UInt64 x2jHash = 550290084522337840; // ensure the expected xcom2json version
 
@@ -254,7 +258,7 @@ namespace RosterizerLW
       checklistGridView.DefaultCellStyle.SelectionForeColor = gridCellFg;
       checklistGridView.DefaultCellStyle.BackColor = gridCellBg;
       checklistGridView.DefaultCellStyle.ForeColor = gridCellFg;
-      checklistGridView.CellBorderStyle = rosterCellBorders;
+      checklistGridView.CellBorderStyle = checklistCellBorders;
 
       rosterPerkList.AutoGenerateColumns = false;
 
@@ -267,13 +271,74 @@ namespace RosterizerLW
       trackBar2.Value = SquadSize;
 
       SetRosterPerks();
-      PopupateSoldierPerks(0);
+      timerStartStopButton_Click(new(), new());
     }
 
-    public void DefaultSorting()
+    public static  void DefaultSorting()
     {
       SortArray.Clear();
       SortArray.Add([.. DefaultSortArray]);
+    }
+
+    public static void DoSorting(int colIndex)
+    {
+      if (SortArray.Count > 5) SortArray = [.. SortArray.Take(MaxSortDepth)];
+
+      // looks like this
+      // 0 [0,0,0,0,0,0,0,0,0,1,0,0] - sort by third-to-last column (XP)
+      // 1 [0,-1,0,0,0,0,0,0,0,0,0,0] - sort by second column ascending
+      // etc
+      // iterate through superarray, i.e. previous sorts, up to MaxSortDepth
+      bool wasInvert = false;
+      for (int i = 0; i < SortArray.Count(); i++)
+      {
+        bool isInvert = false;
+        // iterate through subarrays, each with current sorting
+        for (int j = 0; j < SortArray[i].Count(); j++)
+        {
+          if (colIndex == j)
+          {
+            if (SortArray[i][j] != 0)
+            {
+              SortArray[i][j] *= -1;
+              isInvert = true;
+            }
+          }
+        }
+        wasInvert = isInvert;
+      }
+      if (!wasInvert)
+      {
+        int[] newSort = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        newSort[colIndex] = 1;
+        SortArray.Add([.. newSort]);
+      }
+
+
+    }
+
+    public void AddToSquad(object sender, int rowIndex)
+    {
+      DataGridViewRow r = ((DataGridView)sender).Rows[rowIndex];
+      if (r is not null)
+      {
+        Soldier? s = Roster.FirstOrDefault(x => ((r.Cells["LName"].Value ?? "").ToString() ?? "").Contains(x.LName));
+        if (s is not null && !s.IsDead && (!s.IsWounded || s.HoursOut <= RecoverableHrs))
+        {
+          if (s?.InSquad == true)
+          {
+            CurrentSquadSize--;
+            s.InSquad = false;
+            ListRoster();
+          }
+          else if (CurrentSquadSize <= trackBar2.Value)
+          {
+            CurrentSquadSize++;
+            s?.InSquad = true;
+            ListRoster();
+          }
+        }
+      }
     }
 
     // back files up
@@ -283,7 +348,7 @@ namespace RosterizerLW
       saveFile.CopyTo(Path.Combine(todayBackupDir, $"{execTime}.{saveFile.Name}"), overwrite: true);
     }
 
-    public void PopulatePerkList()
+    public static void PopulatePerkList()
     {
       PerkNames ??= [];
 
@@ -327,14 +392,12 @@ namespace RosterizerLW
         }
         cr.Cells[1].Style = thisOk
           ? new() { BackColor = hiBg, SelectionBackColor = hiBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg }
-          : new() { BackColor = loBg, SelectionBackColor = loBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg };
+          : new() { BackColor = minBg, SelectionBackColor = minBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg };
       }
 
       ChecklistPass = checklistOk == ChecklistPerks.Count;
       string checkMark = ChecklistPass ? "✓" : "ⅹ";
       (tabControl1.TabPages[3] ?? new()).Text = $"{checklistOk}/{ChecklistPerks.Count} {checkMark}";
-
-
     }
 
     public void ListRoster(bool squadUpdate = true)
@@ -348,6 +411,7 @@ namespace RosterizerLW
       rosterGridView.Rows.Clear();
 
       List<Soldier> filteredSoldiers = [];
+      int shivCount = 0;
 
       foreach (Soldier s in Roster)
       {
@@ -387,11 +451,27 @@ namespace RosterizerLW
             if (SquadPerks.TryAdd(p.Name, 1)) continue;
             else SquadPerks[p.Name]++;
           }
+
+          if (s.IsShiv) shivCount++;
         }
       }
 
-      if (squadUpdate)
+      if (squadUpdate && SquadPerks.Count > 0)
       {
+        squadPerkList.Rows.Add($"Soldiers: {CurrentSquadSize}, Shivs: {shivCount}", "");
+        squadPerkList.Rows[0].Height = squadPerkList.Rows[0].Height + 4;
+        squadPerkList.Rows[0].DividerHeight += 4;
+        squadPerkList.Rows[0].Frozen = true;
+        squadPerkList.Rows[0].DefaultCellStyle = new()
+        {
+          BackColor = squadTabUnselectedBg,
+          ForeColor = gridCellFg,
+          SelectionBackColor = squadTabUnselectedBg,
+          SelectionForeColor = gridCellFg,
+          Alignment = DataGridViewContentAlignment.MiddleCenter,
+          Font = new(Font, FontStyle.Regular),
+        };
+
         foreach (var p in SquadPerks)
         {
           squadPerkList.Rows.Add([p.Key, p.Value]);
@@ -525,7 +605,7 @@ namespace RosterizerLW
           f.Stats.Will,
           f.Stats.Aim,
           f.Xp,
-          f.ToNext,
+          $"{(f.ToNext == 99999 ? string.Empty : f.ToNext)}",
           f.RankName,
           f.RankId,
           f.Id,
@@ -537,7 +617,7 @@ namespace RosterizerLW
         if (f.InSquad)
         {
           thisRow.Frozen = true;
-          thisRow.DefaultCellStyle = new() { BackColor = squadRowBg, SelectionBackColor = squadRowBg, ForeColor = squadRowFg, SelectionForeColor = squadRowFg, };
+          thisRow.DefaultCellStyle = new() { BackColor = squadRowBg, SelectionBackColor = rosterHeaderBg, ForeColor = squadRowFg, SelectionForeColor = rosterHeaderFg, };
 
           thisRow.Cells["Aim"].Style =
             thisRow.Cells["Mob"].Style =
@@ -605,7 +685,7 @@ namespace RosterizerLW
         else if (f.IsDead) thisRow.DefaultCellStyle = new() { BackColor = deadBg, ForeColor = deadFg, SelectionBackColor = deadBg, SelectionForeColor = deadFg };
 
         if (f.LName == "TamTam") thisRow.Cells["LName"].Value = $"TamTam ♥";
-        if (f.LName == "ParkaBuoy") thisRow.Cells["LName"].Value = $"ParkaBuoy {new string(' ', DateTime.Now.Second % 5)}{PokemonPicker(f.InSquad ? 1 : 0)}";
+        //if (f.LName == "ParkaBuoy") thisRow.Cells["LName"].Value = $"ParkaBuoy {new string(' ', DateTime.Now.Second % 5)}{PokemonPicker(f.InSquad ? 1 : 0)}";
 
         if (f.Luck == 7777)
         {
@@ -645,9 +725,12 @@ namespace RosterizerLW
         }
 
         filteredSoldierIndex++;
+        thisRow.Selected = (((thisRow.Cells["Id"].Value ?? "").ToString() == SoldierSelectedIdXP.Split(',').First()) && ((thisRow.Cells["XP"].Value ?? "").ToString() == SoldierSelectedIdXP.Split(',').Last()));
       }
 
       ResetChecklist();
+      if (rosterGridView.SelectedRows.Count > 0) PopupateSoldierPerks(rosterGridView.SelectedRows?[0].Index ?? 0);
+      else PopupateSoldierPerks(0);
     }
 
     private void SetRosterPerks()
@@ -686,37 +769,6 @@ namespace RosterizerLW
         ListedRosterPerks.TryGetValue(p, out int perkCount);
         if (!nonRosterPerksCheckbox.Checked && perkCount == 0) continue;
         rosterPerkList.Rows.Add([p, perkCount]);
-      }
-    }
-
-    private static string PokemonPicker(int i)
-    {
-      if (i == 1)
-      {
-        return (DateTime.Now.Millisecond % 4) switch
-        {
-          1 => "༼◥▶ل͜◀◤༽",
-          2 => "♪┏(・o･)┛♪",
-          _ => ""
-        };
-      }
-      else
-      {
-        return (DateTime.Now.Millisecond % 23) switch
-        {
-          1 => "ฅ(^•ﻌ•^ฅ)",
-          2 => "ʕ •ᴥ•ʔ",
-          3 => "ヽ༼ຈل͜ຈ༽ﾉ",
-          4 => "(´･ω･`)",
-          6 => ">:3c",
-          7 => "(ﾉ◕ヮ◕)ﾉ*:･ ﾟ✧",
-          8 => "=＾● ⋏ ●＾=",
-          10 => "ლↂ‿‿ↂლ",
-          11 => "⊙︿⊙",
-          12 => "（＞д＜）ง ▬ι═══ﺤ",
-          13 => "↜(╰ •ω•)╯",
-          _ => ""
-        };
       }
     }
 
@@ -906,7 +958,7 @@ namespace RosterizerLW
                     thisSoldier.Stats.Mobility = aStats[statIndex];
                     break;
                   case 7:
-                    thisSoldier.Stats.Will = aStats[statIndex];
+                    thisSoldier.Stats.Will = thisSoldier.IsShiv ? 99999 : aStats[statIndex];
                     break;
                 }
               }
@@ -954,6 +1006,8 @@ namespace RosterizerLW
 
     private void PopupateSoldierPerks(int rosterRowIndex)
     {
+      if (rosterRowIndex >= rosterGridView.RowCount) return;
+
       DataGridViewRow r = rosterGridView.Rows[rosterRowIndex];
       if (r is not null)
       {
@@ -962,9 +1016,9 @@ namespace RosterizerLW
         soldierPerksGridView.Rows.Add($"{s.LName} - {s.RankName}");
         soldierPerksGridView.Rows[0].Cells[0].Style = new()
         {
-          BackColor = soldierRowBg,
+          BackColor = soldierTabUnselectedBg,
           ForeColor = soldierRowFg,
-          SelectionBackColor = soldierRowBg,
+          SelectionBackColor = soldierTabUnselectedBg,
           SelectionForeColor = soldierRowFg,
           Font = new(Font, FontStyle.Regular),
           Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -983,6 +1037,8 @@ namespace RosterizerLW
             Font = new(Font, FontStyle.Regular),
           };
         }
+        SoldierSelectedIdXP = $"{rosterGridView.Rows[rosterRowIndex].Cells["Id"].Value},{rosterGridView.Rows[rosterRowIndex].Cells["XP"].Value}";
+        rosterGridView.Rows[rosterRowIndex].Selected = true;
       }
     }
 
@@ -1005,7 +1061,8 @@ namespace RosterizerLW
           if (passed.Count > 0)
           {
             rosterPerkList.Rows.Clear();
-            rosterPerkList.Rows.Add($"~\\{passed.First().Key}\\", passed.First().Value);
+            string curCel = passed.First().Key.Replace("~", "").Replace("\\", "");
+            rosterPerkList.Rows.Add($"~\\" + curCel + (string.IsNullOrWhiteSpace(curCel) ? "" : "\\"), passed.First().Value);
             passed.Remove(passed.First().Key);
             rosterPerkList.Rows[0].DividerHeight += 4;
             rosterPerkList.Rows[0].Frozen = true;
@@ -1097,24 +1154,25 @@ namespace RosterizerLW
 
     private void rosterGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
     {
-      if (e.RowIndex == -1)
+      /*if (e.RowIndex == -1)
       {
         e.PaintBackground(e.CellBounds, false);
-        TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue), (e.CellStyle ?? new()).Font, e.CellBounds, e.CellStyle.ForeColor, TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter);
+        TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue), (e.CellStyle ?? new()).Font, e.CellBounds, e.CellStyle.ForeColor, TextFormatFlags.VerticalCenter |'TextFormatFlags.HorizontalCenter);
         e.Handled = true;
       }
       // don't draw zeroes for tonext (shiv/msgt)
-      else if (e.RowIndex >= 0 && e.ColumnIndex == 10 && ((long?)e.Value ?? 0) == 99999)
+      else if (e.RowIndex >= 0 && e.ColumnIndex == 10 && string.IsNullOrWhiteSpace((e.Value ?? "").ToString()))
       {
         e.PaintBackground(e.CellBounds, false);
         e.Handled = true;
       }
-      else if (e.ColumnIndex > 1 && ((DataGridView)sender).Rows[e.RowIndex].Selected)
+      else*/
+      if (e.RowIndex >= 0 && e.ColumnIndex > 1 && ((DataGridView)sender).Rows[e.RowIndex].Selected)
       {
         e.PaintBackground(e.CellBounds, false);
         if (e.ColumnIndex > 3 && e.ColumnIndex != 11)
         {
-          TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue), Font, e.CellBounds, gridCellFg, TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+          TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue), Font, e.CellBounds, gridCellFg, TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding | TextFormatFlags.PreserveGraphicsClipping);
         }
         else
         {
@@ -1129,72 +1187,19 @@ namespace RosterizerLW
     {
       if (e.Button == MouseButtons.Right)
       {
+        // reset sorting
         if (e.RowIndex == -1)
         {
           DefaultSorting();
           ListRoster();
         }
-        else
-        {
-          DataGridViewRow r = rosterGridView.Rows[e.RowIndex];
-          if (r is not null)
-          {
-            Soldier? s = Roster.FirstOrDefault(x => ((r.Cells["LName"].Value ?? "").ToString() ?? "").Contains(x.LName));
-            if (s is not null && !s.IsDead && (!s.IsWounded || s.HoursOut <= RecoverableHrs))
-            {
-              if (s?.InSquad == true)
-              {
-                CurrentSquadSize--;
-                s.InSquad = false;
-                ListRoster();
-              }
-              else if (CurrentSquadSize <= trackBar2.Value)
-              {
-                CurrentSquadSize++;
-                s?.InSquad = true;
-                ListRoster();
-              }
-
-            }
-          }
-        }
+        else AddToSquad(sender, e.RowIndex);
       }
       else if (e.Button == MouseButtons.Left)
       {
         if (e.RowIndex == -1)
         {
-          if (SortArray.Count() > 5) SortArray = [.. SortArray.Take(MaxSortDepth)];
-
-          // looks like this
-          // 0 [0,0,0,0,0,0,0,0,0,1,0,0] - sort by third-to-last column (XP)
-          // 1 [0,-1,0,0,0,0,0,0,0,0,0,0] - sort by second column ascending
-          // etc
-          // iterate through superarray, i.e. previous sorts, up to MaxSortDepth
-          bool wasInvert = false;
-          for (int i = 0; i < SortArray.Count(); i++)
-          {
-            bool isInvert = false;
-            // iterate through subarrays, each with current sorting
-            for (int j = 0; j < SortArray[i].Count(); j++)
-            {
-              if (e.ColumnIndex == j)
-              {
-                if (SortArray[i][j] != 0)
-                {
-                  SortArray[i][j] *= -1;
-                  isInvert = true;
-                }
-              }
-            }
-            wasInvert = isInvert;
-          }
-          if (!wasInvert)
-          {
-            int[] newSort = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            newSort[e.ColumnIndex] = 1;
-            SortArray.Add([.. newSort]);
-          }
-
+          DoSorting(e.ColumnIndex);
           ListRoster();
         }
         else PopupateSoldierPerks(e.RowIndex);
@@ -1365,8 +1370,6 @@ namespace RosterizerLW
         ResetRosterPerkList();
         ListRoster();
       }
-
-      if (!timer2.IsRunning && tabControl1.SelectedIndex == 3) timerStartStopButton_Click(new(), new());
     }
 
     private void checklistGridView_CellContentClick(object sender, DataGridViewCellMouseEventArgs e)
