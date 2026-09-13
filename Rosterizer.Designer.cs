@@ -88,6 +88,8 @@
       checkCount = new DataGridViewTextBoxColumn();
       tabPage7 = new TabPage();
       tableLayoutPanel4 = new TableLayoutPanel();
+      trackBar2 = new TrackBar();
+      label1 = new Label();
       nonRosterPerksCheckbox = new CheckBox();
       minLvlLabel = new Label();
       deadCheckbox = new CheckBox();
@@ -124,6 +126,7 @@
       ((System.ComponentModel.ISupportInitialize)checklistGridView).BeginInit();
       tabPage7.SuspendLayout();
       tableLayoutPanel4.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
       ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
       panel1.SuspendLayout();
       tableLayoutPanel5.SuspendLayout();
@@ -190,7 +193,7 @@
       rosterGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       rosterGridView.RowTemplate.ReadOnly = true;
       rosterGridView.ScrollBars = ScrollBars.Vertical;
-      rosterGridView.SelectionMode = DataGridViewSelectionMode.CellSelect;
+      rosterGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
       rosterGridView.ShowEditingIcon = false;
       rosterGridView.ShowRowErrors = false;
       rosterGridView.Size = new Size(988, 681);
@@ -484,7 +487,6 @@
       rosterPerkList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       rosterPerkList.ColumnHeadersVisible = false;
       rosterPerkList.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2 });
-      rosterPerkList.Cursor = Cursors.Hand;
       rosterPerkList.Dock = DockStyle.Fill;
       rosterPerkList.Location = new Point(3, 33);
       rosterPerkList.Name = "rosterPerkList";
@@ -497,10 +499,10 @@
       rosterPerkList.TabIndex = 2;
       rosterPerkList.TabStop = false;
       rosterPerkList.CellMouseClick += rosterPerkList_CellMouseClick;
+      rosterPerkList.CellMouseDoubleClick += rosterPerkList_MouseDoubleClick;
       rosterPerkList.CellPainting += rosterPerkList_CellPainting;
       rosterPerkList.SelectionChanged += rosterPerkList_SelectionChanged;
       rosterPerkList.KeyPress += rosterPerkList_KeyPress;
-      rosterPerkList.MouseDown += rosterPerkList_MouseDown;
       // 
       // dataGridViewTextBoxColumn1
       // 
@@ -544,6 +546,7 @@
       squadPerkList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       squadPerkList.ColumnHeadersVisible = false;
       squadPerkList.Columns.AddRange(new DataGridViewColumn[] { PerkName, Count });
+      squadPerkList.Cursor = Cursors.Hand;
       squadPerkList.Dock = DockStyle.Fill;
       squadPerkList.Location = new Point(0, 0);
       squadPerkList.MultiSelect = false;
@@ -556,6 +559,7 @@
       squadPerkList.Size = new Size(258, 447);
       squadPerkList.TabIndex = 0;
       squadPerkList.TabStop = false;
+      squadPerkList.CellMouseClick += squadPerkList_CellMouseClick;
       // 
       // PerkName
       // 
@@ -599,6 +603,7 @@
       soldierPerksGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       soldierPerksGridView.ColumnHeadersVisible = false;
       soldierPerksGridView.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn3 });
+      soldierPerksGridView.Cursor = Cursors.Hand;
       soldierPerksGridView.Dock = DockStyle.Fill;
       soldierPerksGridView.Location = new Point(0, 0);
       soldierPerksGridView.MultiSelect = false;
@@ -611,6 +616,7 @@
       soldierPerksGridView.Size = new Size(258, 447);
       soldierPerksGridView.TabIndex = 1;
       soldierPerksGridView.TabStop = false;
+      soldierPerksGridView.CellMouseClick += soldierPerksGridView_CellMouseClick;
       // 
       // dataGridViewTextBoxColumn3
       // 
@@ -695,25 +701,54 @@
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+      tableLayoutPanel4.Controls.Add(trackBar2, 1, 4);
+      tableLayoutPanel4.Controls.Add(label1, 0, 4);
       tableLayoutPanel4.Controls.Add(nonRosterPerksCheckbox, 0, 2);
-      tableLayoutPanel4.Controls.Add(minLvlLabel, 0, 4);
+      tableLayoutPanel4.Controls.Add(minLvlLabel, 0, 5);
       tableLayoutPanel4.Controls.Add(deadCheckbox, 2, 1);
       tableLayoutPanel4.Controls.Add(shivCheckbox, 0, 1);
       tableLayoutPanel4.Controls.Add(woundedCheckbox, 2, 0);
       tableLayoutPanel4.Controls.Add(fatiguedCheckbox, 0, 0);
-      tableLayoutPanel4.Controls.Add(trackBar1, 1, 4);
+      tableLayoutPanel4.Controls.Add(trackBar1, 1, 5);
       tableLayoutPanel4.Dock = DockStyle.Fill;
       tableLayoutPanel4.Location = new Point(3, 3);
       tableLayoutPanel4.Name = "tableLayoutPanel4";
-      tableLayoutPanel4.RowCount = 6;
+      tableLayoutPanel4.RowCount = 7;
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 8F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+      tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.Size = new Size(252, 441);
       tableLayoutPanel4.TabIndex = 0;
+      // 
+      // trackBar2
+      // 
+      trackBar2.AutoSize = false;
+      tableLayoutPanel4.SetColumnSpan(trackBar2, 3);
+      trackBar2.Dock = DockStyle.Fill;
+      trackBar2.LargeChange = 1;
+      trackBar2.Location = new Point(66, 71);
+      trackBar2.Minimum = 6;
+      trackBar2.Name = "trackBar2";
+      trackBar2.Size = new Size(183, 34);
+      trackBar2.TabIndex = 27;
+      trackBar2.TickStyle = TickStyle.TopLeft;
+      trackBar2.Value = 9;
+      // 
+      // label1
+      // 
+      label1.Anchor = AnchorStyles.None;
+      label1.AutoSize = true;
+      label1.FlatStyle = FlatStyle.Flat;
+      label1.Location = new Point(11, 74);
+      label1.Name = "label1";
+      label1.Size = new Size(41, 28);
+      label1.TabIndex = 26;
+      label1.Text = "Squad size:";
+      label1.TextAlign = ContentAlignment.MiddleRight;
       // 
       // nonRosterPerksCheckbox
       // 
@@ -736,7 +771,7 @@
       minLvlLabel.Anchor = AnchorStyles.None;
       minLvlLabel.AutoSize = true;
       minLvlLabel.FlatStyle = FlatStyle.Flat;
-      minLvlLabel.Location = new Point(4, 74);
+      minLvlLabel.Location = new Point(4, 114);
       minLvlLabel.Name = "minLvlLabel";
       minLvlLabel.Size = new Size(54, 28);
       minLvlLabel.TabIndex = 22;
@@ -823,7 +858,7 @@
       tableLayoutPanel4.SetColumnSpan(trackBar1, 3);
       trackBar1.Dock = DockStyle.Fill;
       trackBar1.LargeChange = 1;
-      trackBar1.Location = new Point(66, 71);
+      trackBar1.Location = new Point(66, 111);
       trackBar1.Maximum = 6;
       trackBar1.Name = "trackBar1";
       trackBar1.Size = new Size(183, 34);
@@ -995,6 +1030,7 @@
       tabPage7.ResumeLayout(false);
       tableLayoutPanel4.ResumeLayout(false);
       tableLayoutPanel4.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)trackBar2).EndInit();
       ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
       panel1.ResumeLayout(false);
       tableLayoutPanel5.ResumeLayout(false);
@@ -1062,5 +1098,7 @@
     private TextBox searchTextBox;
     private Label scoreLabel;
     private CheckBox nonRosterPerksCheckbox;
+    private TrackBar trackBar2;
+    private Label label1;
   }
 }
