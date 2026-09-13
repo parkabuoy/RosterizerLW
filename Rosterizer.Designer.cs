@@ -88,6 +88,7 @@
       checkCount = new DataGridViewTextBoxColumn();
       tabPage7 = new TabPage();
       tableLayoutPanel4 = new TableLayoutPanel();
+      nonRosterPerksCheckbox = new CheckBox();
       minLvlLabel = new Label();
       deadCheckbox = new CheckBox();
       shivCheckbox = new CheckBox();
@@ -96,6 +97,7 @@
       trackBar1 = new TrackBar();
       panel1 = new Panel();
       tableLayoutPanel5 = new TableLayoutPanel();
+      scoreLabel = new Label();
       timerResetButton = new Button();
       timerLabel = new Label();
       timerStartStopButton = new Button();
@@ -427,6 +429,7 @@
       tabControl1.SelectedIndex = 0;
       tabControl1.Size = new Size(270, 479);
       tabControl1.TabIndex = 18;
+      tabControl1.DrawItem += tabControl1_DrawItem;
       tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
       // 
       // tabPage3
@@ -692,31 +695,48 @@
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-      tableLayoutPanel4.Controls.Add(minLvlLabel, 0, 3);
+      tableLayoutPanel4.Controls.Add(nonRosterPerksCheckbox, 0, 2);
+      tableLayoutPanel4.Controls.Add(minLvlLabel, 0, 4);
       tableLayoutPanel4.Controls.Add(deadCheckbox, 2, 1);
       tableLayoutPanel4.Controls.Add(shivCheckbox, 0, 1);
       tableLayoutPanel4.Controls.Add(woundedCheckbox, 2, 0);
       tableLayoutPanel4.Controls.Add(fatiguedCheckbox, 0, 0);
-      tableLayoutPanel4.Controls.Add(trackBar1, 1, 3);
+      tableLayoutPanel4.Controls.Add(trackBar1, 1, 4);
       tableLayoutPanel4.Dock = DockStyle.Fill;
       tableLayoutPanel4.Location = new Point(3, 3);
       tableLayoutPanel4.Name = "tableLayoutPanel4";
       tableLayoutPanel4.RowCount = 6;
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 8F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.Size = new Size(252, 441);
       tableLayoutPanel4.TabIndex = 0;
+      // 
+      // nonRosterPerksCheckbox
+      // 
+      nonRosterPerksCheckbox.AutoSize = true;
+      tableLayoutPanel4.SetColumnSpan(nonRosterPerksCheckbox, 4);
+      nonRosterPerksCheckbox.Dock = DockStyle.Fill;
+      nonRosterPerksCheckbox.FlatStyle = FlatStyle.Flat;
+      nonRosterPerksCheckbox.Location = new Point(0, 40);
+      nonRosterPerksCheckbox.Margin = new Padding(0);
+      nonRosterPerksCheckbox.Name = "nonRosterPerksCheckbox";
+      nonRosterPerksCheckbox.Padding = new Padding(10, 0, 0, 0);
+      nonRosterPerksCheckbox.Size = new Size(252, 20);
+      nonRosterPerksCheckbox.TabIndex = 25;
+      nonRosterPerksCheckbox.TabStop = false;
+      nonRosterPerksCheckbox.Text = "Show Non-Roster Perks";
+      nonRosterPerksCheckbox.UseVisualStyleBackColor = true;
       // 
       // minLvlLabel
       // 
       minLvlLabel.Anchor = AnchorStyles.None;
       minLvlLabel.AutoSize = true;
       minLvlLabel.FlatStyle = FlatStyle.Flat;
-      minLvlLabel.Location = new Point(4, 54);
+      minLvlLabel.Location = new Point(4, 74);
       minLvlLabel.Name = "minLvlLabel";
       minLvlLabel.Size = new Size(54, 28);
       minLvlLabel.TabIndex = 22;
@@ -803,7 +823,7 @@
       tableLayoutPanel4.SetColumnSpan(trackBar1, 3);
       trackBar1.Dock = DockStyle.Fill;
       trackBar1.LargeChange = 1;
-      trackBar1.Location = new Point(66, 51);
+      trackBar1.Location = new Point(66, 71);
       trackBar1.Maximum = 6;
       trackBar1.Name = "trackBar1";
       trackBar1.Size = new Size(183, 34);
@@ -829,17 +849,32 @@
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+      tableLayoutPanel5.Controls.Add(scoreLabel, 2, 1);
       tableLayoutPanel5.Controls.Add(timerResetButton, 1, 0);
       tableLayoutPanel5.Controls.Add(timerLabel, 2, 0);
       tableLayoutPanel5.Controls.Add(timerStartStopButton, 0, 0);
       tableLayoutPanel5.Dock = DockStyle.Fill;
       tableLayoutPanel5.Location = new Point(0, 0);
       tableLayoutPanel5.Name = "tableLayoutPanel5";
-      tableLayoutPanel5.RowCount = 2;
+      tableLayoutPanel5.RowCount = 3;
+      tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
       tableLayoutPanel5.Size = new Size(270, 192);
       tableLayoutPanel5.TabIndex = 0;
+      // 
+      // scoreLabel
+      // 
+      scoreLabel.AutoSize = true;
+      scoreLabel.Dock = DockStyle.Fill;
+      scoreLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      scoreLabel.ForeColor = SystemColors.ControlLightLight;
+      scoreLabel.Location = new Point(120, 30);
+      scoreLabel.Margin = new Padding(0);
+      scoreLabel.Name = "scoreLabel";
+      scoreLabel.Size = new Size(150, 30);
+      scoreLabel.TabIndex = 3;
+      scoreLabel.TextAlign = ContentAlignment.MiddleRight;
       // 
       // timerResetButton
       // 
@@ -861,9 +896,10 @@
       timerLabel.Dock = DockStyle.Fill;
       timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
       timerLabel.ForeColor = SystemColors.ControlLightLight;
-      timerLabel.Location = new Point(123, 0);
+      timerLabel.Location = new Point(120, 0);
+      timerLabel.Margin = new Padding(0);
       timerLabel.Name = "timerLabel";
-      timerLabel.Size = new Size(144, 30);
+      timerLabel.Size = new Size(150, 30);
       timerLabel.TabIndex = 0;
       timerLabel.Text = "0:00:00:00.000";
       timerLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -1024,5 +1060,7 @@
     private TrackBar trackBar1;
     private TableLayoutPanel tableLayoutPanel6;
     private TextBox searchTextBox;
+    private Label scoreLabel;
+    private CheckBox nonRosterPerksCheckbox;
   }
 }

@@ -102,9 +102,13 @@ namespace RosterizerLW
     private TimeSpan elapsedTime = TimeSpan.Zero;
     private bool timerRunning = false;
 
-    static readonly double indPct = 1.1;
-    static readonly double indPct2 = 1.05;
-    static readonly double indPct3 = 1.45;
+    // these change the relative count of high/low numbers highlighted (other than min/max) for the various stats (multiple since i.e. percentage spread on def will be lower than aim/will)
+    // -- or to put it another way, too much green/red? make these lower
+    static  double indPctMobWill = 0.22;
+    static  double indPctAim = 0.3;
+    static  double indPctHp = 0.5;
+    static double indPctDef = 0.9;
+
     static readonly int minHiLoListSize = 7;
     static readonly int minMinMaxListSize = 4;
 
@@ -130,19 +134,17 @@ namespace RosterizerLW
     public static Dictionary<string, int> SquadPerks = [];
     public static Dictionary<string, int> RosterPerks = [];
     public static int RecoverableHrs = 8;
-    //public static RosterSort[] DefaultSorting = [RosterSort.Rank, RosterSort.Xp];
-    //public static RosterSort[] Sorting = DefaultSorting;
     public static int BlueshirtLvl = 2;
     public static long[] XpLvls = [120, 350, 700, 1200, 2000, 3000, 4200]; // xp levels per DefaultGameCore.ini ~ln. 900
     public static Dictionary<string, int> ChecklistPerks = [];
     public static bool ChecklistPass = false;
+    public static long ChecklistPassTime = 0;
     public static bool NavFromChecklist = false;
 
     public static List<List<int>> SortArray = [[]];
     public static int[] DefaultSortArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0];
     public static int MaxSortDepth = 5;
     static string overrideSavePath = "..\\..\\..\\saveBackup\\save43";
-    //static string overrideSavePath = "..\\..\\..\\saveBackup\\20260828.1802.save20";
     static string outputDir = "..\\..\\..\\output\\"; // the output dir
     static string backupDir = "..\\..\\..\\saveBackup\\"; // path where saves will be backed up
     static string x2jPath = "..\\..\\..\\exe\\xcom2json.exe"; // the path to xcom2json.exe, CRC 
@@ -156,7 +158,6 @@ namespace RosterizerLW
     string autoSavePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\My Games\\XCOM - Enemy Within\\XComGame\\SaveData";
 
     // ------------------------------------------------------------------------------------------------------------------------------------------------------------
-
     string saveFilenameFull = "";
     string saveFilename = "";
     string jsonFilenameFull = "";
@@ -252,14 +253,10 @@ namespace RosterizerLW
 
       Text = $"{saveFile?.Name}  -  {(SaveParsed.Header.Save_description ?? new()).Str}";
 
-      this.tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
-      this.tabControl1.DrawItem += new DrawItemEventHandler(this.tabControl1_DrawItem);
-
-      ListRoster();
+      trackBar1.Value = BlueshirtLvl;
       ResetRosterPerkList();
       PopupateSoldierPerks(0);
 
-      trackBar1.Value = BlueshirtLvl;
     }
 
     public void DefaultSorting()
@@ -325,6 +322,8 @@ namespace RosterizerLW
       ChecklistPass = checklistOk == ChecklistPerks.Count;
       string checkMark = ChecklistPass ? "✓" : "ⅹ";
       (tabControl1.TabPages[3] ?? new()).Text = $"{checklistOk}/{ChecklistPerks.Count} {checkMark}";
+
+      
     }
 
     public void ListRoster(bool squadOnly = false)
@@ -402,7 +401,7 @@ namespace RosterizerLW
               filteredSoldiers = [.. (isInverted ? filteredSoldiers.OrderByDescending(x => x.LName) : filteredSoldiers.OrderBy(x => x.LName))];
               break;
             case 1:
-              filteredSoldiers = [.. (isInverted ? filteredSoldiers.OrderByDescending(x => x.NName) : filteredSoldiers.OrderBy(x => x.NName))];
+              filteredSoldiers = [.. (isInverted ? filteredSoldiers.OrderBy(x => x.IsShiv).ThenByDescending(x => x.NName) : filteredSoldiers.OrderBy(x => x.IsShiv).ThenBy(x => x.NName))];
               break;
             case 2:
               filteredSoldiers = isInverted
@@ -440,6 +439,11 @@ namespace RosterizerLW
         }
       }
 
+      double hiLo =      1 - (1 / (double)filteredSoldiers.Count) + indPctMobWill; 
+      double hiLoHigh =  1 - (1 / (double)filteredSoldiers.Count) + indPctAim;
+      double hiLolow =   1 - (1 / (double)filteredSoldiers.Count) + indPctHp;
+      double hiLoLower = 1 - (1 / (double)filteredSoldiers.Count) + indPctDef;
+
       foreach (Soldier f in filteredSoldiers.OrderByDescending(x => x.InSquad))
       {
         if (filteredSoldiers.Count >= minMinMaxListSize && !f.IsShiv && !f.IsDead && !f.IsWounded)
@@ -458,17 +462,17 @@ namespace RosterizerLW
 
           if (filteredSoldiers.Count >= minHiLoListSize)
           {
-            hiHp = !minHp && !maxHp && f.Stats.HP * indPct >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.HP);
-            hiMob = !minMob && !maxMob && f.Stats.Mobility * indPct >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Mobility);
-            hiAim = !minAim && !maxAim && f.Stats.Aim * indPct2 >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Aim);
-            hiWill = !minWill && !maxWill && f.Stats.Will * indPct2 >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Will);
-            hiDef = !minDef && !maxDef && f.Stats.Defense * indPct3 >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Defense);
+            hiHp = !minHp && !maxHp && f.Stats.HP * hiLolow >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.HP);
+            hiMob = !minMob && !maxMob && f.Stats.Mobility * hiLo >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Mobility);
+            hiAim = !minAim && !maxAim && f.Stats.Aim * hiLoHigh >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Aim);
+            hiWill = !minWill && !maxWill && f.Stats.Will * hiLo >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Will);
+            hiDef = !minDef && !maxDef && f.Stats.Defense * hiLoLower >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Defense);
 
-            loHp = !hiHp && !minHp && !maxHp && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.HP) * indPct >= f.Stats.HP;
-            loMob = !hiMob && !minMob && !maxMob && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Mobility) * indPct >= f.Stats.Mobility;
-            loAim = !hiAim && !minAim && !maxAim && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Aim) * indPct2 >= f.Stats.Aim;
-            loWill = !hiWill && !minWill && !maxWill && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Will) * indPct2 >= f.Stats.Will;
-            loDef = !hiDef && !minDef && !maxDef && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Defense) * indPct3 >= f.Stats.Defense;
+            loHp = !hiHp && !minHp && !maxHp && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.HP) * indPctMobWill >= f.Stats.HP;
+            loMob = !hiMob && !minMob && !maxMob && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Mobility) * indPctMobWill >= f.Stats.Mobility;
+            loAim = !hiAim && !minAim && !maxAim && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Aim) * indPctAim >= f.Stats.Aim;
+            loWill = !hiWill && !minWill && !maxWill && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Will) * indPctAim >= f.Stats.Will;
+            loDef = !hiDef && !minDef && !maxDef && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Defense) * indPctHp >= f.Stats.Defense;
           }
         }
         else
@@ -573,9 +577,8 @@ namespace RosterizerLW
 
         if (f.LName == "TamTam") thisRow.Cells["LName"].Value = $"TamTam ♥";
         if (f.LName == "ParkaBuoy") thisRow.Cells["LName"].Value = $"ParkaBuoy {new string(' ', DateTime.Now.Second % 5)}{PokemonPicker(f.InSquad ? 1 : 0)}";
-        
-        // lucky dip
-        if (!f.IsWounded && !f.IsBlueshirt && !f.IsDead && !f.IsFatigued && !f.InSquad && DateTime.Now.Microsecond % 100 == 0 && DateTime.Now.Millisecond % 100 == 0)
+
+        if (f.Luck == 7777)
         {
           thisRow.DefaultCellStyle = new()
           {
@@ -629,7 +632,8 @@ namespace RosterizerLW
 
       foreach (Soldier thisSoldier in Roster)
       {
-        if (!thisSoldier.IsDead && (!thisSoldier.IsWounded || thisSoldier.HoursOut <= RecoverableHrs) && !thisSoldier.IsBlueshirt)
+        if (thisSoldier.IsDead || (thisSoldier.IsWounded && thisSoldier.HoursOut > RecoverableHrs) || thisSoldier.IsBlueshirt) continue;
+        else
         {
           foreach (Perk p in thisSoldier.Perks)
           {
@@ -642,6 +646,7 @@ namespace RosterizerLW
       foreach (string p in PerkNames.OrderBy(x => x))
       {
         RosterPerks.TryGetValue(p, out int perkCount);
+        if (!nonRosterPerksCheckbox.Checked && perkCount == 0) continue;
         rosterPerkList.Rows.Add([p, perkCount]);
       }
     }
@@ -793,6 +798,8 @@ namespace RosterizerLW
               IsFatigued = false,
               InSquad = false,
               HasChecklistPerk = false,
+              Score = 0,
+              Luck = 0
             };
             thisSoldier.IsDead = thisSoldier.Status == "Dead";
             thisSoldier.IsShiv = thisSoldier.RankId == -1;
@@ -802,7 +809,10 @@ namespace RosterizerLW
             thisSoldier.RankName = RankMap(thisSoldier.RankId);
             thisSoldier.ToNext = thisSoldier.IsShiv || thisSoldier.RankId == 7 ? 99999 : thisSoldier.RankId > 0 && thisSoldier.RankId < XpLvls.Length ? XpLvls[thisSoldier.RankId] - thisSoldier.Xp : 0;
             if (thisSoldier.IsShiv) thisSoldier.Class = "Shiv";
-
+            
+            if (thisSoldier.IsShiv || thisSoldier.IsWounded || thisSoldier.IsDead) thisSoldier.Luck = 0;
+            else thisSoldier.Luck = DateTime.Now.Microsecond % 100;
+            
             // get the perks taken
             // these are stored as an array of integers in aUpgrades, 176 of them (one per perk)
             int[] aUpgrades = [];
@@ -863,6 +873,17 @@ namespace RosterizerLW
                 }
               }
             }
+
+            thisSoldier.Score =
+                (thisSoldier.Stats.Defense * 17)
+              + (thisSoldier.Stats.HP * 22)
+              + (thisSoldier.Stats.Mobility * 9)
+              + (thisSoldier.Stats.Will * 8)
+              + (thisSoldier.Stats.Aim * 5);
+
+            if (thisSoldier.IsFatigued) thisSoldier.Score = (long)(thisSoldier.Score * 0.75);
+
+            thisSoldier.Luck *= DateTime.Now.Microsecond % 100;
 
             // add the soldier to the roster
             roster.Add(thisSoldier);
@@ -1019,7 +1040,7 @@ namespace RosterizerLW
 
     private void rosterPerkList_SelectionChanged(object sender, EventArgs e)
     {
-      if (rosterPerkList.SelectedRows.Count > 0 && rosterPerkList.SelectedRows[0].Index > 0)
+      if (!NavFromChecklist && rosterPerkList.SelectedRows.Count > 0 && rosterPerkList.SelectedRows[0].Index > 0)
       {
         if (rosterPerkList.Rows[0].Selected) rosterPerkList.Rows[0].Selected = false;
         ListRoster();
@@ -1094,6 +1115,25 @@ namespace RosterizerLW
       }
       else ListRoster();
     }
+
+    private static long CalculateScore()
+    {
+      long score = 0;
+      long baseScore = 101933;
+
+      Roster.ForEach(x => score += x.InSquad ? x.Score : -204);
+
+      if (ChecklistPassTime < 180) return baseScore - score;
+      if (ChecklistPassTime < 240) return baseScore - score - 19320;
+      if (ChecklistPassTime < 360) return baseScore - score - 29203;
+      if (ChecklistPassTime < 600) return baseScore - score - 39548;
+      if (ChecklistPassTime < 1200) return baseScore - score - 83920;
+      else return 0;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// action bindings
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
     private void searchTextBox_KeyDown(object sender, KeyEventArgs e)
     {
@@ -1189,7 +1229,7 @@ namespace RosterizerLW
           }
           else
           {
-            Rectangle r = new Rectangle(recBounds.X + 2, recBounds.Y + 2, recBounds.Width - 4, recBounds.Height - 4);
+            Rectangle r = new(recBounds.X + 2, recBounds.Y + 2, recBounds.Width - 4, recBounds.Height - 4);
 
             if (bSelected)
             {
@@ -1245,7 +1285,7 @@ namespace RosterizerLW
 
     private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
     {
-      if (tabControl1.SelectedIndex == 0)
+      if (tabControl1.SelectedIndex == 0 && !NavFromChecklist)
       {
         ResetRosterPerkList();
         ListRoster();
@@ -1294,6 +1334,8 @@ namespace RosterizerLW
       ChecklistPass = false;
       timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
       timerLabel.ForeColor = windowTitleFg;
+      scoreLabel.Text = "";
+      ChecklistPassTime = 0;
       foreach (Soldier s in Roster) s.InSquad = false;
       tabControl1.SelectedIndex = 0;
       ResetRosterPerkList();
@@ -1302,23 +1344,25 @@ namespace RosterizerLW
 
     private void timer1_Tick(object sender, EventArgs e)
     {
+      timerLabel.Text = elapsedTime.ToString("G")[..14];
       if (ChecklistPass)
       {
-        timerLabel.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-        timerLabel.ForeColor = maxBg;
+        if (ChecklistPassTime == 0) ChecklistPassTime = timer2.ElapsedMilliseconds / 1000;
+        scoreLabel.Font = timerLabel.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        timerLabel.ForeColor = scoreLabel.ForeColor = maxBg;
+        if (DateTime.Now.Millisecond < 500) timerLabel.Text = "";
+        else scoreLabel.Text = $"Score: {CalculateScore()}";
         timerRunning = false;
         timer2.Stop();
         timer2.Reset();
         timerStartStopButton.Text = "Start";
       }
-      else
-        if (timerRunning)
-        {
-          timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-          timerLabel.ForeColor = windowTitleFg;
-          elapsedTime = timer2.Elapsed;
-        }
-      timerLabel.Text = elapsedTime.ToString("G").Substring(0, 14);
+      else if (timerRunning)
+      {
+        timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+        timerLabel.ForeColor = windowTitleFg;
+        elapsedTime = timer2.Elapsed;
+      }
     }
 
     private void rosterPerkList_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)

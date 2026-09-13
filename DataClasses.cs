@@ -22,6 +22,8 @@
       public required bool IsDead { get; set; }
       public required bool InSquad { get; set; }
       public required bool HasChecklistPerk { get; set; }
+      public required long Score { get; set; }
+      public required int Luck { get; set; }
     }
 
     public class SoldierStats
