@@ -42,7 +42,14 @@
       public long Type { get; set; }
     }
 
-    public class Checkpoint
+    public class RelatedPerk
+  {
+    public required Perk[] PerkTree { get; set; }
+    public required Dictionary<Perk, RelatedPerk> PerkBranches { get; set; }
+    public required List<Soldier> SubRoster { get; set; }
+  }
+
+  public class Checkpoint
     {
       public int Unknown_int1 { get; set; }
       public string? Game_type { get; set; }

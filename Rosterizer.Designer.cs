@@ -43,13 +43,16 @@
       DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Rosterizer));
       tableLayoutPanel1 = new TableLayoutPanel();
       rosterGridView = new DataGridView();
@@ -85,8 +88,17 @@
       dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
       tabPage8 = new TabPage();
       checklistGridView = new DataGridView();
+      checkName = new DataGridViewTextBoxColumn();
+      checkCount = new DataGridViewTextBoxColumn();
+      tabPage9 = new TabPage();
+      tableLayoutPanel2 = new TableLayoutPanel();
+      treeSearchTextbox = new TextBox();
+      treeDataGrid = new DataGridView();
+      dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+      dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
       tabPage7 = new TabPage();
       tableLayoutPanel4 = new TableLayoutPanel();
+      darkCheckbox = new CheckBox();
       trackBar2 = new TrackBar();
       label1 = new Label();
       nonRosterPerksCheckbox = new CheckBox();
@@ -106,8 +118,6 @@
       tabPage5 = new TabPage();
       tabPage6 = new TabPage();
       timer1 = new System.Windows.Forms.Timer(components);
-      checkName = new DataGridViewTextBoxColumn();
-      checkCount = new DataGridViewTextBoxColumn();
       tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)rosterGridView).BeginInit();
       tableLayoutPanel3.SuspendLayout();
@@ -125,6 +135,9 @@
       ((System.ComponentModel.ISupportInitialize)soldierPerksGridView).BeginInit();
       tabPage8.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)checklistGridView).BeginInit();
+      tabPage9.SuspendLayout();
+      tableLayoutPanel2.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)treeDataGrid).BeginInit();
       tabPage7.SuspendLayout();
       tableLayoutPanel4.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
@@ -188,6 +201,7 @@
       rosterGridView.ImeMode = ImeMode.NoControl;
       rosterGridView.Location = new Point(0, 0);
       rosterGridView.Margin = new Padding(0);
+      rosterGridView.MultiSelect = false;
       rosterGridView.Name = "rosterGridView";
       rosterGridView.ReadOnly = true;
       rosterGridView.RowHeadersVisible = false;
@@ -422,17 +436,20 @@
       tabControl1.Controls.Add(tabPage2);
       tabControl1.Controls.Add(tabPage1);
       tabControl1.Controls.Add(tabPage8);
+      tabControl1.Controls.Add(tabPage9);
       tabControl1.Controls.Add(tabPage7);
       tabControl1.Dock = DockStyle.Fill;
       tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
       tabControl1.ItemSize = new Size(55, 20);
       tabControl1.Location = new Point(0, 0);
       tabControl1.Margin = new Padding(0);
+      tabControl1.Multiline = true;
       tabControl1.Name = "tabControl1";
       tabControl1.Padding = new Point(0, 0);
       tabControl1.RightToLeft = RightToLeft.No;
       tabControl1.SelectedIndex = 0;
       tabControl1.Size = new Size(270, 479);
+      tabControl1.SizeMode = TabSizeMode.FillToRight;
       tabControl1.TabIndex = 18;
       tabControl1.DrawItem += tabControl1_DrawItem;
       tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
@@ -441,10 +458,10 @@
       // 
       tabPage3.BorderStyle = BorderStyle.Fixed3D;
       tabPage3.Controls.Add(tableLayoutPanel6);
-      tabPage3.Location = new Point(4, 24);
+      tabPage3.Location = new Point(4, 44);
       tabPage3.Margin = new Padding(1);
       tabPage3.Name = "tabPage3";
-      tabPage3.Size = new Size(262, 451);
+      tabPage3.Size = new Size(262, 431);
       tabPage3.TabIndex = 2;
       tabPage3.Text = "Roster";
       tabPage3.UseVisualStyleBackColor = true;
@@ -461,7 +478,7 @@
       tableLayoutPanel6.RowCount = 2;
       tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-      tableLayoutPanel6.Size = new Size(258, 447);
+      tableLayoutPanel6.Size = new Size(258, 427);
       tableLayoutPanel6.TabIndex = 3;
       // 
       // searchTextBox
@@ -489,6 +506,15 @@
       rosterPerkList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       rosterPerkList.ColumnHeadersVisible = false;
       rosterPerkList.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2 });
+      dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle17.BackColor = SystemColors.Window;
+      dataGridViewCellStyle17.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      dataGridViewCellStyle17.ForeColor = SystemColors.ActiveCaptionText;
+      dataGridViewCellStyle17.Padding = new Padding(0, 0, 10, 0);
+      dataGridViewCellStyle17.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle17.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle17.WrapMode = DataGridViewTriState.False;
+      rosterPerkList.DefaultCellStyle = dataGridViewCellStyle17;
       rosterPerkList.Dock = DockStyle.Fill;
       rosterPerkList.Location = new Point(3, 33);
       rosterPerkList.Name = "rosterPerkList";
@@ -497,7 +523,7 @@
       rosterPerkList.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       rosterPerkList.ScrollBars = ScrollBars.Vertical;
       rosterPerkList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      rosterPerkList.Size = new Size(252, 411);
+      rosterPerkList.Size = new Size(252, 391);
       rosterPerkList.TabIndex = 2;
       rosterPerkList.TabStop = false;
       rosterPerkList.CellMouseClick += rosterPerkList_CellMouseClick;
@@ -528,10 +554,10 @@
       // 
       tabPage2.BorderStyle = BorderStyle.Fixed3D;
       tabPage2.Controls.Add(squadPerkList);
-      tabPage2.Location = new Point(4, 24);
+      tabPage2.Location = new Point(4, 44);
       tabPage2.Margin = new Padding(1);
       tabPage2.Name = "tabPage2";
-      tabPage2.Size = new Size(262, 451);
+      tabPage2.Size = new Size(262, 431);
       tabPage2.TabIndex = 1;
       tabPage2.Text = "Squad";
       tabPage2.UseVisualStyleBackColor = true;
@@ -558,15 +584,15 @@
       squadPerkList.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       squadPerkList.ScrollBars = ScrollBars.Vertical;
       squadPerkList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      squadPerkList.Size = new Size(258, 447);
+      squadPerkList.Size = new Size(258, 427);
       squadPerkList.TabIndex = 0;
       squadPerkList.TabStop = false;
       squadPerkList.CellMouseClick += squadPerkList_CellMouseClick;
       // 
       // PerkName
       // 
-      dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      PerkName.DefaultCellStyle = dataGridViewCellStyle17;
+      dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      PerkName.DefaultCellStyle = dataGridViewCellStyle18;
       PerkName.HeaderText = "Name";
       PerkName.Name = "PerkName";
       PerkName.ReadOnly = true;
@@ -575,8 +601,8 @@
       // Count
       // 
       Count.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleRight;
-      Count.DefaultCellStyle = dataGridViewCellStyle18;
+      dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleRight;
+      Count.DefaultCellStyle = dataGridViewCellStyle19;
       Count.HeaderText = "Count";
       Count.Name = "Count";
       Count.ReadOnly = true;
@@ -585,10 +611,10 @@
       // 
       tabPage1.BorderStyle = BorderStyle.Fixed3D;
       tabPage1.Controls.Add(soldierPerksGridView);
-      tabPage1.Location = new Point(4, 24);
+      tabPage1.Location = new Point(4, 44);
       tabPage1.Margin = new Padding(1);
       tabPage1.Name = "tabPage1";
-      tabPage1.Size = new Size(262, 451);
+      tabPage1.Size = new Size(262, 431);
       tabPage1.TabIndex = 3;
       tabPage1.Text = "Soldier";
       tabPage1.UseVisualStyleBackColor = true;
@@ -615,7 +641,7 @@
       soldierPerksGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       soldierPerksGridView.ScrollBars = ScrollBars.Vertical;
       soldierPerksGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      soldierPerksGridView.Size = new Size(258, 447);
+      soldierPerksGridView.Size = new Size(258, 427);
       soldierPerksGridView.TabIndex = 1;
       soldierPerksGridView.TabStop = false;
       soldierPerksGridView.CellMouseClick += soldierPerksGridView_CellMouseClick;
@@ -623,8 +649,8 @@
       // dataGridViewTextBoxColumn3
       // 
       dataGridViewTextBoxColumn3.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle19;
+      dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle20;
       dataGridViewTextBoxColumn3.HeaderText = "Name";
       dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
       dataGridViewTextBoxColumn3.ReadOnly = true;
@@ -633,10 +659,10 @@
       // 
       tabPage8.BorderStyle = BorderStyle.Fixed3D;
       tabPage8.Controls.Add(checklistGridView);
-      tabPage8.Location = new Point(4, 24);
+      tabPage8.Location = new Point(4, 44);
       tabPage8.Margin = new Padding(1);
       tabPage8.Name = "tabPage8";
-      tabPage8.Size = new Size(262, 451);
+      tabPage8.Size = new Size(262, 431);
       tabPage8.TabIndex = 5;
       tabPage8.Text = "0/0";
       tabPage8.UseVisualStyleBackColor = true;
@@ -663,20 +689,133 @@
       checklistGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       checklistGridView.ScrollBars = ScrollBars.Vertical;
       checklistGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      checklistGridView.Size = new Size(258, 447);
+      checklistGridView.Size = new Size(258, 427);
       checklistGridView.TabIndex = 2;
       checklistGridView.TabStop = false;
       checklistGridView.CellMouseClick += checklistGridView_CellContentClick;
+      // 
+      // checkName
+      // 
+      dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      checkName.DefaultCellStyle = dataGridViewCellStyle21;
+      checkName.FillWeight = 194.923859F;
+      checkName.HeaderText = "Name";
+      checkName.Name = "checkName";
+      checkName.ReadOnly = true;
+      checkName.Width = 200;
+      // 
+      // checkCount
+      // 
+      checkCount.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleRight;
+      checkCount.DefaultCellStyle = dataGridViewCellStyle22;
+      checkCount.FillWeight = 5.07614136F;
+      checkCount.HeaderText = "Count";
+      checkCount.Name = "checkCount";
+      checkCount.ReadOnly = true;
+      // 
+      // tabPage9
+      // 
+      tabPage9.BorderStyle = BorderStyle.Fixed3D;
+      tabPage9.Controls.Add(tableLayoutPanel2);
+      tabPage9.Location = new Point(4, 44);
+      tabPage9.Name = "tabPage9";
+      tabPage9.Padding = new Padding(3);
+      tabPage9.Size = new Size(262, 431);
+      tabPage9.TabIndex = 6;
+      tabPage9.Text = "Tree";
+      tabPage9.UseVisualStyleBackColor = true;
+      // 
+      // tableLayoutPanel2
+      // 
+      tableLayoutPanel2.ColumnCount = 1;
+      tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+      tableLayoutPanel2.Controls.Add(treeSearchTextbox, 0, 0);
+      tableLayoutPanel2.Controls.Add(treeDataGrid, 0, 1);
+      tableLayoutPanel2.Dock = DockStyle.Fill;
+      tableLayoutPanel2.Location = new Point(3, 3);
+      tableLayoutPanel2.Name = "tableLayoutPanel2";
+      tableLayoutPanel2.RowCount = 2;
+      tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+      tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+      tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel2.Size = new Size(252, 421);
+      tableLayoutPanel2.TabIndex = 4;
+      // 
+      // treeSearchTextbox
+      // 
+      treeSearchTextbox.BackColor = SystemColors.ControlLightLight;
+      tableLayoutPanel2.SetColumnSpan(treeSearchTextbox, 4);
+      treeSearchTextbox.Dock = DockStyle.Fill;
+      treeSearchTextbox.Location = new Point(4, 4);
+      treeSearchTextbox.Margin = new Padding(4);
+      treeSearchTextbox.MaxLength = 128;
+      treeSearchTextbox.Name = "treeSearchTextbox";
+      treeSearchTextbox.Size = new Size(244, 22);
+      treeSearchTextbox.TabIndex = 25;
+      treeSearchTextbox.KeyDown += treeSearchTextbox_KeyDown;
+      // 
+      // treeDataGrid
+      // 
+      treeDataGrid.AllowUserToAddRows = false;
+      treeDataGrid.AllowUserToDeleteRows = false;
+      treeDataGrid.AllowUserToResizeColumns = false;
+      treeDataGrid.AllowUserToResizeRows = false;
+      treeDataGrid.BackgroundColor = SystemColors.ControlDarkDark;
+      treeDataGrid.BorderStyle = BorderStyle.None;
+      treeDataGrid.CellBorderStyle = DataGridViewCellBorderStyle.Raised;
+      treeDataGrid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Sunken;
+      treeDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+      treeDataGrid.ColumnHeadersVisible = false;
+      treeDataGrid.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5 });
+      treeDataGrid.Cursor = Cursors.Hand;
+      treeDataGrid.Dock = DockStyle.Fill;
+      treeDataGrid.Location = new Point(3, 33);
+      treeDataGrid.MultiSelect = false;
+      treeDataGrid.Name = "treeDataGrid";
+      treeDataGrid.ReadOnly = true;
+      treeDataGrid.RowHeadersVisible = false;
+      treeDataGrid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+      treeDataGrid.ScrollBars = ScrollBars.Vertical;
+      treeDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+      treeDataGrid.Size = new Size(246, 385);
+      treeDataGrid.TabIndex = 4;
+      treeDataGrid.TabStop = false;
+      treeDataGrid.CellMouseClick += treeDataGrid_CellMouseClick;
+      treeDataGrid.MouseClick += treeDataGrid_MouseClick;
+      // 
+      // dataGridViewTextBoxColumn4
+      // 
+      dataGridViewTextBoxColumn4.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle23;
+      dataGridViewTextBoxColumn4.FillWeight = 75F;
+      dataGridViewTextBoxColumn4.HeaderText = "Name";
+      dataGridViewTextBoxColumn4.MinimumWidth = 190;
+      dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+      dataGridViewTextBoxColumn4.ReadOnly = true;
+      // 
+      // dataGridViewTextBoxColumn5
+      // 
+      dataGridViewTextBoxColumn5.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleRight;
+      dataGridViewCellStyle24.Padding = new Padding(0, 0, 10, 0);
+      dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle24;
+      dataGridViewTextBoxColumn5.FillWeight = 25F;
+      dataGridViewTextBoxColumn5.HeaderText = "Count";
+      dataGridViewTextBoxColumn5.MinimumWidth = 48;
+      dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+      dataGridViewTextBoxColumn5.ReadOnly = true;
       // 
       // tabPage7
       // 
       tabPage7.BorderStyle = BorderStyle.Fixed3D;
       tabPage7.Controls.Add(tableLayoutPanel4);
-      tabPage7.Location = new Point(4, 24);
+      tabPage7.Location = new Point(4, 44);
       tabPage7.Margin = new Padding(4, 1, 1, 1);
       tabPage7.Name = "tabPage7";
       tabPage7.Padding = new Padding(3);
-      tabPage7.Size = new Size(262, 451);
+      tabPage7.Size = new Size(262, 431);
       tabPage7.TabIndex = 4;
       tabPage7.Text = "Config";
       tabPage7.UseVisualStyleBackColor = true;
@@ -688,19 +827,21 @@
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-      tableLayoutPanel4.Controls.Add(trackBar2, 1, 4);
-      tableLayoutPanel4.Controls.Add(label1, 0, 4);
+      tableLayoutPanel4.Controls.Add(darkCheckbox, 0, 3);
+      tableLayoutPanel4.Controls.Add(trackBar2, 1, 5);
+      tableLayoutPanel4.Controls.Add(label1, 0, 5);
       tableLayoutPanel4.Controls.Add(nonRosterPerksCheckbox, 0, 2);
-      tableLayoutPanel4.Controls.Add(minLvlLabel, 0, 5);
+      tableLayoutPanel4.Controls.Add(minLvlLabel, 0, 6);
       tableLayoutPanel4.Controls.Add(deadCheckbox, 2, 1);
       tableLayoutPanel4.Controls.Add(shivCheckbox, 0, 1);
       tableLayoutPanel4.Controls.Add(woundedCheckbox, 2, 0);
       tableLayoutPanel4.Controls.Add(fatiguedCheckbox, 0, 0);
-      tableLayoutPanel4.Controls.Add(trackBar1, 1, 5);
+      tableLayoutPanel4.Controls.Add(trackBar1, 1, 6);
       tableLayoutPanel4.Dock = DockStyle.Fill;
       tableLayoutPanel4.Location = new Point(3, 3);
       tableLayoutPanel4.Name = "tableLayoutPanel4";
-      tableLayoutPanel4.RowCount = 7;
+      tableLayoutPanel4.RowCount = 8;
+      tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -708,8 +849,25 @@
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel4.Size = new Size(252, 441);
+      tableLayoutPanel4.Size = new Size(252, 421);
       tableLayoutPanel4.TabIndex = 0;
+      // 
+      // darkCheckbox
+      // 
+      darkCheckbox.AutoSize = true;
+      tableLayoutPanel4.SetColumnSpan(darkCheckbox, 2);
+      darkCheckbox.Dock = DockStyle.Fill;
+      darkCheckbox.FlatStyle = FlatStyle.Flat;
+      darkCheckbox.Location = new Point(0, 60);
+      darkCheckbox.Margin = new Padding(0);
+      darkCheckbox.Name = "darkCheckbox";
+      darkCheckbox.Padding = new Padding(10, 0, 0, 0);
+      darkCheckbox.Size = new Size(126, 20);
+      darkCheckbox.TabIndex = 28;
+      darkCheckbox.TabStop = false;
+      darkCheckbox.Text = "Dark Mode";
+      darkCheckbox.UseVisualStyleBackColor = true;
+      darkCheckbox.CheckedChanged += darkCheckbox_CheckedChanged;
       // 
       // trackBar2
       // 
@@ -717,7 +875,7 @@
       tableLayoutPanel4.SetColumnSpan(trackBar2, 3);
       trackBar2.Dock = DockStyle.Fill;
       trackBar2.LargeChange = 1;
-      trackBar2.Location = new Point(66, 71);
+      trackBar2.Location = new Point(66, 91);
       trackBar2.Minimum = 6;
       trackBar2.Name = "trackBar2";
       trackBar2.Size = new Size(183, 34);
@@ -730,7 +888,7 @@
       label1.Anchor = AnchorStyles.None;
       label1.AutoSize = true;
       label1.FlatStyle = FlatStyle.Flat;
-      label1.Location = new Point(11, 74);
+      label1.Location = new Point(11, 94);
       label1.Name = "label1";
       label1.Size = new Size(41, 28);
       label1.TabIndex = 26;
@@ -758,7 +916,7 @@
       minLvlLabel.Anchor = AnchorStyles.None;
       minLvlLabel.AutoSize = true;
       minLvlLabel.FlatStyle = FlatStyle.Flat;
-      minLvlLabel.Location = new Point(4, 114);
+      minLvlLabel.Location = new Point(4, 134);
       minLvlLabel.Name = "minLvlLabel";
       minLvlLabel.Size = new Size(54, 28);
       minLvlLabel.TabIndex = 22;
@@ -845,7 +1003,7 @@
       tableLayoutPanel4.SetColumnSpan(trackBar1, 3);
       trackBar1.Dock = DockStyle.Fill;
       trackBar1.LargeChange = 1;
-      trackBar1.Location = new Point(66, 111);
+      trackBar1.Location = new Point(66, 131);
       trackBar1.Maximum = 6;
       trackBar1.Name = "trackBar1";
       trackBar1.Size = new Size(183, 34);
@@ -903,7 +1061,7 @@
       timerResetButton.Cursor = Cursors.Hand;
       timerResetButton.Dock = DockStyle.Fill;
       timerResetButton.FlatStyle = FlatStyle.Popup;
-      timerResetButton.ForeColor = SystemColors.ControlLightLight;
+      timerResetButton.ForeColor = SystemColors.ControlText;
       timerResetButton.Location = new Point(63, 3);
       timerResetButton.Name = "timerResetButton";
       timerResetButton.Size = new Size(54, 24);
@@ -931,7 +1089,7 @@
       timerStartStopButton.Cursor = Cursors.Hand;
       timerStartStopButton.Dock = DockStyle.Fill;
       timerStartStopButton.FlatStyle = FlatStyle.Popup;
-      timerStartStopButton.ForeColor = SystemColors.ControlLightLight;
+      timerStartStopButton.ForeColor = SystemColors.ControlText;
       timerStartStopButton.Location = new Point(3, 3);
       timerStartStopButton.Name = "timerStartStopButton";
       timerStartStopButton.Size = new Size(54, 24);
@@ -974,26 +1132,6 @@
       timer1.Interval = 10;
       timer1.Tick += timer1_Tick;
       // 
-      // checkName
-      // 
-      dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      checkName.DefaultCellStyle = dataGridViewCellStyle20;
-      checkName.FillWeight = 194.923859F;
-      checkName.HeaderText = "Name";
-      checkName.Name = "checkName";
-      checkName.ReadOnly = true;
-      checkName.Width = 200;
-      // 
-      // checkCount
-      // 
-      checkCount.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleRight;
-      checkCount.DefaultCellStyle = dataGridViewCellStyle21;
-      checkCount.FillWeight = 5.07614136F;
-      checkCount.HeaderText = "Count";
-      checkCount.Name = "checkCount";
-      checkCount.ReadOnly = true;
-      // 
       // Rosterizer
       // 
       AllowDrop = true;
@@ -1034,6 +1172,10 @@
       ((System.ComponentModel.ISupportInitialize)soldierPerksGridView).EndInit();
       tabPage8.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)checklistGridView).EndInit();
+      tabPage9.ResumeLayout(false);
+      tableLayoutPanel2.ResumeLayout(false);
+      tableLayoutPanel2.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)treeDataGrid).EndInit();
       tabPage7.ResumeLayout(false);
       tableLayoutPanel4.ResumeLayout(false);
       tableLayoutPanel4.PerformLayout();
@@ -1107,5 +1249,12 @@
     private DataGridViewTextBoxColumn RankId;
     private DataGridViewTextBoxColumn checkName;
     private DataGridViewTextBoxColumn checkCount;
+    private CheckBox darkCheckbox;
+    private TabPage tabPage9;
+    private TableLayoutPanel tableLayoutPanel2;
+    private TextBox treeSearchTextbox;
+    private DataGridView treeDataGrid;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
   }
 }
