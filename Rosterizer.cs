@@ -318,9 +318,7 @@ namespace RosterizerLW
       Roster = [.. FillRoster(SaveParsed).OrderByDescending(x => x.Xp)];
 
       DefaultSorting();
-
-      SetRosterPerks();
-      BuildPerkTree();
+      //SetRosterPerks();
 
       // set colors
       SetColor();
@@ -335,6 +333,7 @@ namespace RosterizerLW
       trackBar2.Maximum = MaxSquadSize;
       trackBar2.Value = SquadSize;
 
+      BuildPerkTree();
       SetPerkTree(RosterTree1);
 
       timerStartStopButton_Click(new(), new()); // don't think about it
@@ -383,6 +382,7 @@ namespace RosterizerLW
         treeDataGrid.DefaultCellStyle.SelectionForeColor = darkGridCellFg;
         treeDataGrid.DefaultCellStyle.SelectionBackColor = darkGridCellBg;
         treeDataGrid.CellBorderStyle = darkTreeCellBorders;
+
       }
       else
       {
@@ -396,8 +396,14 @@ namespace RosterizerLW
         rosterGridView.DefaultCellStyle.ForeColor = gridCellFg;
         rosterGridView.DefaultCellStyle.SelectionBackColor = gridCellBg;
         rosterGridView.DefaultCellStyle.SelectionForeColor = gridCellFg;
+        rosterGridView.RowHeadersDefaultCellStyle.BackColor = gridCellBg;
+        rosterGridView.RowHeadersDefaultCellStyle.ForeColor = gridCellFg;
         rosterGridView.RowHeadersDefaultCellStyle.SelectionBackColor = soldierTabUnselectedBg;
         rosterGridView.RowHeadersDefaultCellStyle.SelectionForeColor = gridSelectedCellFg;
+        rosterGridView.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        rosterGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+        rosterGridView.RowHeadersDefaultCellStyle.Padding = Padding.Empty;
+        rosterGridView.RowHeadersWidth = 15;
         rosterGridView.CellBorderStyle = rosterCellBorders;
         squadPerkList.DefaultCellStyle.ForeColor = squadRowFg;
         squadPerkList.DefaultCellStyle.BackColor = squadRowBg;
@@ -555,7 +561,7 @@ namespace RosterizerLW
 
       ChecklistPass = checklistOk == ChecklistPerks.Count;
       string checkMark = ChecklistPass ? "✓" : "ⅹ";
-      (tabControl1.TabPages[3] ?? new()).Text = $"{checklistOk}/{ChecklistPerks.Count}   {checkMark}";
+      (tabControl1.TabPages[3] ?? new()).Text = $"{checklistOk}/{ChecklistPerks.Count} {checkMark}";
     }
 
     public void SetPerkTree(RelatedPerk perkIn)
@@ -794,6 +800,18 @@ namespace RosterizerLW
           maxDef = hiDef = loDef = minDef = false;
         }
 
+        if (!f.IsDead && ((!f.IsWounded && !f.IsFatigued) || f.HoursOut <= RecoverableHrs))
+        {
+          foreach (Perk p in f.Perks)
+          {
+            if (ChecklistPerks.ContainsKey(p.Name ?? ""))
+            {
+              f.HasChecklistPerk = true;
+              break;
+            }
+          }
+        }
+
         object[] dgvrVals =
         {
           f.LName,
@@ -833,17 +851,6 @@ namespace RosterizerLW
           {
             thisRow.Height += 4;
             thisRow.DividerHeight = 4;
-          }
-        }
-        else if (!f.IsDead && ((!f.IsWounded && !f.IsFatigued) || f.HoursOut <= RecoverableHrs))
-        {
-          foreach (Perk p in f.Perks)
-          {
-            if (ChecklistPerks.ContainsKey(p.Name ?? ""))
-            {
-              f.HasChecklistPerk = true;
-              break;
-            }
           }
         }
 
@@ -1471,29 +1478,11 @@ namespace RosterizerLW
 
     private void rosterGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
     {
-      if (e.RowIndex >= 0 && (e.ColumnIndex == 0))
+      if (e.RowIndex >= 0 && e.ColumnIndex == 0)
       {
-        if ((bool?)((DataGridView)sender).Rows[e.RowIndex].Cells["IsAvailable"].Value == false)
+        if ((bool?)((DataGridView)sender).Rows[e.RowIndex].Cells["HasChecklistPerk"].Value == true)
         {
-          //Rectangle r = new(e.CellBounds.X + 210, e.CellBounds.Y + 1, e.CellBounds.Width - 215, e.CellBounds.Height - 4);
-          Rectangle r = new(e.CellBounds.X - 20, e.CellBounds.Y + 12, 15, 1);
-
-          e.PaintBackground(e.CellBounds, false);
-          e.Graphics.DrawRectangle(new Pen(woundBg, 3), r);
-          TextRenderer.DrawText(
-            e.Graphics,
-            string.Format("{0}", e.FormattedValue),
-            Font,
-            e.CellBounds,
-            rosterGridView.DefaultCellStyle.SelectionForeColor,
-            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding
-          );
-          e.Handled = true;
-        }
-        else if ((bool?)((DataGridView)sender).Rows[e.RowIndex].Cells["HasChecklistPerk"].Value == true)
-        {
-          //Rectangle r = new(e.CellBounds.X + 210, e.CellBounds.Y + 1, e.CellBounds.Width - 215, e.CellBounds.Height - 4);
-          Rectangle r = new(e.CellBounds.X-5, e.CellBounds.Y + 10, e.CellBounds.Width - 195, 5);
+          Rectangle r = new(e.CellBounds.X-10, e.CellBounds.Y + 10, 5, 5);
 
           e.PaintBackground(e.CellBounds, false);
           e.Graphics.DrawEllipse(new Pen(checklistGoodTabUnselectedBg, 5), r);
@@ -1508,17 +1497,6 @@ namespace RosterizerLW
           e.Handled = true;
         }
       }
-      //if (e.RowIndex >= 0 && e.ColumnIndex > 1 && ((DataGridView)sender).Rows[e.RowIndex].Selected)
-      //{
-      //  e.PaintBackground(e.CellBounds, false);
-      //  if (e.ColumnIndex > 3 && e.ColumnIndex != 11)
-      //  {
-      //    TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue), Font, e.CellBounds, gridCellFg, TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding | //TextFormatFlags.PreserveGraphicsClipping);
-      //  }
-      //  else TextRenderer.DrawText(e.Graphics, string.Format("{0}", e.FormattedValue), Font, e.CellBounds, gridCellFg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-      //
-      //  e.Handled = true;
-      //}
     }
 
     private void rosterGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -1833,7 +1811,7 @@ namespace RosterizerLW
     {
       BlueshirtLvl = ((TrackBar)sender).Value;
       Roster.ForEach(x => x.IsBlueshirt = x.RankId <= BlueshirtLvl);
-      ListRoster();
+      if(tabControl1.SelectedIndex == 5) ListRoster(); // options
     }
 
     private void trackBar2_ValueChanged(object sender, EventArgs e)

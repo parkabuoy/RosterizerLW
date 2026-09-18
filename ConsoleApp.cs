@@ -116,6 +116,10 @@ namespace RosterizerLW
             Application.OpenForms[i].Close();
           }
         }
+
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+
         Application.Run(new Rosterizer());
       }
       catch (Exception ex)
