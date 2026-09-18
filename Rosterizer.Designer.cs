@@ -31,6 +31,17 @@
       components = new System.ComponentModel.Container();
       DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle25 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
@@ -43,33 +54,9 @@
       DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
       DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
-      DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Rosterizer));
       tableLayoutPanel1 = new TableLayoutPanel();
       rosterGridView = new DataGridView();
-      LName = new DataGridViewTextBoxColumn();
-      NName = new DataGridViewTextBoxColumn();
-      Status = new DataGridViewTextBoxColumn();
-      SoldierClass = new DataGridViewTextBoxColumn();
-      Def = new DataGridViewTextBoxColumn();
-      HP = new DataGridViewTextBoxColumn();
-      Mob = new DataGridViewTextBoxColumn();
-      Will = new DataGridViewTextBoxColumn();
-      Aim = new DataGridViewTextBoxColumn();
-      XP = new DataGridViewTextBoxColumn();
-      Next = new DataGridViewTextBoxColumn();
-      RankName = new DataGridViewTextBoxColumn();
-      Id = new DataGridViewTextBoxColumn();
-      RankId = new DataGridViewTextBoxColumn();
       tableLayoutPanel3 = new TableLayoutPanel();
       splitContainer1 = new SplitContainer();
       tabControl1 = new TabControl();
@@ -118,6 +105,22 @@
       tabPage5 = new TabPage();
       tabPage6 = new TabPage();
       timer1 = new System.Windows.Forms.Timer(components);
+      LName = new DataGridViewTextBoxColumn();
+      NName = new DataGridViewTextBoxColumn();
+      Status = new DataGridViewTextBoxColumn();
+      SoldierClass = new DataGridViewTextBoxColumn();
+      Def = new DataGridViewTextBoxColumn();
+      HP = new DataGridViewTextBoxColumn();
+      Mob = new DataGridViewTextBoxColumn();
+      Will = new DataGridViewTextBoxColumn();
+      Aim = new DataGridViewTextBoxColumn();
+      XP = new DataGridViewTextBoxColumn();
+      Next = new DataGridViewTextBoxColumn();
+      RankName = new DataGridViewTextBoxColumn();
+      Id = new DataGridViewTextBoxColumn();
+      RankId = new DataGridViewTextBoxColumn();
+      HasChecklistPerk = new DataGridViewTextBoxColumn();
+      IsAvailable = new DataGridViewTextBoxColumn();
       tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)rosterGridView).BeginInit();
       tableLayoutPanel3.SuspendLayout();
@@ -185,7 +188,7 @@
       dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
       rosterGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
       rosterGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-      rosterGridView.Columns.AddRange(new DataGridViewColumn[] { LName, NName, Status, SoldierClass, Def, HP, Mob, Will, Aim, XP, Next, RankName, Id, RankId });
+      rosterGridView.Columns.AddRange(new DataGridViewColumn[] { LName, NName, Status, SoldierClass, Def, HP, Mob, Will, Aim, XP, Next, RankName, Id, RankId, HasChecklistPerk, IsAvailable });
       dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleLeft;
       dataGridViewCellStyle14.BackColor = SystemColors.ControlLight;
       dataGridViewCellStyle14.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -204,7 +207,14 @@
       rosterGridView.MultiSelect = false;
       rosterGridView.Name = "rosterGridView";
       rosterGridView.ReadOnly = true;
-      rosterGridView.RowHeadersVisible = false;
+      dataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle15.BackColor = SystemColors.Control;
+      dataGridViewCellStyle15.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      dataGridViewCellStyle15.ForeColor = SystemColors.WindowText;
+      dataGridViewCellStyle15.SelectionBackColor = Color.FromArgb(192, 192, 255);
+      dataGridViewCellStyle15.SelectionForeColor = SystemColors.WindowText;
+      dataGridViewCellStyle15.WrapMode = DataGridViewTriState.False;
+      rosterGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
       rosterGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       rosterGridView.RowTemplate.ReadOnly = true;
       rosterGridView.ScrollBars = ScrollBars.Vertical;
@@ -217,172 +227,6 @@
       rosterGridView.CellDoubleClick += rosterGridView_CellDoubleClick;
       rosterGridView.CellMouseClick += rosterGridView_CellMouseClick;
       rosterGridView.CellPainting += rosterGridView_CellPainting;
-      // 
-      // LName
-      // 
-      LName.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      LName.DefaultCellStyle = dataGridViewCellStyle2;
-      LName.Frozen = true;
-      LName.HeaderText = "Name";
-      LName.Name = "LName";
-      LName.ReadOnly = true;
-      LName.Resizable = DataGridViewTriState.False;
-      LName.SortMode = DataGridViewColumnSortMode.NotSortable;
-      LName.Width = 220;
-      // 
-      // NName
-      // 
-      NName.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      NName.DefaultCellStyle = dataGridViewCellStyle3;
-      NName.Frozen = true;
-      NName.HeaderText = "Nickname";
-      NName.MinimumWidth = 195;
-      NName.Name = "NName";
-      NName.ReadOnly = true;
-      NName.Resizable = DataGridViewTriState.False;
-      NName.SortMode = DataGridViewColumnSortMode.NotSortable;
-      NName.Width = 195;
-      // 
-      // Status
-      // 
-      Status.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
-      Status.DefaultCellStyle = dataGridViewCellStyle4;
-      Status.Frozen = true;
-      Status.HeaderText = "Status";
-      Status.MinimumWidth = 85;
-      Status.Name = "Status";
-      Status.ReadOnly = true;
-      Status.Resizable = DataGridViewTriState.False;
-      Status.SortMode = DataGridViewColumnSortMode.NotSortable;
-      Status.Width = 85;
-      // 
-      // SoldierClass
-      // 
-      SoldierClass.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-      SoldierClass.DefaultCellStyle = dataGridViewCellStyle5;
-      SoldierClass.HeaderText = "Class";
-      SoldierClass.Name = "SoldierClass";
-      SoldierClass.ReadOnly = true;
-      SoldierClass.SortMode = DataGridViewColumnSortMode.NotSortable;
-      SoldierClass.Width = 80;
-      // 
-      // Def
-      // 
-      Def.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
-      Def.DefaultCellStyle = dataGridViewCellStyle6;
-      Def.HeaderText = "Def";
-      Def.MinimumWidth = 40;
-      Def.Name = "Def";
-      Def.ReadOnly = true;
-      Def.Resizable = DataGridViewTriState.False;
-      Def.SortMode = DataGridViewColumnSortMode.NotSortable;
-      Def.Width = 40;
-      // 
-      // HP
-      // 
-      HP.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight;
-      HP.DefaultCellStyle = dataGridViewCellStyle7;
-      HP.HeaderText = "HP";
-      HP.MinimumWidth = 40;
-      HP.Name = "HP";
-      HP.ReadOnly = true;
-      HP.Resizable = DataGridViewTriState.False;
-      HP.SortMode = DataGridViewColumnSortMode.NotSortable;
-      HP.Width = 40;
-      // 
-      // Mob
-      // 
-      Mob.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight;
-      Mob.DefaultCellStyle = dataGridViewCellStyle8;
-      Mob.HeaderText = "Mob";
-      Mob.MinimumWidth = 45;
-      Mob.Name = "Mob";
-      Mob.ReadOnly = true;
-      Mob.Resizable = DataGridViewTriState.False;
-      Mob.SortMode = DataGridViewColumnSortMode.NotSortable;
-      Mob.Width = 45;
-      // 
-      // Will
-      // 
-      Will.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight;
-      Will.DefaultCellStyle = dataGridViewCellStyle9;
-      Will.HeaderText = "Will";
-      Will.MinimumWidth = 40;
-      Will.Name = "Will";
-      Will.ReadOnly = true;
-      Will.Resizable = DataGridViewTriState.False;
-      Will.SortMode = DataGridViewColumnSortMode.NotSortable;
-      Will.Width = 40;
-      // 
-      // Aim
-      // 
-      Aim.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight;
-      Aim.DefaultCellStyle = dataGridViewCellStyle10;
-      Aim.HeaderText = "Aim";
-      Aim.MinimumWidth = 40;
-      Aim.Name = "Aim";
-      Aim.ReadOnly = true;
-      Aim.Resizable = DataGridViewTriState.False;
-      Aim.SortMode = DataGridViewColumnSortMode.NotSortable;
-      Aim.Width = 40;
-      // 
-      // XP
-      // 
-      XP.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight;
-      XP.DefaultCellStyle = dataGridViewCellStyle11;
-      XP.HeaderText = "EXP";
-      XP.MinimumWidth = 65;
-      XP.Name = "XP";
-      XP.ReadOnly = true;
-      XP.Resizable = DataGridViewTriState.False;
-      XP.SortMode = DataGridViewColumnSortMode.NotSortable;
-      XP.Width = 65;
-      // 
-      // Next
-      // 
-      dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight;
-      Next.DefaultCellStyle = dataGridViewCellStyle12;
-      Next.HeaderText = "Next";
-      Next.MinimumWidth = 50;
-      Next.Name = "Next";
-      Next.ReadOnly = true;
-      Next.Resizable = DataGridViewTriState.False;
-      Next.SortMode = DataGridViewColumnSortMode.NotSortable;
-      // 
-      // RankName
-      // 
-      RankName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleCenter;
-      RankName.DefaultCellStyle = dataGridViewCellStyle13;
-      RankName.HeaderText = "Rank";
-      RankName.Name = "RankName";
-      RankName.ReadOnly = true;
-      RankName.Resizable = DataGridViewTriState.False;
-      RankName.SortMode = DataGridViewColumnSortMode.NotSortable;
-      // 
-      // Id
-      // 
-      Id.HeaderText = "Id";
-      Id.Name = "Id";
-      Id.ReadOnly = true;
-      Id.Visible = false;
-      // 
-      // RankId
-      // 
-      RankId.HeaderText = "RankId";
-      RankId.Name = "RankId";
-      RankId.ReadOnly = true;
-      RankId.Visible = false;
       // 
       // tableLayoutPanel3
       // 
@@ -506,15 +350,15 @@
       rosterPerkList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       rosterPerkList.ColumnHeadersVisible = false;
       rosterPerkList.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2 });
-      dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewCellStyle17.BackColor = SystemColors.Window;
-      dataGridViewCellStyle17.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-      dataGridViewCellStyle17.ForeColor = SystemColors.ActiveCaptionText;
-      dataGridViewCellStyle17.Padding = new Padding(0, 0, 10, 0);
-      dataGridViewCellStyle17.SelectionBackColor = SystemColors.Highlight;
-      dataGridViewCellStyle17.SelectionForeColor = SystemColors.HighlightText;
-      dataGridViewCellStyle17.WrapMode = DataGridViewTriState.False;
-      rosterPerkList.DefaultCellStyle = dataGridViewCellStyle17;
+      dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle18.BackColor = SystemColors.Window;
+      dataGridViewCellStyle18.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      dataGridViewCellStyle18.ForeColor = SystemColors.ActiveCaptionText;
+      dataGridViewCellStyle18.Padding = new Padding(0, 0, 10, 0);
+      dataGridViewCellStyle18.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle18.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle18.WrapMode = DataGridViewTriState.False;
+      rosterPerkList.DefaultCellStyle = dataGridViewCellStyle18;
       rosterPerkList.Dock = DockStyle.Fill;
       rosterPerkList.Location = new Point(3, 33);
       rosterPerkList.Name = "rosterPerkList";
@@ -534,8 +378,8 @@
       // 
       // dataGridViewTextBoxColumn1
       // 
-      dataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle15;
+      dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle16;
       dataGridViewTextBoxColumn1.HeaderText = "Name";
       dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
       dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -544,8 +388,8 @@
       // dataGridViewTextBoxColumn2
       // 
       dataGridViewTextBoxColumn2.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleRight;
-      dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle16;
+      dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleRight;
+      dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle17;
       dataGridViewTextBoxColumn2.HeaderText = "Count";
       dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
       dataGridViewTextBoxColumn2.ReadOnly = true;
@@ -591,8 +435,8 @@
       // 
       // PerkName
       // 
-      dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      PerkName.DefaultCellStyle = dataGridViewCellStyle18;
+      dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      PerkName.DefaultCellStyle = dataGridViewCellStyle19;
       PerkName.HeaderText = "Name";
       PerkName.Name = "PerkName";
       PerkName.ReadOnly = true;
@@ -601,8 +445,8 @@
       // Count
       // 
       Count.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleRight;
-      Count.DefaultCellStyle = dataGridViewCellStyle19;
+      dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleRight;
+      Count.DefaultCellStyle = dataGridViewCellStyle20;
       Count.HeaderText = "Count";
       Count.Name = "Count";
       Count.ReadOnly = true;
@@ -649,8 +493,8 @@
       // dataGridViewTextBoxColumn3
       // 
       dataGridViewTextBoxColumn3.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle20;
+      dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle21;
       dataGridViewTextBoxColumn3.HeaderText = "Name";
       dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
       dataGridViewTextBoxColumn3.ReadOnly = true;
@@ -696,8 +540,8 @@
       // 
       // checkName
       // 
-      dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      checkName.DefaultCellStyle = dataGridViewCellStyle21;
+      dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      checkName.DefaultCellStyle = dataGridViewCellStyle22;
       checkName.FillWeight = 194.923859F;
       checkName.HeaderText = "Name";
       checkName.Name = "checkName";
@@ -707,8 +551,8 @@
       // checkCount
       // 
       checkCount.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleRight;
-      checkCount.DefaultCellStyle = dataGridViewCellStyle22;
+      dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleRight;
+      checkCount.DefaultCellStyle = dataGridViewCellStyle23;
       checkCount.FillWeight = 5.07614136F;
       checkCount.HeaderText = "Count";
       checkCount.Name = "checkCount";
@@ -787,8 +631,8 @@
       // dataGridViewTextBoxColumn4
       // 
       dataGridViewTextBoxColumn4.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle23;
+      dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle24;
       dataGridViewTextBoxColumn4.FillWeight = 75F;
       dataGridViewTextBoxColumn4.HeaderText = "Name";
       dataGridViewTextBoxColumn4.MinimumWidth = 190;
@@ -798,9 +642,9 @@
       // dataGridViewTextBoxColumn5
       // 
       dataGridViewTextBoxColumn5.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleRight;
-      dataGridViewCellStyle24.Padding = new Padding(0, 0, 10, 0);
-      dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle24;
+      dataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.MiddleRight;
+      dataGridViewCellStyle25.Padding = new Padding(0, 0, 10, 0);
+      dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle25;
       dataGridViewTextBoxColumn5.FillWeight = 25F;
       dataGridViewTextBoxColumn5.HeaderText = "Count";
       dataGridViewTextBoxColumn5.MinimumWidth = 48;
@@ -1132,6 +976,186 @@
       timer1.Interval = 10;
       timer1.Tick += timer1_Tick;
       // 
+      // LName
+      // 
+      LName.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      LName.DefaultCellStyle = dataGridViewCellStyle2;
+      LName.Frozen = true;
+      LName.HeaderText = "Name";
+      LName.Name = "LName";
+      LName.ReadOnly = true;
+      LName.Resizable = DataGridViewTriState.False;
+      LName.SortMode = DataGridViewColumnSortMode.NotSortable;
+      LName.Width = 200;
+      // 
+      // NName
+      // 
+      NName.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      NName.DefaultCellStyle = dataGridViewCellStyle3;
+      NName.Frozen = true;
+      NName.HeaderText = "Nickname";
+      NName.MinimumWidth = 180;
+      NName.Name = "NName";
+      NName.ReadOnly = true;
+      NName.Resizable = DataGridViewTriState.False;
+      NName.SortMode = DataGridViewColumnSortMode.NotSortable;
+      NName.Width = 180;
+      // 
+      // Status
+      // 
+      Status.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+      Status.DefaultCellStyle = dataGridViewCellStyle4;
+      Status.Frozen = true;
+      Status.HeaderText = "Status";
+      Status.MinimumWidth = 85;
+      Status.Name = "Status";
+      Status.ReadOnly = true;
+      Status.Resizable = DataGridViewTriState.False;
+      Status.SortMode = DataGridViewColumnSortMode.NotSortable;
+      Status.Width = 85;
+      // 
+      // SoldierClass
+      // 
+      SoldierClass.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+      SoldierClass.DefaultCellStyle = dataGridViewCellStyle5;
+      SoldierClass.HeaderText = "Class";
+      SoldierClass.Name = "SoldierClass";
+      SoldierClass.ReadOnly = true;
+      SoldierClass.SortMode = DataGridViewColumnSortMode.NotSortable;
+      SoldierClass.Width = 80;
+      // 
+      // Def
+      // 
+      Def.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+      Def.DefaultCellStyle = dataGridViewCellStyle6;
+      Def.HeaderText = "Def";
+      Def.MinimumWidth = 40;
+      Def.Name = "Def";
+      Def.ReadOnly = true;
+      Def.Resizable = DataGridViewTriState.False;
+      Def.SortMode = DataGridViewColumnSortMode.NotSortable;
+      Def.Width = 40;
+      // 
+      // HP
+      // 
+      HP.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight;
+      HP.DefaultCellStyle = dataGridViewCellStyle7;
+      HP.HeaderText = "HP";
+      HP.MinimumWidth = 40;
+      HP.Name = "HP";
+      HP.ReadOnly = true;
+      HP.Resizable = DataGridViewTriState.False;
+      HP.SortMode = DataGridViewColumnSortMode.NotSortable;
+      HP.Width = 40;
+      // 
+      // Mob
+      // 
+      Mob.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight;
+      Mob.DefaultCellStyle = dataGridViewCellStyle8;
+      Mob.HeaderText = "Mob";
+      Mob.MinimumWidth = 45;
+      Mob.Name = "Mob";
+      Mob.ReadOnly = true;
+      Mob.Resizable = DataGridViewTriState.False;
+      Mob.SortMode = DataGridViewColumnSortMode.NotSortable;
+      Mob.Width = 45;
+      // 
+      // Will
+      // 
+      Will.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight;
+      Will.DefaultCellStyle = dataGridViewCellStyle9;
+      Will.HeaderText = "Will";
+      Will.MinimumWidth = 40;
+      Will.Name = "Will";
+      Will.ReadOnly = true;
+      Will.Resizable = DataGridViewTriState.False;
+      Will.SortMode = DataGridViewColumnSortMode.NotSortable;
+      Will.Width = 40;
+      // 
+      // Aim
+      // 
+      Aim.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight;
+      Aim.DefaultCellStyle = dataGridViewCellStyle10;
+      Aim.HeaderText = "Aim";
+      Aim.MinimumWidth = 40;
+      Aim.Name = "Aim";
+      Aim.ReadOnly = true;
+      Aim.Resizable = DataGridViewTriState.False;
+      Aim.SortMode = DataGridViewColumnSortMode.NotSortable;
+      Aim.Width = 40;
+      // 
+      // XP
+      // 
+      XP.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight;
+      XP.DefaultCellStyle = dataGridViewCellStyle11;
+      XP.HeaderText = "EXP";
+      XP.MinimumWidth = 60;
+      XP.Name = "XP";
+      XP.ReadOnly = true;
+      XP.Resizable = DataGridViewTriState.False;
+      XP.SortMode = DataGridViewColumnSortMode.NotSortable;
+      XP.Width = 60;
+      // 
+      // Next
+      // 
+      dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight;
+      Next.DefaultCellStyle = dataGridViewCellStyle12;
+      Next.HeaderText = "Next";
+      Next.MinimumWidth = 45;
+      Next.Name = "Next";
+      Next.ReadOnly = true;
+      Next.Resizable = DataGridViewTriState.False;
+      Next.SortMode = DataGridViewColumnSortMode.NotSortable;
+      // 
+      // RankName
+      // 
+      RankName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleCenter;
+      RankName.DefaultCellStyle = dataGridViewCellStyle13;
+      RankName.HeaderText = "Rank";
+      RankName.Name = "RankName";
+      RankName.ReadOnly = true;
+      RankName.Resizable = DataGridViewTriState.False;
+      RankName.SortMode = DataGridViewColumnSortMode.NotSortable;
+      // 
+      // Id
+      // 
+      Id.HeaderText = "Id";
+      Id.Name = "Id";
+      Id.ReadOnly = true;
+      Id.Visible = false;
+      // 
+      // RankId
+      // 
+      RankId.HeaderText = "RankId";
+      RankId.Name = "RankId";
+      RankId.ReadOnly = true;
+      RankId.Visible = false;
+      // 
+      // HasChecklistPerk
+      // 
+      HasChecklistPerk.HeaderText = "HasChecklistPerk";
+      HasChecklistPerk.Name = "HasChecklistPerk";
+      HasChecklistPerk.ReadOnly = true;
+      HasChecklistPerk.Visible = false;
+      // 
+      // IsAvailable
+      // 
+      IsAvailable.HeaderText = "IsAvailable";
+      IsAvailable.Name = "IsAvailable";
+      IsAvailable.ReadOnly = true;
+      IsAvailable.Visible = false;
+      // 
       // Rosterizer
       // 
       AllowDrop = true;
@@ -1233,6 +1257,15 @@
     private CheckBox nonRosterPerksCheckbox;
     private TrackBar trackBar2;
     private Label label1;
+    private DataGridViewTextBoxColumn checkName;
+    private DataGridViewTextBoxColumn checkCount;
+    private CheckBox darkCheckbox;
+    private TabPage tabPage9;
+    private TableLayoutPanel tableLayoutPanel2;
+    private TextBox treeSearchTextbox;
+    private DataGridView treeDataGrid;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
     private DataGridViewTextBoxColumn LName;
     private DataGridViewTextBoxColumn NName;
     private DataGridViewTextBoxColumn Status;
@@ -1247,14 +1280,7 @@
     private DataGridViewTextBoxColumn RankName;
     private DataGridViewTextBoxColumn Id;
     private DataGridViewTextBoxColumn RankId;
-    private DataGridViewTextBoxColumn checkName;
-    private DataGridViewTextBoxColumn checkCount;
-    private CheckBox darkCheckbox;
-    private TabPage tabPage9;
-    private TableLayoutPanel tableLayoutPanel2;
-    private TextBox treeSearchTextbox;
-    private DataGridView treeDataGrid;
-    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+    private DataGridViewTextBoxColumn HasChecklistPerk;
+    private DataGridViewTextBoxColumn IsAvailable;
   }
 }
