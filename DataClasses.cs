@@ -24,6 +24,7 @@
       public required bool HasChecklistPerk { get; set; }
       public required long Score { get; set; }
       public required int Luck { get; set; }
+      public int RosterNumber { get; set; }
     }
 
     public class SoldierStats
