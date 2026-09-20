@@ -144,6 +144,7 @@
       timerResetButton = new Button();
       timerLabel = new Label();
       timerStartStopButton = new Button();
+      perkFilterTextbox = new TextBox();
       tabPage4 = new TabPage();
       tabPage5 = new TabPage();
       tabPage6 = new TabPage();
@@ -254,6 +255,9 @@
       squadGridView.TabIndex = 6;
       squadGridView.Visible = false;
       squadGridView.CellMouseClick += squadGridView_CellMouseClick;
+      squadGridView.CellMouseDoubleClick += squadGridView_CellMouseDoubleClick;
+      squadGridView.CellPainting += squadAndRosterGridView_CellPainting;
+
       // 
       // dataGridViewTextBoxColumn1
       // 
@@ -513,7 +517,7 @@
       rosterGridView.CellDoubleClick += rosterGridView_CellDoubleClick;
       rosterGridView.CellMouseClick += rosterGridView_CellMouseClick;
       rosterGridView.CellMouseEnter += rosterGridView_CellMouseEnter;
-      rosterGridView.CellPainting += rosterGridView_CellPainting;
+      rosterGridView.CellPainting += squadAndRosterGridView_CellPainting;
       // 
       // LName
       // 
@@ -717,7 +721,7 @@
       // 
       tableLayoutPanel3.BackColor = SystemColors.ButtonFace;
       tableLayoutPanel3.ColumnCount = 4;
-      tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 43.1968727F));
+      tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 43.19687F));
       tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.95364F));
       tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.0264874F));
       tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.8230019F));
@@ -732,9 +736,7 @@
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 280F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
       tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel3.Size = new Size(276, 681);
       tableLayoutPanel3.TabIndex = 4;
@@ -921,6 +923,7 @@
       squadPerkList.CellMouseClick += squadPerkList_CellMouseClick;
       squadPerkList.CellMouseEnter += squadPerkList_CellMouseEnter;
       squadPerkList.CellMouseLeave += squadPerkList_CellMouseLeave;
+      squadPerkList.MouseClick += squadPerkList_MouseClick;
       // 
       // PerkName
       // 
@@ -1066,6 +1069,7 @@
       // 
       // tableLayoutPanel4
       // 
+      tableLayoutPanel4.BackColor = Color.Gainsboro;
       tableLayoutPanel4.ColumnCount = 4;
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
@@ -1126,7 +1130,7 @@
       trackBar2.Size = new Size(183, 34);
       trackBar2.TabIndex = 27;
       trackBar2.TickStyle = TickStyle.TopLeft;
-      trackBar2.Value = 9;
+      trackBar2.Value = 8;
       // 
       // label1
       // 
@@ -1189,8 +1193,6 @@
       // shivCheckbox
       // 
       shivCheckbox.AutoSize = true;
-      shivCheckbox.Checked = true;
-      shivCheckbox.CheckState = CheckState.Checked;
       tableLayoutPanel4.SetColumnSpan(shivCheckbox, 2);
       shivCheckbox.Dock = DockStyle.Fill;
       shivCheckbox.FlatStyle = FlatStyle.Flat;
@@ -1255,6 +1257,7 @@
       trackBar1.Size = new Size(183, 34);
       trackBar1.TabIndex = 24;
       trackBar1.TickStyle = TickStyle.TopLeft;
+      trackBar1.Value = 3;
       trackBar1.ValueChanged += trackBar1_ValueChanged;
       // 
       // panel1
@@ -1275,17 +1278,21 @@
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-      tableLayoutPanel5.Controls.Add(scoreLabel, 2, 1);
-      tableLayoutPanel5.Controls.Add(timerResetButton, 0, 0);
-      tableLayoutPanel5.Controls.Add(timerLabel, 2, 0);
-      tableLayoutPanel5.Controls.Add(timerStartStopButton, 1, 0);
+      tableLayoutPanel5.Controls.Add(scoreLabel, 2, 2);
+      tableLayoutPanel5.Controls.Add(timerResetButton, 0, 3);
+      tableLayoutPanel5.Controls.Add(timerLabel, 2, 3);
+      tableLayoutPanel5.Controls.Add(timerStartStopButton, 1, 3);
+      tableLayoutPanel5.Controls.Add(perkFilterTextbox, 0, 0);
       tableLayoutPanel5.Dock = DockStyle.Fill;
       tableLayoutPanel5.Location = new Point(0, 0);
       tableLayoutPanel5.Name = "tableLayoutPanel5";
-      tableLayoutPanel5.RowCount = 3;
+      tableLayoutPanel5.RowCount = 4;
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+      tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+      tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+      tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel5.Size = new Size(270, 193);
       tableLayoutPanel5.TabIndex = 0;
       // 
@@ -1295,10 +1302,10 @@
       scoreLabel.Dock = DockStyle.Fill;
       scoreLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
       scoreLabel.ForeColor = SystemColors.ControlLightLight;
-      scoreLabel.Location = new Point(120, 30);
+      scoreLabel.Location = new Point(120, 60);
       scoreLabel.Margin = new Padding(0);
       scoreLabel.Name = "scoreLabel";
-      scoreLabel.Size = new Size(150, 30);
+      scoreLabel.Size = new Size(150, 103);
       scoreLabel.TabIndex = 3;
       scoreLabel.TextAlign = ContentAlignment.MiddleRight;
       // 
@@ -1308,7 +1315,7 @@
       timerResetButton.Dock = DockStyle.Fill;
       timerResetButton.FlatStyle = FlatStyle.Popup;
       timerResetButton.ForeColor = SystemColors.ControlText;
-      timerResetButton.Location = new Point(3, 3);
+      timerResetButton.Location = new Point(3, 166);
       timerResetButton.Name = "timerResetButton";
       timerResetButton.Size = new Size(54, 24);
       timerResetButton.TabIndex = 2;
@@ -1322,14 +1329,13 @@
       timerLabel.Dock = DockStyle.Fill;
       timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
       timerLabel.ForeColor = SystemColors.ControlLightLight;
-      timerLabel.Location = new Point(120, 0);
+      timerLabel.Location = new Point(120, 163);
       timerLabel.Margin = new Padding(0);
       timerLabel.Name = "timerLabel";
       timerLabel.Size = new Size(150, 30);
       timerLabel.TabIndex = 0;
       timerLabel.Text = "0:00:00:00.000";
       timerLabel.TextAlign = ContentAlignment.MiddleCenter;
-      timerLabel.Visible = false;
       // 
       // timerStartStopButton
       // 
@@ -1337,14 +1343,29 @@
       timerStartStopButton.Dock = DockStyle.Fill;
       timerStartStopButton.FlatStyle = FlatStyle.Popup;
       timerStartStopButton.ForeColor = SystemColors.ControlText;
-      timerStartStopButton.Location = new Point(63, 3);
+      timerStartStopButton.Location = new Point(63, 166);
       timerStartStopButton.Name = "timerStartStopButton";
       timerStartStopButton.Size = new Size(54, 24);
       timerStartStopButton.TabIndex = 1;
       timerStartStopButton.Text = "Start";
       timerStartStopButton.UseVisualStyleBackColor = true;
-      timerStartStopButton.Visible = false;
       timerStartStopButton.Click += timerStartStopButton_Click;
+      // 
+      // perkFilterTextbox
+      // 
+      perkFilterTextbox.BackColor = SystemColors.Window;
+      perkFilterTextbox.BorderStyle = BorderStyle.None;
+      tableLayoutPanel5.SetColumnSpan(perkFilterTextbox, 3);
+      perkFilterTextbox.Dock = DockStyle.Top;
+      perkFilterTextbox.Enabled = false;
+      perkFilterTextbox.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      perkFilterTextbox.Location = new Point(3, 3);
+      perkFilterTextbox.Name = "perkFilterTextbox";
+      perkFilterTextbox.ReadOnly = true;
+      perkFilterTextbox.ShortcutsEnabled = false;
+      perkFilterTextbox.Size = new Size(264, 14);
+      perkFilterTextbox.TabIndex = 4;
+      perkFilterTextbox.WordWrap = false;
       // 
       // tabPage4
       // 
@@ -1435,7 +1456,7 @@
     private TableLayoutPanel tableLayoutPanel1;
     private TableLayoutPanel tableLayoutPanel3;
     private DataGridView rosterGridView;
-    private TextBox textBox1;
+    private TextBox perkFilterTextbox;
     private TextBox perkTextBox1;
     private TabPage tabPage4;
     private TabPage tabPage5;
