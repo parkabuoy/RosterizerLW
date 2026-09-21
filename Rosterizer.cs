@@ -1894,7 +1894,8 @@ namespace RosterizerLW
 
     private void timer1_Tick(object sender, EventArgs e)
     {
-      if (DateTime.Now.Second % 60 == 58) timerLabel.Text = "!slow";
+      if (DateTime.Now.Minute % 3 == 1 && DateTime.Now.Second % 60 > 58) timerLabel.Text = "!braincell";
+      else if (DateTime.Now.Second % 60 > 58) timerLabel.Text = "!slow";
       else timerLabel.Text = elapsedTime.ToString("G")[..10];
       
       if (ChecklistPass)
@@ -2487,6 +2488,35 @@ namespace RosterizerLW
         BackColor = gridCellBg,
         SelectionBackColor = gridCellBg
       };
+    }
+
+    private void SquadGridView_MouseWheel(object sender, MouseEventArgs e)
+    {
+      var point = ((DataGridView)sender).PointToClient(Cursor.Position);
+      var info = ((DataGridView)sender).HitTest(point.X, point.Y);
+
+      DataGridView dgv = ((DataGridView)sender);
+
+      int totalRows = dgv.Rows.Count;
+      int colIndex = (dgv.SelectedCells[0].OwningColumn ?? new()).Index;
+      DataGridViewRow selectedRow = dgv.Rows[info.RowIndex];
+
+      if (e.Delta > 0 && info.RowIndex > 0)
+      {
+        dgv.Rows.Remove(selectedRow);
+        dgv.Rows.Insert(info.RowIndex - 1, selectedRow);
+        dgv.ClearSelection();
+        dgv.Rows[info.RowIndex - 1].Cells[colIndex].Selected = true;
+        for (int i = 0; i < totalRows; i++) dgv.Rows[i].Cells[12].Value = i + 1;
+      }
+      else if (e.Delta < 0 && info.RowIndex < totalRows - 1)
+      {
+        dgv.Rows.Remove(selectedRow);
+        dgv.Rows.Insert(info.RowIndex + 1, selectedRow);
+        dgv.ClearSelection();
+        dgv.Rows[info.RowIndex + 1].Cells[colIndex].Selected = true;
+        for (int i = 0; i < totalRows; i++) dgv.Rows[i].Cells[12].Value = i + 1;
+      }
     }
 
     private void squadGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)

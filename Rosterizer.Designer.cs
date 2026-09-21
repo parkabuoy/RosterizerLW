@@ -257,6 +257,7 @@
       squadGridView.CellMouseClick += squadGridView_CellMouseClick;
       squadGridView.CellMouseDoubleClick += squadGridView_CellMouseDoubleClick;
       squadGridView.CellPainting += squadAndRosterGridView_CellPainting;
+      squadGridView.MouseWheel += SquadGridView_MouseWheel;
 
       // 
       // dataGridViewTextBoxColumn1
