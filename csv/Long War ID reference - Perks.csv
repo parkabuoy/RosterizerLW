@@ -101,7 +101,7 @@ Enabled,Name,ID
 0,Overload,99
 0,Psi Control,100
 0,Psi Drain,101
-0,Repair,102
+1,Repair,102
 0,Cannon Fire,103
 0,Implant,104
 0,Chryssalid Spawn,105
@@ -125,7 +125,7 @@ Enabled,Name,ID
 0,,123
 0,Sentinel Module,124
 0,Alien Grenades,125
-0,Light 'Em Up,126
+1,Light 'Em Up,126
 0,Stealth,127
 0,Ghost Mode,128
 0,Reaper Pack,129

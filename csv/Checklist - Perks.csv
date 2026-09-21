@@ -13,15 +13,15 @@ Enabled,Name,ID
 0,Executioner,11
 0,,12
 0,Double Tap,13
-0,In The Zone,14
+1,In The Zone,14
 0,Damn Good Ground,15
 0,Snap Shot,16
 0,Will to Survive,17
 0,Fire Rocket,18
-0,Holo-Targeting,19
+1,Holo-Targeting,19
 0,Adrenal Neurosympathy,20
 0,Suppression,21
-0,Shredder Ammo,22
+1,Shredder Ammo,22
 0,Rapid Reaction,23
 0,Grenadier,24
 0,Danger Zone,25
@@ -34,7 +34,7 @@ Enabled,Name,ID
 0,Aggression,32
 0,Tactical Sense,33
 0,Close Encounters,34
-0,Lightning Reflexes,35
+1,Lightning Reflexes,35
 0,Rapid Fire,36
 0,Flush,37
 0,Depth Perception,38
@@ -89,12 +89,12 @@ Enabled,Name,ID
 0,Fallen Comrades,87
 0,Bloodlust,88
 0,Bull Rush,89
-0,HEAT Ammo,90
-1,Smoke and Mirrors,91
+1,HEAT Ammo,90
+0,Smoke and Mirrors,91
 0,Shock and Awe,92
 1,Mayhem,93
 0,Ranger,94
-0,Concealment,95
+1,Concealment,95
 0,Cluster Bomb,96
 0,Psi Lance,97
 0,Death Blossom,98
@@ -141,7 +141,7 @@ Enabled,Name,ID
 0,Repair Servos,139
 0,Fortiores Una,140
 0,Platform Stability,141
-0,Absorption Fields,142
+1,Absorption Fields,142
 0,Shock-Absorbent Armor,143
 0,Reactive Targeting Sensors,144
 0,Body Shield,145
@@ -161,7 +161,7 @@ Enabled,Name,ID
 0,Lone Wolf,159
 0,Esprit de Corps,160
 0,Into the Breach,161
-0,Paramedic,162
+1,Paramedic,162
 0,Aiming Angles,163
 0,Catching Breath,164
 0,Tactical Rigging,165

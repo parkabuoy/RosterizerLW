@@ -124,8 +124,6 @@
       dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
       tabPage8 = new TabPage();
       checklistGridView = new DataGridView();
-      checkName = new DataGridViewTextBoxColumn();
-      checkCount = new DataGridViewTextBoxColumn();
       tabPage7 = new TabPage();
       tableLayoutPanel4 = new TableLayoutPanel();
       darkCheckbox = new CheckBox();
@@ -149,6 +147,8 @@
       tabPage5 = new TabPage();
       tabPage6 = new TabPage();
       timer1 = new System.Windows.Forms.Timer(components);
+      checkName = new DataGridViewTextBoxColumn();
+      checkCount = new DataGridViewTextBoxColumn();
       tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)squadGridView).BeginInit();
       ((System.ComponentModel.ISupportInitialize)rosterGridView).BeginInit();
@@ -258,7 +258,6 @@
       squadGridView.CellMouseDoubleClick += squadGridView_CellMouseDoubleClick;
       squadGridView.CellPainting += squadAndRosterGridView_CellPainting;
       squadGridView.MouseWheel += SquadGridView_MouseWheel;
-
       // 
       // dataGridViewTextBoxColumn1
       // 
@@ -1035,26 +1034,6 @@
       checklistGridView.CellMouseEnter += checklistGridView_CellMouseEnter;
       checklistGridView.CellMouseLeave += checklistGridView_CellMouseLeave;
       // 
-      // checkName
-      // 
-      dataGridViewCellStyle38.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      checkName.DefaultCellStyle = dataGridViewCellStyle38;
-      checkName.FillWeight = 194.923859F;
-      checkName.HeaderText = "Name";
-      checkName.Name = "checkName";
-      checkName.ReadOnly = true;
-      checkName.Width = 200;
-      // 
-      // checkCount
-      // 
-      checkCount.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle39.Alignment = DataGridViewContentAlignment.MiddleRight;
-      checkCount.DefaultCellStyle = dataGridViewCellStyle39;
-      checkCount.FillWeight = 5.07614136F;
-      checkCount.HeaderText = "Count";
-      checkCount.Name = "checkCount";
-      checkCount.ReadOnly = true;
-      // 
       // tabPage7
       // 
       tabPage7.BorderStyle = BorderStyle.Fixed3D;
@@ -1402,6 +1381,27 @@
       timer1.Interval = 10;
       timer1.Tick += timer1_Tick;
       // 
+      // checkName
+      // 
+      checkName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle38.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      checkName.DefaultCellStyle = dataGridViewCellStyle38;
+      checkName.FillWeight = 194.923859F;
+      checkName.HeaderText = "Name";
+      checkName.Name = "checkName";
+      checkName.ReadOnly = true;
+      // 
+      // checkCount
+      // 
+      checkCount.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle39.Alignment = DataGridViewContentAlignment.MiddleRight;
+      checkCount.DefaultCellStyle = dataGridViewCellStyle39;
+      checkCount.FillWeight = 5.07614136F;
+      checkCount.HeaderText = "Count";
+      checkCount.Name = "checkCount";
+      checkCount.ReadOnly = true;
+      checkCount.Visible = false;
+      // 
       // Rosterizer
       // 
       AllowDrop = true;
@@ -1493,8 +1493,6 @@
     private CheckBox nonRosterPerksCheckbox;
     private TrackBar trackBar2;
     private Label label1;
-    private DataGridViewTextBoxColumn checkName;
-    private DataGridViewTextBoxColumn checkCount;
     private CheckBox darkCheckbox;
     private TabPage tabPage9;
     private TableLayoutPanel tableLayoutPanel2;
@@ -1537,5 +1535,7 @@
     private DataGridViewTextBoxColumn RankId;
     private DataGridViewTextBoxColumn HasChecklistPerk;
     private DataGridViewTextBoxColumn IsAvailable;
+    private DataGridViewTextBoxColumn checkName;
+    private DataGridViewTextBoxColumn checkCount;
   }
 }
