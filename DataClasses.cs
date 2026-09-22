@@ -25,6 +25,8 @@
       public required long Score { get; set; }
       public required int Luck { get; set; }
       public int RosterNumber { get; set; }
+      public required List<long> RandomPerks { get; set; }
+      public required List<Perk> UnchosenPerks { get; set; }
     }
 
     public class SoldierStats

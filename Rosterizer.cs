@@ -6,6 +6,7 @@ using System.IO.Hashing;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Accessibility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -52,26 +53,29 @@ namespace RosterizerLW
     static readonly Color gridBg = SystemColors.ControlDark;
     static Color hotFg = Color.Blue;
     static Color hotBg = Color.Blue;
-    static readonly Color AssaultClassColor = Color.FromArgb(255, 222, 33, 33);
-    static readonly Color EngineerClassColor = Color.FromArgb(255, 245, 115, 131);
-    static readonly Color GunnerClassColor = Color.FromArgb(255, 171, 212, 141);
-    static readonly Color InfantryClassColor = Color.FromArgb(255, 99, 99, 173);
-    static readonly Color MedicClassColor = Color.FromArgb(255, 255, 255, 255);
-    static readonly Color RocketeerClassColor = Color.FromArgb(255, 80, 180, 180);
-    static readonly Color ScoutClassColor = Color.FromArgb(255, 98, 140, 112);
-    static readonly Color ShivClassColor = Color.FromArgb(255, 0, 0, 0);
-    static readonly Color SniperClassColor = Color.FromArgb(255, 55, 0, 55);
+    static DataGridViewCellStyle hotStyle = new();
+    static readonly Color AssaultClassColor = Color.FromArgb(140, 222, 33, 33);
+    static readonly Color EngineerClassColor = Color.FromArgb(140, 245, 115, 131);
+    static readonly Color GunnerClassColor = Color.FromArgb(140, 171, 212, 141);
+    static readonly Color InfantryClassColor = Color.FromArgb(140, 99, 99, 173);
+    static readonly Color MedicClassColor = Color.FromArgb(140, 255, 255, 255);
+    static readonly Color RocketeerClassColor = Color.FromArgb(140, 80, 180, 180);
+    static readonly Color ScoutClassColor = Color.FromArgb(140, 98, 140, 112);
+    static readonly Color ShivClassColor = Color.FromArgb(140, 0, 0, 0);
+    static readonly Color SniperClassColor = Color.FromArgb(140, 55, 0, 55);
     static readonly Color ClassColorShadow = Color.FromArgb(255, 77, 77, 77);
 
     static readonly Color gridSelectedCellBg = Color.FromArgb(118, 152, 169);
     static readonly Color gridSelectedCellFg = Color.FromArgb(0, 0, 0);
-    static readonly Color treeHeaderBg = Color.FromArgb(106, 149, 150);
-    static readonly Color treeTabUnselectedBg = Color.FromArgb(150, 180, 181);
+    static readonly Color treeHeaderBg = Color.FromArgb(107, 134, 136);
+    static readonly Color treeTabUnselectedBg = Color.FromArgb(86, 171, 176);
     static readonly Color treeHeaderFg = Color.FromArgb(222, 255, 222);
+    static readonly Color unselectedSoldierPerkBg = Color.FromArgb(143, 166, 176);
+    static readonly Color statLineFg = Color.FromArgb(140, 0, 0, 0);
     static readonly DataGridViewCellBorderStyle rosterCellBorders = DataGridViewCellBorderStyle.Raised;
     static readonly DataGridViewCellBorderStyle squadCellBorders = DataGridViewCellBorderStyle.RaisedHorizontal;
     static readonly DataGridViewCellBorderStyle soldierCellBorders = DataGridViewCellBorderStyle.RaisedHorizontal;
-    static readonly DataGridViewCellBorderStyle checklistCellBorders = DataGridViewCellBorderStyle.Single;
+    static readonly DataGridViewCellBorderStyle checklistCellBorders = DataGridViewCellBorderStyle.Raised;
     static readonly DataGridViewCellBorderStyle treeCellBorders = DataGridViewCellBorderStyle.RaisedHorizontal;
     static readonly bool LongWoundBgStyle = false;
     static readonly bool StatWoundBgStyle = false;
@@ -617,7 +621,9 @@ namespace RosterizerLW
                 s.RosterNumber,
                 s.Id,
                 s.HasChecklistPerk,
-                !(s.IsWounded && s.HoursOut > RecoverableHrs) && !s.IsDead
+                !(s.IsWounded && s.HoursOut > RecoverableHrs) && !s.IsDead,
+                s.RandomPerks = [],
+                s.UnchosenPerks = []
               ];
               squadGridView.Rows.Add(dgvrVals);
               //rosterGridView.Rows.RemoveAt(rowIndex);
@@ -1265,6 +1271,8 @@ namespace RosterizerLW
       List<Soldier> roster = [];
       int rosterCount = 0;
       //----------------------------------------------------------------------------- mapping
+
+
       // in parsed json, step through the parts which relate to soldiers
       foreach (CheckpointTable entity in ((saveJson).Checkpoints[0].Checkpoint_table ?? []).Where(x => x.Class_name == "XComStrategyGame.XGStrategySoldier"))
       {
@@ -1306,7 +1314,9 @@ namespace RosterizerLW
               HasChecklistPerk = false,
               Score = 0,
               Luck = 0,
-              RosterNumber = ++rosterCount
+              RosterNumber = ++rosterCount,
+              RandomPerks = [],
+              UnchosenPerks = []
             };
             thisSoldier.IsDead = thisSoldier.Status == "Dead";
             thisSoldier.IsShiv = thisSoldier.RankId == -1;
@@ -1319,6 +1329,40 @@ namespace RosterizerLW
 
             if (thisSoldier.IsShiv || thisSoldier.IsWounded || thisSoldier.IsDead) thisSoldier.Luck = 0;
             else thisSoldier.Luck = DateTime.Now.Microsecond;
+
+            // get soldier's random perk tree (spoilers)
+            bool isThisSoldier = false;
+            bool breakLoop = false;
+            foreach (CheckpointTable e2 in ((saveJson).Checkpoints[0].Checkpoint_table ?? []).Where(x => x.Name == "Command1.TheWorld:PersistentLevel.RPCheckpoint_0"))
+            {
+              foreach (var p2 in e2.Properties.Where(x => x.Name == "arrSoldierStorage"))
+              {
+                foreach (var p3 in p2.Structs)
+                {
+                  foreach (XStruct p4 in p3)
+                  {
+                    if (p4.Name == "SoldierID")
+                    {
+                      if (Int64.Parse(p4.Value.ToString() ?? "-1") == thisSoldier.Id)
+                      {
+                        isThisSoldier = true;
+                      }
+                    }
+
+                    if (isThisSoldier && p4.Name == "RandomTree")
+                    {
+                      thisSoldier.RandomPerks = p4.Elements ?? [];
+                      breakLoop = true;
+                    }
+
+                    if (breakLoop) break;
+                  }
+                  if (breakLoop) break;
+                }
+                if (breakLoop) break;
+              }
+              if (breakLoop) break;
+            }
 
             // get the perks taken
             // these are stored as an array of integers in aUpgrades, 176 of them (one per perk)
@@ -1347,6 +1391,67 @@ namespace RosterizerLW
 
                       break;
                     }
+                  }
+                }
+              }
+            }
+
+            List<long> unchosen = [];
+            if (thisSoldier.RandomPerks.Count == 21)
+            {
+              for (int i = 2; i <= thisSoldier.RankId; i++)
+              {
+                List<long> unpickedLvl = [];
+                bool pickedPerk = false;
+                
+                // these are the tree levels, three per level
+                switch (i)
+                {
+                  case 2:
+                    unpickedLvl = thisSoldier.RandomPerks[3..6];
+                    break;
+                  case 3:
+                    unpickedLvl = thisSoldier.RandomPerks[6..9];
+                    break;
+                  case 4:
+                    unpickedLvl = thisSoldier.RandomPerks[9..12];
+                    break;
+                  case 5:
+                    unpickedLvl = thisSoldier.RandomPerks[12..15];
+                    break;
+                  case 6:
+                    unpickedLvl = thisSoldier.RandomPerks[15..18];
+                    break;
+                  case 7:
+                    unpickedLvl = thisSoldier.RandomPerks[18..21];
+                    break;
+                }
+
+                for (int j = 0; j < 3; j++)
+                {
+                  if (thisSoldier.Perks.Select(x => x.Id).Contains(unpickedLvl[j])) pickedPerk = true;
+                }
+
+                if (pickedPerk) continue;
+                else unchosen.AddRange(unpickedLvl);
+              }
+            }
+            for (int i = 0; i < unchosen.Count; i++)
+            {
+              if (unchosen[i] > 0)
+              {
+                foreach (DataRow row in PerkList.Rows)
+                {
+                  if (Int64.Parse(row["Enabled"].ToString() ?? "-1") > 0 && Int32.Parse(row["ID"].ToString() ?? "") == unchosen[i])
+                  {
+                    thisSoldier.UnchosenPerks.Add(new()
+                    {
+                      Id = unchosen[i],
+                      Name = row["Name"].ToString() ?? "",
+                      Type = -1
+                    });
+            
+                    break;
                   }
                 }
               }
@@ -1446,7 +1551,7 @@ namespace RosterizerLW
           Alignment = DataGridViewContentAlignment.MiddleCenter
         };
 
-        s.Perks = s.Perks.OrderBy(x => x.Name).ToList();
+        s.Perks = [.. s.Perks.OrderBy(x => x.Name)];
         for (int i = 0; i < s.Perks.Count; i++)
         {
           soldierPerksGridView.Rows.Add([s.Perks[i].Name ?? ""]);
@@ -1459,6 +1564,21 @@ namespace RosterizerLW
             Font = new(Font, FontStyle.Regular),
           };
         }
+
+        s.UnchosenPerks = [.. s.UnchosenPerks.OrderBy(x => x.Name)];
+        for (int i = 0; i < s.UnchosenPerks.Count; i++)
+        {
+          soldierPerksGridView.Rows.Add(s.UnchosenPerks[i].Name ?? "");
+          soldierPerksGridView.Rows[i + 1].Cells[0].Style = new()
+          {
+            BackColor = unselectedSoldierPerkBg,
+            ForeColor = checklistBadHeaderFg,
+            SelectionBackColor = unselectedSoldierPerkBg,
+            SelectionForeColor = checklistBadHeaderFg,
+            Font = new(Font, FontStyle.Italic),
+          };
+        }
+
         if (fromSquad)
         {
           SoldierSelectedIdXP = $"{squadGridView.Rows[rosterRowIndex].Cells[12].Value},{squadGridView.Rows[rosterRowIndex].Cells[8].Value}";
@@ -1574,6 +1694,7 @@ namespace RosterizerLW
 
       if (e.ColumnIndex == 12)
       {
+
         Color fillColor = Color.Black;
         if ((((DataGridView)sender).Name == "squadGridView"))
         {
@@ -1583,7 +1704,7 @@ namespace RosterizerLW
         else fillColor = gridBg;
 
         e.Graphics.FillRectangle(new SolidBrush(fillColor), new(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height));
-
+        e.Graphics.DrawLine(new Pen(statLineFg, 1), new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Left, e.CellBounds.Bottom));
         TextRenderer.DrawText(
           e.Graphics,
           string.Format("{0}", e.FormattedValue),
@@ -1653,20 +1774,38 @@ namespace RosterizerLW
               break;
           }
 
+          // define locations of graphics
           Rectangle dotRect = new(e.CellBounds.X + 1, e.CellBounds.Y + 5, 14, 14);
           Rectangle outlineRect = new(e.CellBounds.X + 3, e.CellBounds.Y + 7, 12, 12);
           Rectangle textRect = new(e.CellBounds.X + 8, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height);
 
-          e.PaintBackground(e.CellBounds, false);                                     // draw cell background
-          e.Graphics.DrawEllipse(new Pen(ClassColorShadow, 2.3F), outlineRect);           // draw shadow
+          e.PaintBackground(e.CellBounds, false);                                         // draw cell background
+          e.Graphics.DrawEllipse(new Pen(ClassColorShadow, 4F), outlineRect);             // draw shadow
+          e.Graphics.FillEllipse(new SolidBrush(Color.FromArgb(255, 100,100,100)), dotRect);                 // draw dot bg
           e.Graphics.FillEllipse(new SolidBrush(classColor), dotRect);                    // draw dot
-          TextRenderer.DrawText(                                                      // draw class name
+          TextRenderer.DrawText(                                                          // draw class name text
             e.Graphics,
             string.Format("{0}", e.FormattedValue),
             Font,
             textRect,
             ((DataGridView)sender).DefaultCellStyle.SelectionForeColor,
             TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+          e.Handled = true;                                                               // mark as handled so the default draw doesn't happen
+        }
+        else if (e.ColumnIndex == 4 || e.ColumnIndex == 9)
+        {
+          Color lineColor = Color.FromArgb(100, 0, 0, 0);
+
+          e.PaintBackground(e.CellBounds, false);
+
+          e.Graphics.DrawLine(new Pen(lineColor, 1), new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Left, e.CellBounds.Bottom));
+          TextRenderer.DrawText(
+                      e.Graphics,
+                      string.Format("{0}", e.FormattedValue),
+                      Font,
+                      e.CellBounds,
+                      ((DataGridView)sender).DefaultCellStyle.SelectionForeColor,
+                      TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
           e.Handled = true;
         }
       }
@@ -2393,10 +2532,13 @@ namespace RosterizerLW
     {
       // hot-track soldier perk list
       List<Tuple<string, long>> perkedSquadSoldiers = [];
+      List<Tuple<string, long>> perkedNonSqadSoldiers = [];
 
       for (int i = 0; i < Squad.Count; i++)
         if (Squad[i].Perks.Select(x => x.Name).Contains((((DataGridView)sender).Rows[e.RowIndex].Cells[0].Value ?? "").ToString() ?? ""))
           perkedSquadSoldiers.Add(new(Squad[i].LName, Squad[i].Xp));
+
+      hotStyle = ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style;
 
       for (int i = 0; i < squadGridView.Rows.Count; i++)
       {
@@ -2436,21 +2578,14 @@ namespace RosterizerLW
       }
 
       if (e.RowIndex == 0 || ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style.BackColor == checklistGoodTabUnselectedBg) return;
-      ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = new()
-      {
-        ForeColor = gridCellFg,
-        SelectionForeColor = gridCellFg,
-        BackColor = gridCellBg,
-        SelectionBackColor = gridCellBg
-      };
+      ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = hotStyle;
     }
 
     private void checklistGridView_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
     {
       // hot-track soldier perk list
       List<Tuple<string, long>> perkedSquadSoldiers = [];
-      hotBg = ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style.BackColor;
-      hotFg = ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style.ForeColor;
+      hotStyle = ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style;
 
       for (int i = 0; i < Squad.Count; i++)
         if (Squad[i].Perks.Select(x => x.Name).Contains((((DataGridView)sender).Rows[e.RowIndex].Cells[0].Value ?? "").ToString() ?? ""))
@@ -2492,13 +2627,7 @@ namespace RosterizerLW
         squadGridView.Rows[i].Cells[0].Style = new() { BackColor = gridCellBg, SelectionBackColor = gridCellBg };
       }
 
-      ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = new()
-      {
-        ForeColor = hotFg,
-        SelectionForeColor = hotFg,
-        BackColor = hotBg,
-        SelectionBackColor = hotBg
-      };
+      ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = hotStyle;
     }
 
     private void SquadGridView_MouseWheel(object sender, MouseEventArgs e)
