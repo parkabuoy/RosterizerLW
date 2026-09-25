@@ -269,6 +269,8 @@ namespace RosterizerLW
       SubRoster = []
     };
     bool PerkTreeByName = false;
+    bool SquadPerksByName = true;
+
     Perk[] RosterPerkTree = [];
     // path from which we'll load the save (or blank to load AutoSavePath below
     static string overrideSavePath = "..\\..\\..\\saveBackup\\save43";
@@ -283,7 +285,6 @@ namespace RosterizerLW
     public static string SoldierSelectedIdXP = "";
 
     UInt64 x2jHash = 550290084522337840; // ensure the expected xcom2json version
-
 
     // ------------------------------------------------------------------------------------------------------------------------------------------------------------
     string saveFilenameFull = "";
@@ -419,11 +420,6 @@ namespace RosterizerLW
         soldierPerksGridView.DefaultCellStyle.SelectionForeColor = darkSoldierRowFg;
         soldierPerksGridView.DefaultCellStyle.SelectionBackColor = darkSoldierTabUnselectedBg;
         soldierPerksGridView.CellBorderStyle = darkSoldierCellBorders;
-        //rosterPerkList.DefaultCellStyle.BackColor = darkGridCellBg;
-        //rosterPerkList.DefaultCellStyle.ForeColor = darkGridCellFg;
-        //rosterPerkList.DefaultCellStyle.SelectionBackColor = darkGridSelectedCellBg;
-        //rosterPerkList.DefaultCellStyle.SelectionForeColor = darkGridSelectedCellFg;
-        //rosterPerkList.CellBorderStyle = darkRosterCellBorders;
         checklistGridView.DefaultCellStyle.SelectionBackColor = darkGridCellBg;
         checklistGridView.DefaultCellStyle.SelectionForeColor = darkGridCellFg;
         checklistGridView.DefaultCellStyle.BackColor = darkGridCellBg;
@@ -861,10 +857,9 @@ namespace RosterizerLW
           Padding = new(20, 0, 0, 0)
         };
 
-        foreach (var p in SquadPerks.OrderBy(x => x.Key))
+        foreach (var p in SquadPerksByName ? SquadPerks.OrderBy(x => x.Key) : SquadPerks.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
         {
-          if (squadPerkList.Rows.Count > 1 && p.Key.CompareTo((squadPerkList.Rows[1].Cells[0].Value ?? "").ToString()) <= 0) squadPerkList.Rows.Insert(1, [p.Key, p.Value]);
-          else squadPerkList.Rows.Add([p.Key, p.Value]);
+          squadPerkList.Rows.Add([p.Key, p.Value]);
 
           if (ChecklistPerks.ContainsKey(p.Key)) squadPerkList.Rows[^1].Cells[0].Style = squadPerkList.Rows[^1].Cells[1].Style = new()
           {
@@ -2011,9 +2006,9 @@ namespace RosterizerLW
       }
     }
 
-    private void tabControl1_TabIndexChanged(object sender, EventArgs e)
+    private void tabControl1_TabIndexChanged(object? sender = null, EventArgs? e = null)
     {
-      if (((TabControl)sender).SelectedIndex == 1)
+      if (sender is null || ((TabControl)sender).SelectedIndex == 1)
       {
         FromSquadTab = true;
         hotStyle = new()
@@ -2297,7 +2292,14 @@ namespace RosterizerLW
     {
       if (e.Button == MouseButtons.Right)
       {
-        ListRoster();
+        tabControl1_TabIndexChanged(); // todo: not this
+      }
+      if (e.Button == MouseButtons.Middle)
+      {
+        SquadPerksByName = !SquadPerksByName;
+        squadPerkList.CellBorderStyle = SquadPerksByName ? DataGridViewCellBorderStyle.SingleHorizontal : DataGridViewCellBorderStyle.Raised;
+
+        tabControl1_TabIndexChanged(); // todo: not this
       }
     }
 
