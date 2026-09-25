@@ -113,7 +113,7 @@ namespace RosterizerLW
         {
           for (int i = 0; i < Application.OpenForms.Count; i++)
           {
-            Application.OpenForms[i].Close();
+            Application.OpenForms[i]?.Close();
           }
         }
 

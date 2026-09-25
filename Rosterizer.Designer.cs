@@ -92,6 +92,7 @@
       checklistGridView = new DataGridView();
       checkName = new DataGridViewTextBoxColumn();
       checkCount = new DataGridViewTextBoxColumn();
+      Desired = new DataGridViewTextBoxColumn();
       tabPage7 = new TabPage();
       tableLayoutPanel4 = new TableLayoutPanel();
       darkCheckbox = new CheckBox();
@@ -133,6 +134,8 @@
       HasChecklistPerk = new DataGridViewTextBoxColumn();
       IsAvailable = new DataGridViewTextBoxColumn();
       HasUnselectedPerks = new DataGridViewTextBoxColumn();
+      InShortlist = new DataGridViewTextBoxColumn();
+      InSquad = new DataGridViewTextBoxColumn();
       dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
       dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
       dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
@@ -151,6 +154,8 @@
       dataGridViewTextBoxColumn18 = new DataGridViewTextBoxColumn();
       dataGridViewTextBoxColumn19 = new DataGridViewTextBoxColumn();
       SquadHasUnselectedPerks = new DataGridViewTextBoxColumn();
+      InShortlist2 = new DataGridViewTextBoxColumn();
+      InSquad2 = new DataGridViewTextBoxColumn();
       tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)squadGridView).BeginInit();
       ((System.ComponentModel.ISupportInitialize)rosterGridView).BeginInit();
@@ -219,7 +224,7 @@
       squadGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
       squadGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
       squadGridView.ColumnHeadersVisible = false;
-      squadGridView.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn15, dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn9, dataGridViewTextBoxColumn10, dataGridViewTextBoxColumn11, dataGridViewTextBoxColumn12, dataGridViewTextBoxColumn13, dataGridViewTextBoxColumn14, dataGridViewTextBoxColumn20, dataGridViewTextBoxColumn16, dataGridViewTextBoxColumn17, dataGridViewTextBoxColumn18, dataGridViewTextBoxColumn19, SquadHasUnselectedPerks });
+      squadGridView.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn15, dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn9, dataGridViewTextBoxColumn10, dataGridViewTextBoxColumn11, dataGridViewTextBoxColumn12, dataGridViewTextBoxColumn13, dataGridViewTextBoxColumn14, dataGridViewTextBoxColumn20, dataGridViewTextBoxColumn16, dataGridViewTextBoxColumn17, dataGridViewTextBoxColumn18, dataGridViewTextBoxColumn19, SquadHasUnselectedPerks, InShortlist2, InSquad2 });
       dataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleLeft;
       dataGridViewCellStyle15.BackColor = SystemColors.ControlLight;
       dataGridViewCellStyle15.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -259,7 +264,9 @@
       squadGridView.CellMouseClick += squadGridView_CellMouseClick;
       squadGridView.CellMouseDoubleClick += squadGridView_CellMouseDoubleClick;
       squadGridView.CellPainting += squadAndRosterGridView_CellPainting;
-      squadGridView.MouseWheel += SquadGridView_MouseWheel;
+      squadGridView.MouseWheel += squadGridView_MouseWheel;
+      squadGridView.CellMouseEnter += squadGridView_CellMouseEnter;
+      squadGridView.CellMouseLeave += squadGridView_CellMouseLeave;
       // 
       // rosterGridView
       // 
@@ -283,7 +290,7 @@
       dataGridViewCellStyle17.WrapMode = DataGridViewTriState.False;
       rosterGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
       rosterGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-      rosterGridView.Columns.AddRange(new DataGridViewColumn[] { LName, NName, Status, SoldierClass, RankName, Def, HP, Mob, Will, Aim, XP, Next, Number, Id, RankId, HasChecklistPerk, IsAvailable, HasUnselectedPerks });
+      rosterGridView.Columns.AddRange(new DataGridViewColumn[] { LName, NName, Status, SoldierClass, RankName, Def, HP, Mob, Will, Aim, XP, Next, Number, Id, RankId, HasChecklistPerk, IsAvailable, HasUnselectedPerks, InShortlist, InSquad });
       dataGridViewCellStyle31.Alignment = DataGridViewContentAlignment.MiddleLeft;
       dataGridViewCellStyle31.BackColor = SystemColors.ControlLight;
       dataGridViewCellStyle31.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -302,6 +309,7 @@
       rosterGridView.MultiSelect = false;
       rosterGridView.Name = "rosterGridView";
       rosterGridView.ReadOnly = true;
+      rosterGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Sunken;
       dataGridViewCellStyle32.Alignment = DataGridViewContentAlignment.MiddleLeft;
       dataGridViewCellStyle32.BackColor = SystemColors.Control;
       dataGridViewCellStyle32.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -322,6 +330,7 @@
       rosterGridView.CellDoubleClick += rosterGridView_CellDoubleClick;
       rosterGridView.CellMouseClick += rosterGridView_CellMouseClick;
       rosterGridView.CellMouseEnter += rosterGridView_CellMouseEnter;
+      rosterGridView.CellMouseLeave += rosterGridView_CellMouseLeave;
       rosterGridView.CellPainting += squadAndRosterGridView_CellPainting;
       // 
       // tableLayoutPanel3
@@ -390,6 +399,7 @@
       tabControl1.SizeMode = TabSizeMode.FillToRight;
       tabControl1.TabIndex = 18;
       tabControl1.DrawItem += tabControl1_DrawItem;
+      tabControl1.SelectedIndexChanged += tabControl1_TabIndexChanged;
       // 
       // tabPage9
       // 
@@ -620,10 +630,10 @@
       checklistGridView.AllowUserToResizeRows = false;
       checklistGridView.BackgroundColor = SystemColors.ControlDarkDark;
       checklistGridView.BorderStyle = BorderStyle.None;
-      checklistGridView.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
+      checklistGridView.CellBorderStyle = DataGridViewCellBorderStyle.SunkenHorizontal;
       checklistGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       checklistGridView.ColumnHeadersVisible = false;
-      checklistGridView.Columns.AddRange(new DataGridViewColumn[] { checkName, checkCount });
+      checklistGridView.Columns.AddRange(new DataGridViewColumn[] { checkName, checkCount, Desired });
       checklistGridView.Cursor = Cursors.Hand;
       checklistGridView.Dock = DockStyle.Fill;
       checklistGridView.Location = new Point(0, 0);
@@ -653,14 +663,24 @@
       // 
       // checkCount
       // 
-      checkCount.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+      checkCount.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
       dataGridViewCellStyle39.Alignment = DataGridViewContentAlignment.MiddleRight;
       checkCount.DefaultCellStyle = dataGridViewCellStyle39;
       checkCount.FillWeight = 5.07614136F;
       checkCount.HeaderText = "Count";
+      checkCount.MinimumWidth = 20;
       checkCount.Name = "checkCount";
       checkCount.ReadOnly = true;
-      checkCount.Visible = false;
+      checkCount.Width = 20;
+      // 
+      // Desired
+      // 
+      Desired.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+      Desired.HeaderText = "Desired";
+      Desired.MinimumWidth = 30;
+      Desired.Name = "Desired";
+      Desired.ReadOnly = true;
+      Desired.Width = 30;
       // 
       // tabPage7
       // 
@@ -1027,6 +1047,7 @@
       NName.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
       dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleLeft;
       NName.DefaultCellStyle = dataGridViewCellStyle19;
+      NName.DividerWidth = 2;
       NName.Frozen = true;
       NName.HeaderText = "Nickname";
       NName.MinimumWidth = 185;
@@ -1149,14 +1170,15 @@
       // 
       XP.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
       dataGridViewCellStyle28.Alignment = DataGridViewContentAlignment.MiddleRight;
+      dataGridViewCellStyle28.ForeColor = Color.Black;
       XP.DefaultCellStyle = dataGridViewCellStyle28;
       XP.HeaderText = "EXP";
-      XP.MinimumWidth = 55;
+      XP.MinimumWidth = 50;
       XP.Name = "XP";
       XP.ReadOnly = true;
       XP.Resizable = DataGridViewTriState.False;
       XP.SortMode = DataGridViewColumnSortMode.NotSortable;
-      XP.Width = 55;
+      XP.Width = 50;
       // 
       // Next
       // 
@@ -1219,6 +1241,20 @@
       HasUnselectedPerks.ReadOnly = true;
       HasUnselectedPerks.Visible = false;
       // 
+      // InShortlist
+      // 
+      InShortlist.HeaderText = "InShortlist";
+      InShortlist.Name = "InShortlist";
+      InShortlist.ReadOnly = true;
+      InShortlist.Visible = false;
+      // 
+      // InSquad
+      // 
+      InSquad.HeaderText = "InSquad";
+      InSquad.Name = "InSquad";
+      InSquad.ReadOnly = true;
+      InSquad.Visible = false;
+      // 
       // dataGridViewTextBoxColumn1
       // 
       dataGridViewTextBoxColumn1.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
@@ -1237,6 +1273,7 @@
       dataGridViewTextBoxColumn2.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
       dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
       dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle3;
+      dataGridViewTextBoxColumn2.DividerWidth = 2;
       dataGridViewTextBoxColumn2.Frozen = true;
       dataGridViewTextBoxColumn2.HeaderText = "Nickname";
       dataGridViewTextBoxColumn2.MinimumWidth = 185;
@@ -1357,12 +1394,12 @@
       dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight;
       dataGridViewTextBoxColumn13.DefaultCellStyle = dataGridViewCellStyle12;
       dataGridViewTextBoxColumn13.HeaderText = "EXP";
-      dataGridViewTextBoxColumn13.MinimumWidth = 55;
+      dataGridViewTextBoxColumn13.MinimumWidth = 50;
       dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
       dataGridViewTextBoxColumn13.ReadOnly = true;
       dataGridViewTextBoxColumn13.Resizable = DataGridViewTriState.False;
       dataGridViewTextBoxColumn13.SortMode = DataGridViewColumnSortMode.NotSortable;
-      dataGridViewTextBoxColumn13.Width = 55;
+      dataGridViewTextBoxColumn13.Width = 50;
       // 
       // dataGridViewTextBoxColumn14
       // 
@@ -1423,6 +1460,20 @@
       SquadHasUnselectedPerks.Name = "SquadHasUnselectedPerks";
       SquadHasUnselectedPerks.ReadOnly = true;
       SquadHasUnselectedPerks.Visible = false;
+      // 
+      // InShortlist2
+      // 
+      InShortlist2.HeaderText = "InShortlist";
+      InShortlist2.Name = "InShortlist2";
+      InShortlist2.ReadOnly = true;
+      InShortlist2.Visible = false;
+      // 
+      // InSquad2
+      // 
+      InSquad2.HeaderText = "InSquad";
+      InSquad2.Name = "InSquad2";
+      InSquad2.ReadOnly = true;
+      InSquad2.Visible = false;
       // 
       // Rosterizer
       // 
@@ -1525,6 +1576,7 @@
     private DataGridView squadGridView;
     private DataGridViewTextBoxColumn checkName;
     private DataGridViewTextBoxColumn checkCount;
+    private DataGridViewTextBoxColumn Desired;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
@@ -1543,6 +1595,8 @@
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn18;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn19;
     private DataGridViewTextBoxColumn SquadHasUnselectedPerks;
+    private DataGridViewTextBoxColumn InShortlist2;
+    private DataGridViewTextBoxColumn InSquad2;
     private DataGridViewTextBoxColumn LName;
     private DataGridViewTextBoxColumn NName;
     private DataGridViewTextBoxColumn Status;
@@ -1561,5 +1615,7 @@
     private DataGridViewTextBoxColumn HasChecklistPerk;
     private DataGridViewTextBoxColumn IsAvailable;
     private DataGridViewTextBoxColumn HasUnselectedPerks;
+    private DataGridViewTextBoxColumn InShortlist;
+    private DataGridViewTextBoxColumn InSquad;
   }
 }
