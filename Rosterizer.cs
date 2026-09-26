@@ -192,7 +192,7 @@ namespace RosterizerLW
     static double indPctHp = 0.5;
     static double indPctDef = 0.9;
 
-    static readonly int minHiLoListSize = 7;
+    static readonly int minHiLoListSize = 9;
     static readonly int minMinMaxListSize = 4;
 
     bool maxHp = false, hiHp = false, loHp = false, minHp = false;
@@ -210,6 +210,7 @@ namespace RosterizerLW
     public static bool FromSquadTab = false;
     public static List<Soldier> TabFlipList = [];
     public static string TabFlipFilterLabelText = "";
+    public static int TabFlipVscroll = 0;
     public static List<Soldier> Roster = [];
     public static List<Soldier> Shortlist = [];
     //public static FileInfo SaveFile;
@@ -230,10 +231,12 @@ namespace RosterizerLW
     public static int CurrentShortlistSize = 0;
 
     public static int CurrentSquadSize = 0;
+    public static List<List<long>> SquadStats = [];
     public static Dictionary<string, int> ChecklistPerks = [];
     public static bool ChecklistPass = false;
     public static long ChecklistPassTime = 0;
     public static List<List<int>> SortArray = [[]];
+
     public static int[] DefaultSortArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
     public static int MaxSortDepth = 5;
     public static Font SmallFont = new("Tahoma", 7.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -566,13 +569,36 @@ namespace RosterizerLW
 
             if (s?.InShortlist == true)
             {
+              if (s.InSquad == true)
+              {
+                List<long> thisSoldierStats = [];
+                for (int j = 0; j < 5; j++) thisSoldierStats.Add(Int64.Parse((((DataGridView)sender).Rows[info.RowIndex].Cells[j + 5].Value ?? "").ToString() ?? ""));
+                for (int i = 0; i < SquadStats.Count; i++)
+                {
+                  if (SquadStats[i][0] == thisSoldierStats[0]
+                    && SquadStats[i][1] == thisSoldierStats[1]
+                    && SquadStats[i][2] == thisSoldierStats[2]
+                    && SquadStats[i][3] == thisSoldierStats[3]
+                    && SquadStats[i][4] == thisSoldierStats[4]
+                  )
+                  {
+                    SquadStats.RemoveAt(i);
+                    break;
+                  }
+                }
+              }
+
               if (CurrentShortlistSize == 1) HideSquadGrid();
               else tableLayoutPanel1.RowStyles[0].Height -= 25;
 
               if (((DataGridView)sender).Name == "squadGridView")
               {
                 if (s.InSquad) s.InSquad = false;
-                if (squadGridView.Rows.Count > 1) squadGridView.Rows.RemoveAt(info.RowIndex);
+
+                if (squadGridView.Rows.Count > 1)
+                {
+                  squadGridView.Rows.RemoveAt(info.RowIndex);
+                }
                 else squadGridView.Rows.Clear();
               }
               else
@@ -591,30 +617,41 @@ namespace RosterizerLW
               Roster.Where(x => x.LName == s.LName && x.Xp == s.Xp).ToList().ForEach(x => { x.InShortlist = false; x.InSquad = false; });
               Shortlist.Remove(s);
 
+              int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
               switch (RosterPerkTree.Length)
               {
                 case 0:
+                  SetPerkTree(RosterTree1);
                   ListRoster(RosterTree1.SubRoster);
                   break;
                 case 1:
+                  SetPerkTree(RosterTree2);
                   ListRoster(RosterTree2.SubRoster);
                   break;
                 case 2:
+                  SetPerkTree(RosterTree3);
                   ListRoster(RosterTree3.SubRoster);
                   break;
                 case 3:
+                  SetPerkTree(RosterTree4);
                   ListRoster(RosterTree4.SubRoster);
                   break;
               }
+
+              if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
             }
             else if (CurrentShortlistSize < MaxSquadSize && s?.InShortlist == false)
             {
               if (CurrentShortlistSize == 0) ShowSquadGrid();
-
+              if (Shortlist.Count < trackBar2.Value) s.InSquad = true;
+              else s.InSquad = false;
+              s.InShortlist = true;
               tableLayoutPanel1.RowStyles[0].Height += 25;
+
               object[] dgvrVals =
               [
-                s.LName.Contains("TamTam") ? $"{s.LName} ♥♥" : s.LName,
+                s.LName.Contains("TamTam") ? $"{s.LName} ♥♥" : s.LName.Contains("kaBuoy") ? $"{s.LName}   >:3" : s.LName,
                 s.NName,
                 (s.IsFatigued || s.IsWounded) && !s.IsDead ? ((s.HoursOut / 24) > 0 ? $"{s.HoursOut / 24}d " : "") + $"{s.HoursOut % 24}h" : s.Status,
                 s.Class,
@@ -636,27 +673,57 @@ namespace RosterizerLW
                 s.InSquad
               ];
               squadGridView.Rows.Add(dgvrVals);
-              //rosterGridView.Rows.RemoveAt(rowIndex);
 
               CurrentShortlistSize++;
-              s.InShortlist = true;
               Shortlist.Add(s);
-              Roster.Where(x => x.LName == s.LName && x.Id == s.Id).ToList().ForEach(x => x.InShortlist = true);
+              Roster.Where(x => x.LName == s.LName && x.Id == s.Id).ToList().ForEach(x => { x.InShortlist = s.InShortlist; x.InSquad = s.InSquad; });
+
+              if ((bool?)dgvrVals[19] == true)
+              {
+                List<long> thisSoldierStats = [];
+                for (int j = 0; j < 5; j++) thisSoldierStats.Add(Int64.Parse((((DataGridView)sender).Rows[info.RowIndex].Cells[j + 5].Value ?? "").ToString() ?? ""));
+
+                bool wasFound = false;
+                for (int i = 0; i < SquadStats.Count; i++)
+                {
+                  if (SquadStats[i][0] == thisSoldierStats[0]
+                    && SquadStats[i][1] == thisSoldierStats[1]
+                    && SquadStats[i][2] == thisSoldierStats[2]
+                    && SquadStats[i][3] == thisSoldierStats[3]
+                    && SquadStats[i][4] == thisSoldierStats[4]
+                  )
+                  {
+                    wasFound = true;
+                    break;
+                  }
+                }
+
+                if (!wasFound) SquadStats.Add(thisSoldierStats);
+              }
+
+              int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
               switch (RosterPerkTree.Length)
               {
                 case 0:
+                  SetPerkTree(RosterTree1);
                   ListRoster(RosterTree1.SubRoster);
                   break;
                 case 1:
+                  SetPerkTree(RosterTree2);
                   ListRoster(RosterTree2.SubRoster);
                   break;
                 case 2:
+                  SetPerkTree(RosterTree3);
                   ListRoster(RosterTree3.SubRoster);
                   break;
                 case 3:
+                  SetPerkTree(RosterTree4);
                   ListRoster(RosterTree4.SubRoster);
                   break;
               }
+
+              if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
             }
 
             // switch RosterNumber to squad count
@@ -664,6 +731,15 @@ namespace RosterizerLW
 
             if (vscroll > 0 && ((DataGridView)sender).Rows.Count >= vscroll - 1) ((DataGridView)sender).FirstDisplayedScrollingRowIndex = vscroll;
           }
+        }
+
+        if (CurrentShortlistSize == 0)
+        {
+          tabControl1.SelectedIndex = 0;
+        }
+        else if (tabControl1.SelectedIndex == 1)
+        {
+          tabControl1_TabIndexChanged(null, null); // todo: not this
         }
       }
     }
@@ -826,13 +902,14 @@ namespace RosterizerLW
       {
         if (squadUpdate && Shortlist.Contains(s))
         {
-          for (int i = 0; i < squadGridView.Rows.Count && i < trackBar2.Value; i++)
+          for (int i = 0; i < squadGridView.Rows.Count; i++)
           {
             if (((squadGridView.Rows[i].Cells[0].Value ?? "").ToString() ?? "").Contains(s.LName) && Int64.Parse((squadGridView.Rows[i].Cells[10].Value ?? "").ToString() ?? "") == s.Xp)
             {
-              s.InSquad = true;
+              s.InSquad = i < trackBar2.Value;
               CurrentSquadSize++;
               s.Perks.ForEach(x => { if (!SquadPerks.TryAdd(x.Name ?? "", 1)) SquadPerks[x.Name ?? ""]++; });
+              continue;
             }
           }
 
@@ -1678,77 +1755,109 @@ namespace RosterizerLW
 
     private void deadCheckbox_CheckedChanged(object sender, EventArgs e)
     {
+      int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
       switch (RosterPerkTree.Length)
       {
         case 0:
+          SetPerkTree(RosterTree1);
           ListRoster(RosterTree1.SubRoster);
           break;
         case 1:
+          SetPerkTree(RosterTree2);
           ListRoster(RosterTree2.SubRoster);
           break;
         case 2:
+          SetPerkTree(RosterTree3);
           ListRoster(RosterTree3.SubRoster);
           break;
         case 3:
+          SetPerkTree(RosterTree4);
           ListRoster(RosterTree4.SubRoster);
           break;
       }
+
+      if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
     }
 
     private void woundedCheckbox_CheckedChanged(object sender, EventArgs e)
     {
+      int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
       switch (RosterPerkTree.Length)
       {
         case 0:
+          SetPerkTree(RosterTree1);
           ListRoster(RosterTree1.SubRoster);
           break;
         case 1:
+          SetPerkTree(RosterTree2);
           ListRoster(RosterTree2.SubRoster);
           break;
         case 2:
+          SetPerkTree(RosterTree3);
           ListRoster(RosterTree3.SubRoster);
           break;
         case 3:
+          SetPerkTree(RosterTree4);
           ListRoster(RosterTree4.SubRoster);
           break;
       }
+
+      if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
     }
 
     private void shivCheckBox_CheckedChanged(object sender, EventArgs e)
     {
+      int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
       switch (RosterPerkTree.Length)
       {
         case 0:
+          SetPerkTree(RosterTree1);
           ListRoster(RosterTree1.SubRoster);
           break;
         case 1:
+          SetPerkTree(RosterTree2);
           ListRoster(RosterTree2.SubRoster);
           break;
         case 2:
+          SetPerkTree(RosterTree3);
           ListRoster(RosterTree3.SubRoster);
           break;
         case 3:
+          SetPerkTree(RosterTree4);
           ListRoster(RosterTree4.SubRoster);
           break;
       }
+
+      if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
     }
     private void fatiguedCheckbox_CheckedChanged(object sender, EventArgs e)
     {
+      int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
       switch (RosterPerkTree.Length)
       {
         case 0:
+          SetPerkTree(RosterTree1);
           ListRoster(RosterTree1.SubRoster);
           break;
         case 1:
+          SetPerkTree(RosterTree2);
           ListRoster(RosterTree2.SubRoster);
           break;
         case 2:
+          SetPerkTree(RosterTree3);
           ListRoster(RosterTree3.SubRoster);
           break;
         case 3:
+          SetPerkTree(RosterTree4);
           ListRoster(RosterTree4.SubRoster);
           break;
       }
+
+      if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
     }
 
     private void squadAndRosterGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
@@ -1761,7 +1870,7 @@ namespace RosterizerLW
       if (isSquadGrid && (e.ColumnIndex != 0 && e.ColumnIndex != 1) && e.RowIndex == trackBar2.Value)
       {
         DrawSquadLine(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), inSquadBookendsBg);
-        if (e.ColumnIndex > 0 && e.ColumnIndex < 12) DrawSquadLine2(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), gridCellBg);
+        if (e.ColumnIndex > 0 && e.ColumnIndex < 12) DrawSquadLine2(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), Color.FromArgb(150, gridCellBg));
         else DrawSquadLine2(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), inSquadBookendsBg);
       }
 
@@ -1825,7 +1934,8 @@ namespace RosterizerLW
             e.Graphics?.FillEllipse(new SolidBrush(unselectedSoldierPerkBg), r);
           }
         }
-        else if (e.ColumnIndex == 2)
+        // draw shortlist/squad indicator in roster view
+        else if (e.ColumnIndex == 2 && ((DataGridView)sender).Name == "rosterGridView")
         {
           e.PaintBackground(e.CellBounds, false);
 
@@ -1926,21 +2036,79 @@ namespace RosterizerLW
             TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
           e.Handled = true;                                                                     // mark as handled so the default draw doesn't happen
         }
-        else if (e.ColumnIndex == 5 || e.ColumnIndex == 10)
+
+        if (e.ColumnIndex > 4 && e.ColumnIndex < 10)
+        {
+          if (isSquadGrid && squadGridView.Rows.Count >= trackBar2.Value)
+          {
+            if (e.RowIndex < trackBar2.Value)
+            {
+              List<long> statHeirarchy = [];
+              Color bgColor = Color.Blue;
+
+              switch (e.ColumnIndex)
+              {
+                case 5:
+                  statHeirarchy = [.. SquadStats.Select(x => x[0]).OrderByDescending(x => x)];
+                  break;
+                case 6:
+                  statHeirarchy = [.. SquadStats.Select(x => x[1]).OrderByDescending(x => x)];
+                  break;
+                case 7:
+                  statHeirarchy = [.. SquadStats.Select(x => x[2]).OrderByDescending(x => x)];
+                  break;
+                case 8:
+                  statHeirarchy = [.. SquadStats.Select(x => x[3]).OrderByDescending(x => x)];
+                  break;
+                case 9:
+                  statHeirarchy = [.. SquadStats.Select(x => x[4]).OrderByDescending(x => x)];
+                  break;
+              }
+
+              if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value ?? "").ToString() ?? "") >= statHeirarchy[1])
+              {
+                bgColor = hiBg;
+              }
+              else if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value ?? "").ToString() ?? "") <= statHeirarchy[6])
+              {
+                bgColor = loBg;
+              }
+              else bgColor = gridCellBg;
+
+              e.PaintBackground(e.CellBounds, false);
+              e.Graphics?.FillRectangle(new SolidBrush(bgColor), e.CellBounds);
+
+              TextRenderer.DrawText(
+                          e.Graphics ?? ((DataGridView)sender).CreateGraphics(),
+                          string.Format("{0}", e.FormattedValue),
+                          Font,
+                          e.CellBounds,
+                          ((DataGridView)sender).DefaultCellStyle.ForeColor,
+                          TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+              e.Handled = true;
+            }
+          }
+        }
+
+        if (e.ColumnIndex == 5 || e.ColumnIndex == 10)
         {
           Color lineColor = Color.FromArgb(100, 0, 0, 0);
 
-          e.PaintBackground(e.CellBounds, false);
+          if (!e.Handled) e.PaintBackground(e.CellBounds, false);
 
           e.Graphics?.DrawLine(new Pen(lineColor, 1), new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Left, e.CellBounds.Bottom));
-          TextRenderer.DrawText(
+
+          if (!e.Handled)
+          {        
+            TextRenderer.DrawText(
                       e.Graphics ?? ((DataGridView)sender).CreateGraphics(),
                       string.Format("{0}", e.FormattedValue),
                       Font,
                       e.CellBounds,
                       ((DataGridView)sender).DefaultCellStyle.SelectionForeColor,
                       TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
-          e.Handled = true;
+            e.Handled = true;
+          }
         }
       }
     }
@@ -1953,21 +2121,29 @@ namespace RosterizerLW
         if (e.RowIndex == -1)
         {
           DefaultSorting();
+          int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
           switch (RosterPerkTree.Length)
           {
             case 0:
+              SetPerkTree(RosterTree1);
               ListRoster(RosterTree1.SubRoster);
               break;
             case 1:
+              SetPerkTree(RosterTree2);
               ListRoster(RosterTree2.SubRoster);
               break;
             case 2:
+              SetPerkTree(RosterTree3);
               ListRoster(RosterTree3.SubRoster);
               break;
             case 3:
+              SetPerkTree(RosterTree4);
               ListRoster(RosterTree4.SubRoster);
               break;
           }
+
+          if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
         }
         else ToggleInShortlist(sender);
       }
@@ -1984,21 +2160,29 @@ namespace RosterizerLW
             }
             else
             {
+              int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
               switch (RosterPerkTree.Length)
               {
                 case 0:
+                  SetPerkTree(RosterTree1);
                   ListRoster(RosterTree1.SubRoster);
                   break;
                 case 1:
+                  SetPerkTree(RosterTree2);
                   ListRoster(RosterTree2.SubRoster);
                   break;
                 case 2:
+                  SetPerkTree(RosterTree3);
                   ListRoster(RosterTree3.SubRoster);
                   break;
                 case 3:
+                  SetPerkTree(RosterTree4);
                   ListRoster(RosterTree4.SubRoster);
                   break;
               }
+
+              if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
             }
           }
         }
@@ -2010,22 +2194,32 @@ namespace RosterizerLW
     {
       if (sender is null || ((TabControl)sender).SelectedIndex == 1)
       {
-        FromSquadTab = true;
-        hotStyle = new()
+        if (Shortlist.Count > 0)
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
-        };
-        TabFlipList = RosterPerkTree.Length == 0 ? RosterTree1.SubRoster : RosterPerkTree.Length == 1 ? RosterTree2.SubRoster : RosterPerkTree.Length == 2 ? RosterTree3.SubRoster : RosterTree4.SubRoster;
-        TabFlipFilterLabelText = perkFilterTextbox.Text;
-        perkFilterTextbox.Text = "";
-        ListRoster([.. Shortlist.OrderBy(x => x.InSquad)]);
+          if (!FromSquadTab) TabFlipVscroll = rosterGridView.FirstDisplayedScrollingRowIndex;
+          FromSquadTab = true;
+          hotStyle = new()
+          {
+            ForeColor = gridCellFg,
+            SelectionForeColor = gridCellFg,
+            BackColor = gridCellBg,
+            SelectionBackColor = gridCellBg
+          };
+          TabFlipList = RosterPerkTree.Length == 0 ? RosterTree1.SubRoster : RosterPerkTree.Length == 1 ? RosterTree2.SubRoster : RosterPerkTree.Length == 2 ? RosterTree3.SubRoster : RosterTree4.SubRoster;
+          TabFlipFilterLabelText = perkFilterTextbox.Text;
+          perkFilterTextbox.Text = "";
+          ListRoster([.. Shortlist.OrderBy(x => x.InSquad)]);
+        }
       }
       else
       {
-        if (FromSquadTab) ListRoster(TabFlipList);
+        if (FromSquadTab)
+        {
+          ListRoster(TabFlipList);
+          if (TabFlipVscroll > 0 && rosterGridView.Rows.Count >= TabFlipVscroll - 1) rosterGridView.FirstDisplayedScrollingRowIndex = TabFlipVscroll;
+        }
+        else TabFlipVscroll = rosterGridView.FirstDisplayedScrollingRowIndex;
+
         perkFilterTextbox.Text = TabFlipFilterLabelText;
         FromSquadTab = false;
       }
@@ -2240,21 +2434,29 @@ namespace RosterizerLW
       Roster.ForEach(x => x.IsBlueshirt = x.RankId <= BlueshirtLvl);
       if (tabControl1.SelectedIndex == 4) // options
       {
+        int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
         switch (RosterPerkTree.Length)
         {
           case 0:
+            SetPerkTree(RosterTree1);
             ListRoster(RosterTree1.SubRoster);
             break;
           case 1:
+            SetPerkTree(RosterTree2);
             ListRoster(RosterTree2.SubRoster);
             break;
           case 2:
+            SetPerkTree(RosterTree3);
             ListRoster(RosterTree3.SubRoster);
             break;
           case 3:
+            SetPerkTree(RosterTree4);
             ListRoster(RosterTree4.SubRoster);
             break;
         }
+
+        if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
       }
     }
 
@@ -2263,21 +2465,29 @@ namespace RosterizerLW
       SquadSize = ((TrackBar)sender).Value;
       Roster.ForEach(x => x.InShortlist = false);
       Shortlist = [];
+      int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
       switch (RosterPerkTree.Length)
       {
         case 0:
+          SetPerkTree(RosterTree1);
           ListRoster(RosterTree1.SubRoster);
           break;
         case 1:
+          SetPerkTree(RosterTree2);
           ListRoster(RosterTree2.SubRoster);
           break;
         case 2:
+          SetPerkTree(RosterTree3);
           ListRoster(RosterTree3.SubRoster);
           break;
         case 3:
+          SetPerkTree(RosterTree4);
           ListRoster(RosterTree4.SubRoster);
           break;
       }
+
+      if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
     }
 
     private void squadPerkList_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -2495,7 +2705,7 @@ namespace RosterizerLW
           }
         }
       }
-      if (vscroll > 0 && sender.Rows.Count >= vscroll && !sender.Rows[vscroll].Frozen) sender.FirstDisplayedScrollingRowIndex = vscroll;
+      if (vscroll > 0 && sender.Rows.Count > vscroll && !sender.Rows[vscroll].Frozen) sender.FirstDisplayedScrollingRowIndex = vscroll;
     }
 
     private void treeDataGrid_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -2528,6 +2738,8 @@ namespace RosterizerLW
       {
         PerkTreeByName = !PerkTreeByName;
         treeDataGrid.CellBorderStyle = PerkTreeByName ? DataGridViewCellBorderStyle.SingleHorizontal : DataGridViewCellBorderStyle.Raised;
+        int vscroll2 = rosterGridView.FirstDisplayedScrollingRowIndex;
+
         switch (RosterPerkTree.Length)
         {
           case 0:
@@ -2547,6 +2759,8 @@ namespace RosterizerLW
             ListRoster(RosterTree4.SubRoster);
             break;
         }
+
+        if (vscroll2 > 0 && rosterGridView.Rows.Count >= vscroll2 - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll2;
       }
     }
 
@@ -3204,26 +3418,59 @@ namespace RosterizerLW
           PopulateChecklist();
         }
       }
-    }
 
-    private void squadGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-    {
-      if (e.Button == MouseButtons.Left) PopupateSoldierPerks(e.RowIndex, (DataGridView)sender);
-      else if (e.Button == MouseButtons.Right) ToggleInShortlist(sender);
-      else if (e.Button == MouseButtons.Middle)
+      if (info.RowIndex <= trackBar2.Value && squadGridView.Rows.Count >= trackBar2.Value)
       {
-        var point = ((DataGridView)sender).PointToClient(Cursor.Position);
-        var info = ((DataGridView)sender).HitTest(point.X, point.Y);
-        if (info.RowIndex > 0)
+        List<long> statHeirarchy = [];
+        Graphics g = ((DataGridView)sender).CreateGraphics();
+
+        for (int i = 5; i < 10; i++)
         {
-          DataGridView dgv = ((DataGridView)sender);
-          DataGridViewRow selectedRow = dgv.Rows[info.RowIndex];
-          dgv.Rows.Remove(selectedRow);
-          dgv.Rows.Insert(0, selectedRow);
-          dgv.Rows[0].Cells[0].Style = dgv.Rows[0].Cells[1].Style = hotStyle;
-          dgv.Rows[0].Cells[(dgv.SelectedCells[0].OwningColumn ?? new()).Index].Selected = true;
-          for (int i = 0; i < dgv.Rows.Count; i++) dgv.Rows[i].Cells[12].Value = i + 1;
+          switch (i)
+          {
+            case 5:
+              statHeirarchy = [.. SquadStats.Select(x => x[0]).OrderByDescending(x => x)];
+              break;
+            case 6:
+              statHeirarchy = [.. SquadStats.Select(x => x[1]).OrderByDescending(x => x)];
+              break;
+            case 7:
+              statHeirarchy = [.. SquadStats.Select(x => x[2]).OrderByDescending(x => x)];
+              break;
+            case 8:
+              statHeirarchy = [.. SquadStats.Select(x => x[3]).OrderByDescending(x => x)];
+              break;
+            case 9:
+              statHeirarchy = [.. SquadStats.Select(x => x[4]).OrderByDescending(x => x)];
+              break;
+          }
+
+          if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[info.RowIndex].Cells[i].Value ?? "").ToString() ?? "") >= statHeirarchy[1])
+          {
+            g?.FillRectangle(new SolidBrush(hiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+
+            TextRenderer.DrawText(
+                        g ?? ((DataGridView)sender).CreateGraphics(),
+                        string.Format("{0}", ((DataGridView)sender).Rows[info.RowIndex].Cells[i].FormattedValue),
+                        Font,
+                        ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds,
+                        ((DataGridView)sender).DefaultCellStyle.ForeColor,
+                        TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+          }
+          else if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[info.RowIndex].Cells[i].Value ?? "").ToString() ?? "") <= statHeirarchy[6])
+          {
+            g?.FillRectangle(new SolidBrush(loBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+
+            TextRenderer.DrawText(
+                        g ?? ((DataGridView)sender).CreateGraphics(),
+                        string.Format("{0}", ((DataGridView)sender).Rows[info.RowIndex].Cells[i].FormattedValue),
+                        Font,
+                        ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds,
+                        ((DataGridView)sender).DefaultCellStyle.ForeColor,
+                        TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+          }
         }
+        int vscroll = rosterGridView.FirstDisplayedScrollingRowIndex;
 
         switch (RosterPerkTree.Length)
         {
@@ -3244,6 +3491,107 @@ namespace RosterizerLW
             ListRoster(RosterTree4.SubRoster);
             break;
         }
+
+        if (vscroll > 0 && rosterGridView.Rows.Count >= vscroll - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll;
+      }
+    }
+
+    private void squadGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left) PopupateSoldierPerks(e.RowIndex, (DataGridView)sender);
+      else if (e.Button == MouseButtons.Right) ToggleInShortlist(sender);
+      else if (e.Button == MouseButtons.Middle)
+      {
+        var point = ((DataGridView)sender).PointToClient(Cursor.Position);
+        var info = ((DataGridView)sender).HitTest(point.X, point.Y);
+        if (info.RowIndex > 0)
+        {
+          DataGridView dgv = ((DataGridView)sender);
+          DataGridViewRow selectedRow = dgv.Rows[info.RowIndex];
+          dgv.Rows.Remove(selectedRow);
+          dgv.Rows.Insert(0, selectedRow);
+          if (dgv.Rows.Count >= trackBar2.Value) dgv.Rows[trackBar2.Value].Cells[19].Value = false;
+          dgv.Rows[0].Cells[0].Style = dgv.Rows[0].Cells[1].Style = hotStyle;
+          dgv.Rows[0].Cells[(dgv.SelectedCells[0].OwningColumn ?? new()).Index].Selected = true;
+          for (int i = 0; i < dgv.Rows.Count; i++) dgv.Rows[i].Cells[12].Value = i + 1;
+        }
+
+        if (info.RowIndex < trackBar2.Value && squadGridView.Rows.Count >= trackBar2.Value)
+        {
+          List<long> statHeirarchy = [];
+          Graphics g = ((DataGridView)sender).CreateGraphics();
+
+          for (int i = 5; i < 10; i++)
+          {
+            switch (i)
+            {
+              case 5:
+                statHeirarchy = [.. SquadStats.Select(x => x[0]).OrderByDescending(x => x)];
+                break;
+              case 6:
+                statHeirarchy = [.. SquadStats.Select(x => x[1]).OrderByDescending(x => x)];
+                break;
+              case 7:
+                statHeirarchy = [.. SquadStats.Select(x => x[2]).OrderByDescending(x => x)];
+                break;
+              case 8:
+                statHeirarchy = [.. SquadStats.Select(x => x[3]).OrderByDescending(x => x)];
+                break;
+              case 9:
+                statHeirarchy = [.. SquadStats.Select(x => x[4]).OrderByDescending(x => x)];
+                break;
+            }
+
+            if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[info.RowIndex].Cells[i].Value ?? "").ToString() ?? "") >= statHeirarchy[1])
+            {
+              g?.FillRectangle(new SolidBrush(hiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+
+              TextRenderer.DrawText(
+                          g ?? ((DataGridView)sender).CreateGraphics(),
+                          string.Format("{0}", ((DataGridView)sender).Rows[info.RowIndex].Cells[i].FormattedValue),
+                          Font,
+                          ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds,
+                          ((DataGridView)sender).DefaultCellStyle.ForeColor,
+                          TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+            }
+            else if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[info.RowIndex].Cells[i].Value ?? "").ToString() ?? "") <= statHeirarchy[6])
+            {
+              g?.FillRectangle(new SolidBrush(loBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+
+              TextRenderer.DrawText(
+                          g ?? ((DataGridView)sender).CreateGraphics(),
+                          string.Format("{0}", ((DataGridView)sender).Rows[info.RowIndex].Cells[i].FormattedValue),
+                          Font,
+                          ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds,
+                          ((DataGridView)sender).DefaultCellStyle.ForeColor,
+                          TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+            }
+          }
+        }
+
+        int vscroll = rosterGridView.FirstDisplayedScrollingRowIndex;
+
+        switch (RosterPerkTree.Length)
+        {
+          case 0:
+            SetPerkTree(RosterTree1);
+            ListRoster(RosterTree1.SubRoster);
+            break;
+          case 1:
+            SetPerkTree(RosterTree2);
+            ListRoster(RosterTree2.SubRoster);
+            break;
+          case 2:
+            SetPerkTree(RosterTree3);
+            ListRoster(RosterTree3.SubRoster);
+            break;
+          case 3:
+            SetPerkTree(RosterTree4);
+            ListRoster(RosterTree4.SubRoster);
+            break;
+        }
+
+        if (vscroll > 0 && rosterGridView.Rows.Count >= vscroll - 1) rosterGridView.FirstDisplayedScrollingRowIndex = vscroll;
       }
 
       PopulateChecklist();
