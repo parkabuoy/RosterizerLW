@@ -1,12 +1,14 @@
 using System.Data;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.IO.Hashing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RosterizerLW.Properties;
 
 namespace RosterizerLW
 {
@@ -301,10 +303,39 @@ namespace RosterizerLW
 
     FileInfo x2jFile = new(X2jPath);
     UInt64 hash = Crc64.HashToUInt64(File.ReadAllBytes(X2jPath));
+    
+    // import seven-segment font
+    [DllImport("gdi32.dll")]
+    private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont,
+        IntPtr pdv, [In] ref uint pcFonts);
+    private PrivateFontCollection fonts = new();
+    private PrivateFontCollection fonts2 = new();
+
+    Font SevenSegmentFont;
+    Font SevenSegmentItalicFont;
 
     public Rosterizer()
     {
       InitializeComponent();
+
+      byte[] fontData = Resources.digital_7__mono_;
+      IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
+      Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+      uint dummy = 0;
+      fonts.AddMemoryFont(fontPtr, Resources.digital_7__mono_.Length);
+      AddFontMemResourceEx(fontPtr, (uint)Resources.digital_7__mono_.Length, IntPtr.Zero, ref dummy);
+      Marshal.FreeCoTaskMem(fontPtr);
+
+      byte[] fontData2 = Resources.digital_7__mono_italic_;
+      IntPtr fontPtr2 = Marshal.AllocCoTaskMem(fontData2.Length);
+      Marshal.Copy(fontData2, 0, fontPtr2, fontData2.Length);
+      uint dummy2 = 0;
+      fonts2.AddMemoryFont(fontPtr2, Resources.digital_7__mono_italic_.Length);
+      AddFontMemResourceEx(fontPtr2, (uint)Resources.digital_7__mono_italic_.Length, IntPtr.Zero, ref dummy2);
+      Marshal.FreeCoTaskMem(fontPtr2);
+
+      SevenSegmentFont = new Font(fonts.Families[0], 16.0F);
+      SevenSegmentItalicFont = new Font(fonts2.Families[0], 16.0F);
 
       if (!x2jFile.Exists || hash != x2jHash) ShowError("invalid xcom2json exe!", x2jFile.FullName);
 
@@ -481,8 +512,8 @@ namespace RosterizerLW
         squadPerkList.CellBorderStyle = squadCellBorders;
         soldierPerksGridView.DefaultCellStyle.ForeColor = gridCellFg;
         soldierPerksGridView.DefaultCellStyle.BackColor = gridCellBg;
-        soldierPerksGridView.DefaultCellStyle.SelectionForeColor = soldierRowFg;
-        soldierPerksGridView.DefaultCellStyle.SelectionBackColor = soldierTabUnselectedBg;
+        soldierPerksGridView.DefaultCellStyle.SelectionForeColor = gridCellFg;
+        soldierPerksGridView.DefaultCellStyle.SelectionBackColor = gridCellBg;
         soldierPerksGridView.CellBorderStyle = soldierCellBorders;
         checklistGridView.DefaultCellStyle.SelectionBackColor = gridCellBg;
         checklistGridView.DefaultCellStyle.SelectionForeColor = gridCellFg;
@@ -572,7 +603,12 @@ namespace RosterizerLW
               if (s.InSquad == true)
               {
                 List<long> thisSoldierStats = [];
-                for (int j = 0; j < 5; j++) thisSoldierStats.Add(Int64.Parse((((DataGridView)sender).Rows[info.RowIndex].Cells[j + 5].Value ?? "").ToString() ?? ""));
+                for (int j = 0; j < 5; j++)
+                {
+                  _ = Int64.TryParse((((DataGridView)sender).Rows[info.RowIndex].Cells[j].Value ?? "0").ToString() ?? "0", out long thisStat);
+                  thisSoldierStats.Add(thisStat);
+                }
+
                 for (int i = 0; i < SquadStats.Count; i++)
                 {
                   if (SquadStats[i][0] == thisSoldierStats[0]
@@ -681,7 +717,13 @@ namespace RosterizerLW
               if ((bool?)dgvrVals[19] == true)
               {
                 List<long> thisSoldierStats = [];
-                for (int j = 0; j < 5; j++) thisSoldierStats.Add(Int64.Parse((((DataGridView)sender).Rows[info.RowIndex].Cells[j + 5].Value ?? "").ToString() ?? ""));
+
+                long thisStat = 0;
+                for (int j = 0; j < 5; j++)
+                {
+                  _ = Int64.TryParse((((DataGridView)sender).Rows[info.RowIndex].Cells[j + 5].Value ?? "0").ToString() ?? "0", out thisStat);
+                  thisSoldierStats.Add(thisStat);
+                }
 
                 bool wasFound = false;
                 for (int i = 0; i < SquadStats.Count; i++)
@@ -906,14 +948,17 @@ namespace RosterizerLW
           {
             if (((squadGridView.Rows[i].Cells[0].Value ?? "").ToString() ?? "").Contains(s.LName) && Int64.Parse((squadGridView.Rows[i].Cells[10].Value ?? "").ToString() ?? "") == s.Xp)
             {
-              s.InSquad = i < trackBar2.Value;
-              CurrentSquadSize++;
-              s.Perks.ForEach(x => { if (!SquadPerks.TryAdd(x.Name ?? "", 1)) SquadPerks[x.Name ?? ""]++; });
-              continue;
+              if (i < trackBar2.Value)
+              {
+                s.InSquad = i < trackBar2.Value;
+                CurrentSquadSize++;
+                s.Perks.ForEach(x => { if (!SquadPerks.TryAdd(x.Name ?? "", 1)) SquadPerks[x.Name ?? ""]++; });
+              }
+
+              if (s.IsShiv) shivCount++;
             }
           }
 
-          if (s.IsShiv) shivCount++;
         }
       }
 
@@ -2065,11 +2110,13 @@ namespace RosterizerLW
                   break;
               }
 
-              if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value ?? "").ToString() ?? "") >= statHeirarchy[1])
+              _ = Int64.TryParse((((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].Value ?? "0").ToString() ?? "0", out long thisStat);
+
+              if (statHeirarchy.Count > 6 && thisStat >= statHeirarchy[1])
               {
                 bgColor = hiBg;
               }
-              else if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value ?? "").ToString() ?? "") <= statHeirarchy[6])
+              else if (statHeirarchy.Count > 6 && thisStat <= statHeirarchy[6])
               {
                 bgColor = loBg;
               }
@@ -2192,12 +2239,24 @@ namespace RosterizerLW
 
     private void tabControl1_TabIndexChanged(object? sender = null, EventArgs? e = null)
     {
+      hotStyle = new()
+      {
+        ForeColor = gridCellFg,
+        SelectionForeColor = gridCellFg,
+        BackColor = gridCellBg,
+        SelectionBackColor = gridCellBg
+      };
+
       if (sender is null || ((TabControl)sender).SelectedIndex == 1)
       {
         if (Shortlist.Count > 0)
         {
           if (!FromSquadTab) TabFlipVscroll = rosterGridView.FirstDisplayedScrollingRowIndex;
           FromSquadTab = true;
+          TabFlipList = RosterPerkTree.Length == 0 ? RosterTree1.SubRoster : RosterPerkTree.Length == 1 ? RosterTree2.SubRoster : RosterPerkTree.Length == 2 ? RosterTree3.SubRoster : RosterTree4.SubRoster;
+          TabFlipFilterLabelText = perkFilterTextbox.Text;
+          perkFilterTextbox.Text = "";
+          ListRoster([.. Shortlist.OrderBy(x => x.InSquad)]);
           hotStyle = new()
           {
             ForeColor = gridCellFg,
@@ -2205,10 +2264,6 @@ namespace RosterizerLW
             BackColor = gridCellBg,
             SelectionBackColor = gridCellBg
           };
-          TabFlipList = RosterPerkTree.Length == 0 ? RosterTree1.SubRoster : RosterPerkTree.Length == 1 ? RosterTree2.SubRoster : RosterPerkTree.Length == 2 ? RosterTree3.SubRoster : RosterTree4.SubRoster;
-          TabFlipFilterLabelText = perkFilterTextbox.Text;
-          perkFilterTextbox.Text = "";
-          ListRoster([.. Shortlist.OrderBy(x => x.InSquad)]);
         }
       }
       else
@@ -2358,7 +2413,7 @@ namespace RosterizerLW
 
     private void timerStartStopButton_Click(object sender, EventArgs e)
     {
-      timer1.Interval = 500;
+      timer1.Interval = 200;
       timer1.Start();
       if (!timerRunning)
       {
@@ -2385,7 +2440,7 @@ namespace RosterizerLW
       elapsedTime = TimeSpan.Zero;
 
       ChecklistPass = false;
-      timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      timerLabel.Font = SevenSegmentFont;
       timerLabel.ForeColor = windowFg;
       scoreLabel.Text = "";
       ChecklistPassTime = 0;
@@ -2404,14 +2459,14 @@ namespace RosterizerLW
 
     private void timer1_Tick(object sender, EventArgs e)
     {
-      if (DateTime.Now.Minute % 3 == 1 && DateTime.Now.Second % 60 > 58) timerLabel.Text = "!braincell";
+      if (DateTime.Now.Minute % 3 == 0 && DateTime.Now.Second % 60 > 58) timerLabel.Text = "!braincell";
       else if (DateTime.Now.Second % 60 > 58) timerLabel.Text = "!slow";
       else timerLabel.Text = elapsedTime.ToString("G")[..10];
 
       if (ChecklistPass)
       {
         if (ChecklistPassTime == 0) ChecklistPassTime = timer2.ElapsedMilliseconds / 1000;
-        scoreLabel.Font = timerLabel.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        scoreLabel.Font = timerLabel.Font = SevenSegmentFont;
         timerLabel.ForeColor = scoreLabel.ForeColor = maxBg;
         if (DateTime.Now.Millisecond < 500) timerLabel.Text = "";
         else scoreLabel.Text = $"Score: {CalculateScore()}";
@@ -2422,8 +2477,8 @@ namespace RosterizerLW
       }
       else if (timerRunning)
       {
-        timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-        timerLabel.ForeColor = windowFg;
+        timerLabel.Font = SevenSegmentFont;
+        timerLabel.ForeColor = Color.Red;
         elapsedTime = timer2.Elapsed;
       }
     }
@@ -3445,9 +3500,14 @@ namespace RosterizerLW
               break;
           }
 
-          if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[info.RowIndex].Cells[i].Value ?? "").ToString() ?? "") >= statHeirarchy[1])
+          _ = Int64.TryParse((((DataGridView)sender).Rows[info.RowIndex].Cells[i].Value ?? "0").ToString() ?? "0", out long thisStat);
+
+          if (statHeirarchy.Count > 6 && thisStat >= statHeirarchy[1])
           {
-            g?.FillRectangle(new SolidBrush(hiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+            if (!(thisStat == 0 && i == 8))
+            {
+              g?.FillRectangle(new SolidBrush(hiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+            }
 
             TextRenderer.DrawText(
                         g ?? ((DataGridView)sender).CreateGraphics(),
@@ -3457,9 +3517,12 @@ namespace RosterizerLW
                         ((DataGridView)sender).DefaultCellStyle.ForeColor,
                         TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
           }
-          else if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[info.RowIndex].Cells[i].Value ?? "").ToString() ?? "") <= statHeirarchy[6])
+          else if (statHeirarchy.Count > 6 && thisStat <= statHeirarchy[6])
           {
-            g?.FillRectangle(new SolidBrush(loBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+            if (!(thisStat == 0 && i == 8))
+            {
+              g?.FillRectangle(new SolidBrush(loBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+            }
 
             TextRenderer.DrawText(
                         g ?? ((DataGridView)sender).CreateGraphics(),
@@ -3541,10 +3604,13 @@ namespace RosterizerLW
                 statHeirarchy = [.. SquadStats.Select(x => x[4]).OrderByDescending(x => x)];
                 break;
             }
-
-            if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[info.RowIndex].Cells[i].Value ?? "").ToString() ?? "") >= statHeirarchy[1])
+            _ = Int64.TryParse((((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].Value ?? "0").ToString() ?? "0", out long thisStat);
+            if (statHeirarchy.Count > 6 && thisStat >= statHeirarchy[1])
             {
-              g?.FillRectangle(new SolidBrush(hiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+              if (!(thisStat == 0 && i == 8))
+              {
+                g?.FillRectangle(new SolidBrush(hiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+              }
 
               TextRenderer.DrawText(
                           g ?? ((DataGridView)sender).CreateGraphics(),
@@ -3554,9 +3620,12 @@ namespace RosterizerLW
                           ((DataGridView)sender).DefaultCellStyle.ForeColor,
                           TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
             }
-            else if (statHeirarchy.Count > 6 && Int64.Parse((squadGridView.Rows[info.RowIndex].Cells[i].Value ?? "").ToString() ?? "") <= statHeirarchy[6])
+            else if (statHeirarchy.Count > 6 && thisStat <= statHeirarchy[6])
             {
-              g?.FillRectangle(new SolidBrush(loBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+              if (!(thisStat == 0 && i == 8))
+              {
+                g?.FillRectangle(new SolidBrush(loBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+              }
 
               TextRenderer.DrawText(
                           g ?? ((DataGridView)sender).CreateGraphics(),
