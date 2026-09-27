@@ -136,15 +136,15 @@
       tabPage7 = new TabPage();
       tableLayoutPanel4 = new TableLayoutPanel();
       darkCheckbox = new CheckBox();
-      trackBar2 = new TrackBar();
-      label1 = new Label();
       nonRosterPerksCheckbox = new CheckBox();
-      minLvlLabel = new Label();
       deadCheckbox = new CheckBox();
       shivCheckbox = new CheckBox();
       woundedCheckbox = new CheckBox();
       fatiguedCheckbox = new CheckBox();
-      trackBar1 = new TrackBar();
+      minLvlCombx = new ComboBox();
+      squadSizeCombx = new ComboBox();
+      minLvlLabel = new Label();
+      label1 = new Label();
       panel1 = new Panel();
       tableLayoutPanel5 = new TableLayoutPanel();
       scoreLabel = new Label();
@@ -176,8 +176,6 @@
       ((System.ComponentModel.ISupportInitialize)checklistGridView).BeginInit();
       tabPage7.SuspendLayout();
       tableLayoutPanel4.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
       panel1.SuspendLayout();
       tableLayoutPanel5.SuspendLayout();
       SuspendLayout();
@@ -549,6 +547,7 @@
       rosterGridView.TabIndex = 5;
       rosterGridView.CellDoubleClick += rosterGridView_CellDoubleClick;
       rosterGridView.CellMouseClick += rosterGridView_CellMouseClick;
+      rosterGridView.CellMouseDown += rosterGridView_CellMouseDown;
       rosterGridView.CellMouseEnter += rosterGridView_CellMouseEnter;
       rosterGridView.CellMouseLeave += rosterGridView_CellMouseLeave;
       rosterGridView.CellPainting += squadAndRosterGridView_CellPainting;
@@ -833,7 +832,7 @@
       tabControl1.Controls.Add(tabPage7);
       tabControl1.Dock = DockStyle.Fill;
       tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
-      tabControl1.ItemSize = new Size(55, 20);
+      tabControl1.ItemSize = new Size(53, 24);
       tabControl1.Location = new Point(0, 0);
       tabControl1.Margin = new Padding(0);
       tabControl1.Multiline = true;
@@ -842,7 +841,7 @@
       tabControl1.RightToLeft = RightToLeft.No;
       tabControl1.SelectedIndex = 0;
       tabControl1.Size = new Size(270, 478);
-      tabControl1.SizeMode = TabSizeMode.FillToRight;
+      tabControl1.SizeMode = TabSizeMode.Fixed;
       tabControl1.TabIndex = 18;
       tabControl1.DrawItem += tabControl1_DrawItem;
       tabControl1.SelectedIndexChanged += tabControl1_TabIndexChanged;
@@ -852,10 +851,10 @@
       tabPage9.BackColor = Color.Transparent;
       tabPage9.BorderStyle = BorderStyle.Fixed3D;
       tabPage9.Controls.Add(tableLayoutPanel2);
-      tabPage9.Location = new Point(4, 24);
+      tabPage9.Location = new Point(4, 52);
       tabPage9.Name = "tabPage9";
       tabPage9.Padding = new Padding(3);
-      tabPage9.Size = new Size(262, 450);
+      tabPage9.Size = new Size(262, 422);
       tabPage9.TabIndex = 6;
       tabPage9.Text = "Perks";
       // 
@@ -873,7 +872,7 @@
       tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
       tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel2.Size = new Size(252, 440);
+      tableLayoutPanel2.Size = new Size(252, 412);
       tableLayoutPanel2.TabIndex = 4;
       // 
       // treeSearchTextbox
@@ -915,7 +914,7 @@
       treeDataGrid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       treeDataGrid.ScrollBars = ScrollBars.Vertical;
       treeDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      treeDataGrid.Size = new Size(252, 410);
+      treeDataGrid.Size = new Size(252, 382);
       treeDataGrid.TabIndex = 4;
       treeDataGrid.TabStop = false;
       treeDataGrid.CellMouseClick += treeDataGrid_CellMouseClick;
@@ -950,10 +949,10 @@
       // 
       tabPage2.BorderStyle = BorderStyle.Fixed3D;
       tabPage2.Controls.Add(squadPerkList);
-      tabPage2.Location = new Point(4, 24);
+      tabPage2.Location = new Point(4, 28);
       tabPage2.Margin = new Padding(1);
       tabPage2.Name = "tabPage2";
-      tabPage2.Size = new Size(262, 450);
+      tabPage2.Size = new Size(262, 446);
       tabPage2.TabIndex = 1;
       tabPage2.Text = "Squad";
       tabPage2.UseVisualStyleBackColor = true;
@@ -980,7 +979,7 @@
       squadPerkList.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       squadPerkList.ScrollBars = ScrollBars.Vertical;
       squadPerkList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      squadPerkList.Size = new Size(258, 446);
+      squadPerkList.Size = new Size(258, 442);
       squadPerkList.TabIndex = 0;
       squadPerkList.TabStop = false;
       squadPerkList.CellMouseClick += squadPerkList_CellMouseClick;
@@ -1010,10 +1009,10 @@
       // 
       tabPage1.BorderStyle = BorderStyle.Fixed3D;
       tabPage1.Controls.Add(soldierPerksGridView);
-      tabPage1.Location = new Point(4, 24);
+      tabPage1.Location = new Point(4, 28);
       tabPage1.Margin = new Padding(1);
       tabPage1.Name = "tabPage1";
-      tabPage1.Size = new Size(262, 450);
+      tabPage1.Size = new Size(262, 446);
       tabPage1.TabIndex = 3;
       tabPage1.Text = "Soldier";
       tabPage1.UseVisualStyleBackColor = true;
@@ -1040,7 +1039,7 @@
       soldierPerksGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       soldierPerksGridView.ScrollBars = ScrollBars.Vertical;
       soldierPerksGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      soldierPerksGridView.Size = new Size(258, 446);
+      soldierPerksGridView.Size = new Size(258, 442);
       soldierPerksGridView.TabIndex = 1;
       soldierPerksGridView.TabStop = false;
       soldierPerksGridView.CellMouseClick += soldierPerksGridView_CellMouseClick;
@@ -1060,10 +1059,10 @@
       // 
       tabPage8.BorderStyle = BorderStyle.Fixed3D;
       tabPage8.Controls.Add(checklistGridView);
-      tabPage8.Location = new Point(4, 24);
+      tabPage8.Location = new Point(4, 28);
       tabPage8.Margin = new Padding(1);
       tabPage8.Name = "tabPage8";
-      tabPage8.Size = new Size(262, 450);
+      tabPage8.Size = new Size(262, 446);
       tabPage8.TabIndex = 5;
       tabPage8.Text = "0/0";
       tabPage8.UseVisualStyleBackColor = true;
@@ -1090,7 +1089,7 @@
       checklistGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       checklistGridView.ScrollBars = ScrollBars.Vertical;
       checklistGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      checklistGridView.Size = new Size(258, 446);
+      checklistGridView.Size = new Size(258, 442);
       checklistGridView.TabIndex = 2;
       checklistGridView.TabStop = false;
       checklistGridView.CellMouseClick += checklistGridView_CellContentClick;
@@ -1132,11 +1131,11 @@
       // 
       tabPage7.BorderStyle = BorderStyle.Fixed3D;
       tabPage7.Controls.Add(tableLayoutPanel4);
-      tabPage7.Location = new Point(4, 24);
+      tabPage7.Location = new Point(4, 52);
       tabPage7.Margin = new Padding(4, 1, 1, 1);
       tabPage7.Name = "tabPage7";
       tabPage7.Padding = new Padding(3);
-      tabPage7.Size = new Size(262, 450);
+      tabPage7.Size = new Size(262, 422);
       tabPage7.TabIndex = 4;
       tabPage7.Text = "Config";
       tabPage7.UseVisualStyleBackColor = true;
@@ -1150,15 +1149,15 @@
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.Controls.Add(darkCheckbox, 0, 3);
-      tableLayoutPanel4.Controls.Add(trackBar2, 1, 5);
-      tableLayoutPanel4.Controls.Add(label1, 0, 5);
       tableLayoutPanel4.Controls.Add(nonRosterPerksCheckbox, 0, 2);
-      tableLayoutPanel4.Controls.Add(minLvlLabel, 0, 6);
       tableLayoutPanel4.Controls.Add(deadCheckbox, 2, 1);
       tableLayoutPanel4.Controls.Add(shivCheckbox, 0, 1);
       tableLayoutPanel4.Controls.Add(woundedCheckbox, 2, 0);
       tableLayoutPanel4.Controls.Add(fatiguedCheckbox, 0, 0);
-      tableLayoutPanel4.Controls.Add(trackBar1, 1, 6);
+      tableLayoutPanel4.Controls.Add(minLvlCombx, 3, 5);
+      tableLayoutPanel4.Controls.Add(squadSizeCombx, 1, 5);
+      tableLayoutPanel4.Controls.Add(minLvlLabel, 2, 5);
+      tableLayoutPanel4.Controls.Add(label1, 0, 5);
       tableLayoutPanel4.Dock = DockStyle.Fill;
       tableLayoutPanel4.Location = new Point(3, 3);
       tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -1171,7 +1170,7 @@
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel4.Size = new Size(252, 440);
+      tableLayoutPanel4.Size = new Size(252, 412);
       tableLayoutPanel4.TabIndex = 0;
       // 
       // darkCheckbox
@@ -1192,32 +1191,6 @@
       darkCheckbox.Visible = false;
       darkCheckbox.CheckedChanged += darkCheckbox_CheckedChanged;
       // 
-      // trackBar2
-      // 
-      trackBar2.AutoSize = false;
-      tableLayoutPanel4.SetColumnSpan(trackBar2, 3);
-      trackBar2.Dock = DockStyle.Fill;
-      trackBar2.LargeChange = 1;
-      trackBar2.Location = new Point(66, 91);
-      trackBar2.Minimum = 6;
-      trackBar2.Name = "trackBar2";
-      trackBar2.Size = new Size(183, 34);
-      trackBar2.TabIndex = 27;
-      trackBar2.TickStyle = TickStyle.TopLeft;
-      trackBar2.Value = 8;
-      // 
-      // label1
-      // 
-      label1.Anchor = AnchorStyles.None;
-      label1.AutoSize = true;
-      label1.FlatStyle = FlatStyle.Flat;
-      label1.Location = new Point(11, 94);
-      label1.Name = "label1";
-      label1.Size = new Size(41, 28);
-      label1.TabIndex = 26;
-      label1.Text = "Squad size:";
-      label1.TextAlign = ContentAlignment.MiddleRight;
-      // 
       // nonRosterPerksCheckbox
       // 
       nonRosterPerksCheckbox.AutoSize = true;
@@ -1234,18 +1207,6 @@
       nonRosterPerksCheckbox.Text = "Show Non-Roster Perks";
       nonRosterPerksCheckbox.UseVisualStyleBackColor = true;
       nonRosterPerksCheckbox.Visible = false;
-      // 
-      // minLvlLabel
-      // 
-      minLvlLabel.Anchor = AnchorStyles.None;
-      minLvlLabel.AutoSize = true;
-      minLvlLabel.FlatStyle = FlatStyle.Flat;
-      minLvlLabel.Location = new Point(4, 134);
-      minLvlLabel.Name = "minLvlLabel";
-      minLvlLabel.Size = new Size(54, 28);
-      minLvlLabel.TabIndex = 22;
-      minLvlLabel.Text = "Minimum level:";
-      minLvlLabel.TextAlign = ContentAlignment.MiddleRight;
       // 
       // deadCheckbox
       // 
@@ -1319,20 +1280,53 @@
       fatiguedCheckbox.UseVisualStyleBackColor = true;
       fatiguedCheckbox.CheckedChanged += fatiguedCheckbox_CheckedChanged;
       // 
-      // trackBar1
+      // minLvlCombx
       // 
-      trackBar1.AutoSize = false;
-      tableLayoutPanel4.SetColumnSpan(trackBar1, 3);
-      trackBar1.Dock = DockStyle.Fill;
-      trackBar1.LargeChange = 1;
-      trackBar1.Location = new Point(66, 131);
-      trackBar1.Maximum = 6;
-      trackBar1.Name = "trackBar1";
-      trackBar1.Size = new Size(183, 34);
-      trackBar1.TabIndex = 24;
-      trackBar1.TickStyle = TickStyle.TopLeft;
-      trackBar1.Value = 3;
-      trackBar1.ValueChanged += trackBar1_ValueChanged;
+      minLvlCombx.DropDownStyle = ComboBoxStyle.DropDownList;
+      minLvlCombx.FlatStyle = FlatStyle.Flat;
+      minLvlCombx.FormattingEnabled = true;
+      minLvlCombx.Items.AddRange(new object[] { "RK", "SQ", "SPC", "LCPL", "CPL", "SGT", "TSGT", "GSGT", "MSGT" });
+      minLvlCombx.Location = new Point(192, 91);
+      minLvlCombx.Name = "minLvlCombx";
+      minLvlCombx.Size = new Size(57, 22);
+      minLvlCombx.TabIndex = 30;
+      minLvlCombx.SelectedValueChanged += minLvlCombx_ValueChanged;
+      // 
+      // squadSizeCombx
+      // 
+      squadSizeCombx.DropDownStyle = ComboBoxStyle.DropDownList;
+      squadSizeCombx.FlatStyle = FlatStyle.Flat;
+      squadSizeCombx.FormattingEnabled = true;
+      squadSizeCombx.Items.AddRange(new object[] { "6", "7", "8", "9", "10", "11", "13", "14", "15", "16" });
+      squadSizeCombx.Location = new Point(66, 91);
+      squadSizeCombx.Name = "squadSizeCombx";
+      squadSizeCombx.Size = new Size(57, 22);
+      squadSizeCombx.TabIndex = 29;
+      squadSizeCombx.SelectedValueChanged += squadSizeCombx_ValueChanged;
+      // 
+      // minLvlLabel
+      // 
+      minLvlLabel.Anchor = AnchorStyles.Top;
+      minLvlLabel.AutoSize = true;
+      minLvlLabel.FlatStyle = FlatStyle.Flat;
+      minLvlLabel.Location = new Point(130, 88);
+      minLvlLabel.Name = "minLvlLabel";
+      minLvlLabel.Size = new Size(54, 28);
+      minLvlLabel.TabIndex = 22;
+      minLvlLabel.Text = "Minimum level:";
+      minLvlLabel.TextAlign = ContentAlignment.MiddleRight;
+      // 
+      // label1
+      // 
+      label1.Anchor = AnchorStyles.Top;
+      label1.AutoSize = true;
+      label1.FlatStyle = FlatStyle.Flat;
+      label1.Location = new Point(11, 88);
+      label1.Name = "label1";
+      label1.Size = new Size(41, 28);
+      label1.TabIndex = 26;
+      label1.Text = "Squad size:";
+      label1.TextAlign = ContentAlignment.MiddleRight;
       // 
       // panel1
       // 
@@ -1349,8 +1343,8 @@
       // tableLayoutPanel5
       // 
       tableLayoutPanel5.ColumnCount = 3;
-      tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
-      tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
+      tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
+      tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
       tableLayoutPanel5.Controls.Add(scoreLabel, 2, 2);
       tableLayoutPanel5.Controls.Add(timerResetButton, 0, 3);
@@ -1365,8 +1359,6 @@
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-      tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
       tableLayoutPanel5.Size = new Size(270, 193);
       tableLayoutPanel5.TabIndex = 0;
       // 
@@ -1376,10 +1368,10 @@
       scoreLabel.Dock = DockStyle.Fill;
       scoreLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
       scoreLabel.ForeColor = SystemColors.ControlLightLight;
-      scoreLabel.Location = new Point(120, 60);
+      scoreLabel.Location = new Point(150, 60);
       scoreLabel.Margin = new Padding(0);
       scoreLabel.Name = "scoreLabel";
-      scoreLabel.Size = new Size(150, 103);
+      scoreLabel.Size = new Size(120, 103);
       scoreLabel.TabIndex = 3;
       scoreLabel.TextAlign = ContentAlignment.MiddleRight;
       // 
@@ -1387,11 +1379,10 @@
       // 
       timerResetButton.Cursor = Cursors.Hand;
       timerResetButton.Dock = DockStyle.Fill;
-      timerResetButton.FlatStyle = FlatStyle.Popup;
       timerResetButton.ForeColor = SystemColors.ControlText;
       timerResetButton.Location = new Point(3, 166);
       timerResetButton.Name = "timerResetButton";
-      timerResetButton.Size = new Size(54, 24);
+      timerResetButton.Size = new Size(69, 24);
       timerResetButton.TabIndex = 2;
       timerResetButton.Text = "Reset";
       timerResetButton.UseVisualStyleBackColor = true;
@@ -1399,27 +1390,27 @@
       // 
       // timerLabel
       // 
-      timerLabel.AutoSize = true;
-      timerLabel.Dock = DockStyle.Fill;
+      timerLabel.BackColor = Color.Transparent;
       timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
       timerLabel.ForeColor = SystemColors.ControlLightLight;
-      timerLabel.Location = new Point(120, 163);
-      timerLabel.Margin = new Padding(0);
+      timerLabel.Location = new Point(154, 166);
+      timerLabel.Margin = new Padding(4, 3, 0, 0);
       timerLabel.Name = "timerLabel";
-      timerLabel.Padding = new Padding(20, 0, 0, 0);
-      timerLabel.Size = new Size(150, 30);
+      timerLabel.Size = new Size(115, 26);
       timerLabel.TabIndex = 0;
+      timerLabel.Text = "0:00:00:00";
       timerLabel.TextAlign = ContentAlignment.MiddleLeft;
+      timerLabel.Paint += timerLabel_Paint;
       // 
       // timerStartStopButton
       // 
       timerStartStopButton.Cursor = Cursors.Hand;
       timerStartStopButton.Dock = DockStyle.Fill;
-      timerStartStopButton.FlatStyle = FlatStyle.Popup;
+      timerStartStopButton.FlatStyle = FlatStyle.System;
       timerStartStopButton.ForeColor = SystemColors.ControlText;
-      timerStartStopButton.Location = new Point(63, 166);
+      timerStartStopButton.Location = new Point(78, 166);
       timerStartStopButton.Name = "timerStartStopButton";
-      timerStartStopButton.Size = new Size(54, 24);
+      timerStartStopButton.Size = new Size(69, 24);
       timerStartStopButton.TabIndex = 1;
       timerStartStopButton.Text = "Start";
       timerStartStopButton.UseVisualStyleBackColor = true;
@@ -1518,8 +1509,6 @@
       tabPage7.ResumeLayout(false);
       tableLayoutPanel4.ResumeLayout(false);
       tableLayoutPanel4.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)trackBar2).EndInit();
-      ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
       panel1.ResumeLayout(false);
       tableLayoutPanel5.ResumeLayout(false);
       tableLayoutPanel5.PerformLayout();
@@ -1561,10 +1550,8 @@
     private System.Windows.Forms.Timer timer1;
     private Label timerLabel;
     private Button timerResetButton;
-    private TrackBar trackBar1;
     private Label scoreLabel;
     private CheckBox nonRosterPerksCheckbox;
-    private TrackBar trackBar2;
     private Label label1;
     private CheckBox darkCheckbox;
     private TabPage tabPage9;
@@ -1617,5 +1604,7 @@
     private DataGridViewTextBoxColumn HasUnselectedPerks;
     private DataGridViewTextBoxColumn InShortlist;
     private DataGridViewTextBoxColumn InSquad;
+    private ComboBox minLvlCombx;
+    private ComboBox squadSizeCombx;
   }
 }
