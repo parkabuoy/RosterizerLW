@@ -116,11 +116,12 @@ namespace RosterizerLW
             Application.OpenForms[i]?.Close();
           }
         }
-
+        AppConfig config = new();
+        config.GetConfigData("Config.xml");
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
 
-        Application.Run(new Rosterizer());
+        Application.Run(new Rosterizer(config));
       }
       catch (Exception ex)
       {

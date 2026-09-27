@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<AppName>RosterizerLW</AppName>
+	<AppVersion>0</AppVersion>
+
+    <!-- location of Xcom2Json.exe and its hash-->    
+	<Xcom2JsonPath>..\..\..\exe\xcom2json.exe</Xcom2JsonPath>
+	<Xcom2JsonCRC64>550290084522337840</Xcom2JsonCRC64>
+	
+	<OutputPath></OutputPath>
+	<BackupPath></BackupPath>
+	<XcomSavePath></XcomSavePath>
+	<SavesToBackup>1</SavesToBackup>
+	
+	<AssaultClassColor>#8CDE2121</AssaultClassColor>
+	<EngineerClassColor>#8CF57383</EngineerClassColor>
+	<GunnerClassColor>#8CABD48D</GunnerClassColor>
+	<InfantryClassColor>#8C6363AD</InfantryClassColor>
+	<MedicClassColor>#8CFFFFFF</MedicClassColor>
+	<RocketeerClassColor>#8C50B4B4</RocketeerClassColor>
+	<ScoutClassColor>#8C628C70</ScoutClassColor>
+	<ShivClassColor>#8C000000</ShivClassColor>
+	<SniperClassColor>#8C370037</SniperClassColor>
+	<ClassColorShadow>#4D4D4D</ClassColorShadow>
+	
+	<DeadBg>#905761</DeadBg>
+	<DeadFg>#FFFFFF</DeadFg>
+	<WoundBg>#B69198</WoundBg>
+	<FatigueBg>#C2C2C2</FatigueBg>
+	<ShivBg>#9D9D9D</ShivBg>
+	<MaxBg>#89B1AA</MaxBg>
+	<HiBg>#ACC8C3</HiBg>
+	<LoBg>#CDB4B9</LoBg>
+	<MinBg>#B8949B</MinBg>
+	<RosterHeaderBg>#3A5C6D</RosterHeaderBg>
+	<RosterTabUnselectedBg>#7698A9</RosterTabUnselectedBg>
+	<RosterHeaderFg>#DEDEDE</RosterHeaderFg>
+	<RosterSquadHotTrackBg>#998FB0</RosterSquadHotTrackBg>
+	<RosterSquadHotTrackFg>#DEDEDE</RosterSquadHotTrackFg>
+	<RosterSelectedBookendBg>#998FB0</RosterSelectedBookendBg>
+	<WoobieBg>#9743F1</WoobieBg>
+	<WoobieFg>#FFFFFF</WoobieFg>
+	<WoobieFg2>#9743F1</WoobieFg2>
+	<SquadHeaderBg>#8A7F8D</SquadHeaderBg>
+	<SquadTabUnselectedBg>#A4A4A4</SquadTabUnselectedBg>
+	<SquadHeaderFg>#DEDEDE</SquadHeaderFg>
+	<SoldierHeaderBg>#7A728C</SoldierHeaderBg>
+	<SoldierTabUnselectedBg>#998FB0</SoldierTabUnselectedBg>
+	<SoldierHeaderFg>#DEDEDE</SoldierHeaderFg>
+	<ChecklistBadHeaderBg>#B8949B</ChecklistBadHeaderBg>
+	<ChecklistBadTabUnselectedBg>#B8949B</ChecklistBadTabUnselectedBg>
+	<ChecklistBadHeaderFg>#DEFFDE</ChecklistBadHeaderFg>
+	<ChecklistBadTabHighlight>#FF9F9F</ChecklistBadTabHighlight>
+	<ChecklistGoodHeaderBg>#5F8F6E</ChecklistGoodHeaderBg>
+	<ChecklistGoodTabUnselectedBg>#8FB099</ChecklistGoodTabUnselectedBg>
+	<ChecklistGoodHeaderFg>#DEFFDE</ChecklistGoodHeaderFg>
+	<SquadRowBg>#C2C2C2</SquadRowBg>
+	<SquadRowFg>#000000</SquadRowFg>
+	<SoldierRowFg>#1E1E1E</SoldierRowFg>
+	<WindowTitleBg>#456F84</WindowTitleBg>
+	<WindowTitleFg>#DEDEDE</WindowTitleFg>
+	<WindowBg>#DEDEDE</WindowBg>
+	<WindowFg>#000000</WindowFg>
+	<GridCellBg>#DEDEDE</GridCellBg>
+	<GridCellFg>#000000</GridCellFg>
+	<GridBg>#A0A0A0</GridBg>
+	<ChecklistedPerkBg>#8FB099</ChecklistedPerkBg>
+	<InSquadBookendsBg>#8A7F8D</InSquadBookendsBg>
+	
+	<GridSelectedCellBg>#7698A9</GridSelectedCellBg>
+	<GridSelectedCellFg>#000000</GridSelectedCellFg>
+	<TreeHeaderBg>#6B8688</TreeHeaderBg>
+	<TreeTabUnselectedBg>#456F84</TreeTabUnselectedBg>
+	<TreeHeaderFg>#DEFFDE</TreeHeaderFg>
+	<UnselectedSoldierPerkBg>#FAFADE</UnselectedSoldierPerkBg>
+	<StatLineFg>#8C000000</StatLineFg>
+	<ChatGemIdle>#DEDEDE</ChatGemIdle>
+	<ChatGemActive>#456F84</ChatGemActive>
+	<ChatGemPerfect>#FF14CD</ChatGemPerfect>
+</root>

@@ -851,10 +851,10 @@
       tabPage9.BackColor = Color.Transparent;
       tabPage9.BorderStyle = BorderStyle.Fixed3D;
       tabPage9.Controls.Add(tableLayoutPanel2);
-      tabPage9.Location = new Point(4, 52);
+      tabPage9.Location = new Point(4, 28);
       tabPage9.Name = "tabPage9";
       tabPage9.Padding = new Padding(3);
-      tabPage9.Size = new Size(262, 422);
+      tabPage9.Size = new Size(262, 446);
       tabPage9.TabIndex = 6;
       tabPage9.Text = "Perks";
       // 
@@ -872,7 +872,7 @@
       tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
       tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel2.Size = new Size(252, 412);
+      tableLayoutPanel2.Size = new Size(252, 436);
       tableLayoutPanel2.TabIndex = 4;
       // 
       // treeSearchTextbox
@@ -914,7 +914,7 @@
       treeDataGrid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
       treeDataGrid.ScrollBars = ScrollBars.Vertical;
       treeDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      treeDataGrid.Size = new Size(252, 382);
+      treeDataGrid.Size = new Size(252, 406);
       treeDataGrid.TabIndex = 4;
       treeDataGrid.TabStop = false;
       treeDataGrid.CellMouseClick += treeDataGrid_CellMouseClick;
@@ -1131,11 +1131,11 @@
       // 
       tabPage7.BorderStyle = BorderStyle.Fixed3D;
       tabPage7.Controls.Add(tableLayoutPanel4);
-      tabPage7.Location = new Point(4, 52);
+      tabPage7.Location = new Point(4, 28);
       tabPage7.Margin = new Padding(4, 1, 1, 1);
       tabPage7.Name = "tabPage7";
       tabPage7.Padding = new Padding(3);
-      tabPage7.Size = new Size(262, 422);
+      tabPage7.Size = new Size(262, 446);
       tabPage7.TabIndex = 4;
       tabPage7.Text = "Config";
       tabPage7.UseVisualStyleBackColor = true;
@@ -1170,7 +1170,7 @@
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel4.Size = new Size(252, 412);
+      tableLayoutPanel4.Size = new Size(252, 436);
       tableLayoutPanel4.TabIndex = 0;
       // 
       // darkCheckbox
@@ -1285,7 +1285,6 @@
       minLvlCombx.DropDownStyle = ComboBoxStyle.DropDownList;
       minLvlCombx.FlatStyle = FlatStyle.Flat;
       minLvlCombx.FormattingEnabled = true;
-      minLvlCombx.Items.AddRange(new object[] { "RK", "SQ", "SPC", "LCPL", "CPL", "SGT", "TSGT", "GSGT", "MSGT" });
       minLvlCombx.Location = new Point(192, 91);
       minLvlCombx.Name = "minLvlCombx";
       minLvlCombx.Size = new Size(57, 22);
@@ -1297,7 +1296,6 @@
       squadSizeCombx.DropDownStyle = ComboBoxStyle.DropDownList;
       squadSizeCombx.FlatStyle = FlatStyle.Flat;
       squadSizeCombx.FormattingEnabled = true;
-      squadSizeCombx.Items.AddRange(new object[] { "6", "7", "8", "9", "10", "11", "13", "14", "15", "16" });
       squadSizeCombx.Location = new Point(66, 91);
       squadSizeCombx.Name = "squadSizeCombx";
       squadSizeCombx.Size = new Size(57, 22);
@@ -1382,6 +1380,7 @@
       timerResetButton.ForeColor = SystemColors.ControlText;
       timerResetButton.Location = new Point(3, 166);
       timerResetButton.Name = "timerResetButton";
+      timerResetButton.Padding = new Padding(0, 0, 0, 3);
       timerResetButton.Size = new Size(69, 24);
       timerResetButton.TabIndex = 2;
       timerResetButton.Text = "Reset";
@@ -1393,8 +1392,8 @@
       timerLabel.BackColor = Color.Transparent;
       timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
       timerLabel.ForeColor = SystemColors.ControlLightLight;
-      timerLabel.Location = new Point(154, 166);
-      timerLabel.Margin = new Padding(4, 3, 0, 0);
+      timerLabel.Location = new Point(154, 167);
+      timerLabel.Margin = new Padding(4, 4, 0, 0);
       timerLabel.Name = "timerLabel";
       timerLabel.Size = new Size(115, 26);
       timerLabel.TabIndex = 0;
@@ -1410,6 +1409,7 @@
       timerStartStopButton.ForeColor = SystemColors.ControlText;
       timerStartStopButton.Location = new Point(78, 166);
       timerStartStopButton.Name = "timerStartStopButton";
+      timerStartStopButton.Padding = new Padding(0, 0, 0, 3);
       timerStartStopButton.Size = new Size(69, 24);
       timerStartStopButton.TabIndex = 1;
       timerStartStopButton.Text = "Start";

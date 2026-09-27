@@ -18,72 +18,6 @@ namespace RosterizerLW
   {
     // muted color scheme
     static bool darkMode = false;
-    static readonly Color deadBg = Color.FromArgb(144, 87, 97);
-    static readonly Color deadFg = Color.FromArgb(255, 255, 255);
-    static readonly Color woundBg = Color.FromArgb(182, 145, 152);
-    static readonly Color fatigueBg = Color.FromArgb(194, 194, 194);
-    static readonly Color shivBg = Color.FromArgb(157, 157, 157);
-    static readonly Color maxBg = Color.FromArgb(137, 177, 170);
-    static readonly Color hiBg = Color.FromArgb(172, 200, 195);
-    static readonly Color loBg = Color.FromArgb(205, 180, 185);
-    static readonly Color minBg = Color.FromArgb(184, 148, 155);
-    static readonly Color rosterHeaderBg = Color.FromArgb(58, 92, 109);
-    static readonly Color rosterTabUnselectedBg = Color.FromArgb(118, 152, 169);
-    static readonly Color rosterHeaderFg = Color.FromArgb(222, 222, 222);
-    static readonly Color rosterSquadHotTrackBg = Color.FromArgb(153, 143, 176);
-    static readonly Color rosterSquadHotTrackFg = Color.FromArgb(222, 222, 222);
-
-    static readonly Color rosterSelectedBookendBg = Color.FromArgb(153, 143, 176);
-    static readonly Color woobieBg = Color.FromArgb(151, 67, 241);
-    static readonly Color woobieFg = Color.FromArgb(255, 255, 255);
-    static readonly Color woobieFg2 = Color.FromArgb(151, 67, 241);
-    static readonly Color squadHeaderBg = Color.FromArgb(138, 127, 141);
-    static readonly Color squadTabUnselectedBg = Color.FromArgb(164, 164, 164);
-    static readonly Color squadHeaderFg = Color.FromArgb(222, 222, 222);
-    static readonly Color soldierHeaderBg = Color.FromArgb(122, 114, 140);
-    static readonly Color soldierTabUnselectedBg = Color.FromArgb(153, 143, 176);
-    static readonly Color soldierHeaderFg = Color.FromArgb(222, 222, 222);
-    static readonly Color checklistBadHeaderBg = Color.FromArgb(184, 148, 155);
-    static readonly Color checklistBadTabUnselectedBg = Color.FromArgb(184, 148, 155);
-    static readonly Color checklistBadHeaderFg = Color.FromArgb(222, 255, 222);
-    static readonly Color checklistBadTabHighlight = Color.FromArgb(255, 159, 159);
-    static readonly Color checklistGoodHeaderBg = Color.FromArgb(95, 143, 110);
-    static readonly Color checklistGoodTabUnselectedBg = Color.FromArgb(143, 176, 153);
-    static readonly Color checklistGoodHeaderFg = Color.FromArgb(222, 255, 222);
-    static readonly Color squadRowBg = Color.FromArgb(194, 194, 194);
-    static readonly Color squadRowFg = Color.FromArgb(0, 0, 0);
-    static readonly Color soldierRowFg = Color.FromArgb(30, 30, 30);
-    static readonly Color windowTitleBg = Color.FromArgb(69, 111, 132);
-    static readonly Color windowTitleFg = Color.FromArgb(222, 222, 222);
-    static readonly Color windowBg = Color.FromArgb(222, 222, 222);
-    static readonly Color windowFg = Color.FromArgb(0, 0, 0);
-    static readonly Color gridCellBg = Color.FromArgb(222, 222, 222);
-    static readonly Color gridCellFg = Color.FromArgb(0, 0, 0);
-    static readonly Color gridBg = SystemColors.ControlDark;
-    static readonly Color checklistedPerkBg = Color.FromArgb(143, 176, 153);
-    static readonly Color inSquadBookendsBg = Color.FromArgb(138, 127, 141);
-    static readonly Color AssaultClassColor = Color.FromArgb(140, 222, 33, 33);
-    static readonly Color EngineerClassColor = Color.FromArgb(140, 245, 115, 131);
-    static readonly Color GunnerClassColor = Color.FromArgb(140, 171, 212, 141);
-    static readonly Color InfantryClassColor = Color.FromArgb(140, 99, 99, 173);
-    static readonly Color MedicClassColor = Color.FromArgb(140, 255, 255, 255);
-    static readonly Color RocketeerClassColor = Color.FromArgb(140, 80, 180, 180);
-    static readonly Color ScoutClassColor = Color.FromArgb(140, 98, 140, 112);
-    static readonly Color ShivClassColor = Color.FromArgb(140, 0, 0, 0);
-    static readonly Color SniperClassColor = Color.FromArgb(140, 55, 0, 55);
-    static readonly Color ClassColorShadow = Color.FromArgb(255, 77, 77, 77);
-
-    static readonly Color gridSelectedCellBg = Color.FromArgb(118, 152, 169);
-    static readonly Color gridSelectedCellFg = Color.FromArgb(0, 0, 0);
-    static readonly Color treeHeaderBg = Color.FromArgb(107, 134, 136);
-    static readonly Color treeTabUnselectedBg = Color.FromArgb(69, 111, 132);
-    static readonly Color treeHeaderFg = Color.FromArgb(222, 255, 222);
-    static readonly Color unselectedSoldierPerkBg = Color.FromArgb(250, 250, 222);
-    static readonly Color statLineFg = Color.FromArgb(140, 0, 0, 0);
-    static readonly Color ChatGemIdle = Color.FromArgb(255, 222, 222, 222);
-    static readonly Color ChatGemActive = rosterHeaderBg;
-    static readonly Color ChatGemPerfect = Color.FromArgb(255, 255, 20, 205);
-
 
     static readonly DataGridViewCellBorderStyle rosterCellBorders = DataGridViewCellBorderStyle.RaisedHorizontal;
     static readonly DataGridViewCellBorderStyle squadCellBorders = DataGridViewCellBorderStyle.RaisedHorizontal;
@@ -94,101 +28,6 @@ namespace RosterizerLW
     static DataGridViewCellStyle hotStyle = new();
     static readonly bool LongWoundBgStyle = false;
     static readonly bool StatWoundBgStyle = false;
-
-    static readonly Color darkDeadFg = SystemColors.ControlText;
-    static readonly Color darkFatigueBg = SystemColors.ControlDark;
-    static readonly Color darkShivBg = SystemColors.ControlLight;
-    static readonly Color darkDeadBg = Color.FromArgb(99, 38, 44);
-    static readonly Color darkWoundBg = Color.FromArgb(130, 81, 86);
-    static readonly Color darkMaxBg = Color.FromArgb(46, 92, 107);
-    static readonly Color darkHiBg = Color.FromArgb(87, 124, 136);
-    static readonly Color darkLoBg = Color.FromArgb(136, 99, 87);
-    static readonly Color darkMinBg = Color.FromArgb(97, 71, 62);
-    static readonly Color darkRosterHeaderBg = SystemColors.InactiveCaption;
-    static readonly Color darkRosterTabUnselectedBg = SystemColors.InactiveCaption;
-    static readonly Color darkRosterHeaderFg = SystemColors.ControlText;
-    static readonly Color darkSquadHeaderBg = SystemColors.ControlDarkDark;
-    static readonly Color darkSquadTabUnselectedBg = SystemColors.ControlDarkDark;
-    static readonly Color darkSquadHeaderFg = SystemColors.ControlText;
-    static readonly Color darkSoldierHeaderBg = SystemColors.Control;
-    static readonly Color darkSoldierTabUnselectedBg = SystemColors.ControlLight;
-    static readonly Color darkSoldierHeaderFg = SystemColors.ControlText;
-    static readonly Color darkChecklistBadHeaderBg = SystemColors.InactiveCaption;
-    static readonly Color darkChecklistBadTabUnselectedBg = SystemColors.InactiveCaption;
-    static readonly Color darkChecklistBadHeaderFg = SystemColors.ControlText;
-    static readonly Color darkChecklistBadTabHighlight = SystemColors.ActiveCaption;
-    static readonly Color darkChecklistGoodHeaderBg = SystemColors.HotTrack;
-    static readonly Color darkChecklistGoodTabUnselectedBg = SystemColors.ActiveCaption;
-    static readonly Color darkChecklistGoodHeaderFg = SystemColors.ControlText;
-    static readonly Color darkSquadRowBg = SystemColors.ControlDark;
-    static readonly Color darkSquadRowFg = SystemColors.ControlText;
-    static readonly Color darkSoldierRowFg = SystemColors.ControlText;
-    static readonly Color darkWindowTitleBg = SystemColors.HotTrack;
-    static readonly Color darkWindowTitleFg = SystemColors.ControlText;
-    static readonly Color darkWindowBg = SystemColors.ControlLightLight;
-    static readonly Color darkWindowFg = SystemColors.ControlText;
-    static readonly Color darkGridCellBg = SystemColors.Control;
-    static readonly Color darkGridCellFg = SystemColors.ControlText;
-    static readonly Color darkGridSelectedCellBg = SystemColors.ActiveCaption;
-    static readonly Color darkGridSelectedCellFg = SystemColors.InactiveCaptionText;
-    static readonly Color darkTreeHeaderBg = Color.FromArgb(46, 92, 107);
-    static readonly Color darkTreeTabUnselectedBg = Color.FromArgb(87, 124, 136);
-    static readonly Color darkTreeHeaderFg = SystemColors.ControlText;
-    static readonly DataGridViewCellBorderStyle darkRosterCellBorders = DataGridViewCellBorderStyle.Single;
-    static readonly DataGridViewCellBorderStyle darkSquadCellBorders = DataGridViewCellBorderStyle.Single;
-    static readonly DataGridViewCellBorderStyle darkSoldierCellBorders = DataGridViewCellBorderStyle.Single;
-    static readonly DataGridViewCellBorderStyle darkChecklistCellBorders = DataGridViewCellBorderStyle.Single;
-    static readonly DataGridViewCellBorderStyle darkTreeCellBorders = DataGridViewCellBorderStyle.Single;
-
-    static readonly bool darkLongWoundBgStyle = false;
-    static readonly bool darkStatWoundBgStyle = false;
-
-    /*
-            // muted color scheme
-        static readonly Color deadBg = Color.FromArgb(144, 87, 97);
-        static readonly Color deadFg = Color.FromArgb(255, 255, 255);
-        static readonly Color woundBg = Color.FromArgb(182, 145, 152);
-        static readonly Color fatigueBg = Color.FromArgb(194, 194, 194);
-        static readonly Color shivBg = Color.FromArgb(157, 157, 157);
-        static readonly Color maxBg = Color.FromArgb(137, 177, 170);
-        static readonly Color hiBg = Color.FromArgb(172, 200, 195);
-        static readonly Color loBg = Color.FromArgb(205, 180, 185);
-        static readonly Color minBg = Color.FromArgb(184, 148, 155);
-        static readonly Color rosterHeaderBg = Color.FromArgb(58, 92, 109);
-        static readonly Color rosterTabUnselectedBg = Color.FromArgb(118, 152, 169);
-        static readonly Color rosterHeaderFg = Color.FromArgb(222, 222, 222);
-        static readonly Color squadHeaderBg = Color.FromArgb(134, 134, 134);
-        static readonly Color squadTabUnselectedBg = Color.FromArgb(164, 164, 164);
-        static readonly Color squadHeaderFg = Color.FromArgb(222, 222, 222);
-        static readonly Color soldierHeaderBg = Color.FromArgb(122, 114, 140);
-        static readonly Color soldierTabUnselectedBg = Color.FromArgb(153, 143, 176);
-        static readonly Color soldierHeaderFg = Color.FromArgb(222, 222, 222);
-        static readonly Color checklistBadHeaderBg = Color.FromArgb(95, 143, 110);
-        static readonly Color checklistBadTabUnselectedBg = Color.FromArgb(143, 176, 153);
-        static readonly Color checklistBadHeaderFg = Color.FromArgb(222, 255, 222);
-        static readonly Color checklistBadTabHighlight = Color.FromArgb(184, 148, 155);
-        static readonly Color checklistGoodHeaderBg = Color.FromArgb(95, 143, 110);
-        static readonly Color checklistGoodTabUnselectedBg = Color.FromArgb(143, 176, 153);
-        static readonly Color checklistGoodHeaderFg = Color.FromArgb(222, 255, 222);
-        static readonly Color squadRowBg = Color.FromArgb(194, 194, 194);
-        static readonly Color squadRowFg = Color.FromArgb(0, 0, 0);
-        static readonly Color soldierRowFg = Color.FromArgb(30, 30, 30);
-        static readonly Color windowTitleBg = Color.FromArgb(69, 111, 132);
-        static readonly Color windowTitleFg = Color.FromArgb(222, 222, 222);
-        static readonly Color windowBg = Color.FromArgb(222, 222, 222);
-        static readonly Color windowFg = Color.FromArgb(0, 0, 0);
-        static readonly Color gridCellBg = Color.FromArgb(222, 222, 222);
-        static readonly Color gridCellFg = Color.FromArgb(0, 0, 0);
-        static readonly Color gridSelectedCellBg = Color.FromArgb(118, 152, 169);
-        static readonly Color gridSelectedCellFg = Color.FromArgb(0, 0, 0);
-        static readonly bool darkMode = false;
-        static readonly DataGridViewCellBorderStyle rosterCellBorders = DataGridViewCellBorderStyle.Raised;
-        static readonly DataGridViewCellBorderStyle squadCellBorders = DataGridViewCellBorderStyle.Sunken;
-        static readonly DataGridViewCellBorderStyle soldierCellBorders = DataGridViewCellBorderStyle.Raised;
-        static readonly DataGridViewCellBorderStyle checklistCellBorders = DataGridViewCellBorderStyle.Sunken;
-        static readonly bool LongWoundBgStyle = false;
-        static readonly bool StatWoundBgStyle = false;
-    */
 
     private Stopwatch timer2 = new();
     private TimeSpan elapsedTime = TimeSpan.Zero;
@@ -291,13 +130,10 @@ namespace RosterizerLW
     string AutoSavePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\My Games\\XCOM - Enemy Within\\XComGame\\SaveData";
     static string OutputDir = "..\\..\\..\\output\\"; // the output dir
     static string BackupDir = "..\\..\\..\\saveBackup\\"; // path where saves will be backed up
-    static string X2jPath = "..\\..\\..\\exe\\xcom2json.exe"; // the path to xcom2json.exe, CRC 
     static string PerkListPath = "..\\..\\..\\csv\\Long War ID reference - Perks.csv";
     static string PerkChecklistPath = "..\\..\\..\\csv\\Checklist - Perks.csv";
     public static FileInfo SaveFile;
     public static string SoldierSelectedIdXP = "";
-
-    UInt64 x2jHash = 550290084522337840; // ensure the expected xcom2json version
 
     // ------------------------------------------------------------------------------------------------------------------------------------------------------------
     string saveFilenameFull = "";
@@ -309,8 +145,8 @@ namespace RosterizerLW
 
     string execTime = $"{DateTime.Now:yyyyMMdd.HHmm}";
 
-    FileInfo x2jFile = new(X2jPath);
-    UInt64 hash = Crc64.HashToUInt64(File.ReadAllBytes(X2jPath));
+    FileInfo x2jFile = new(AppConfig.Xcom2JsonPath);
+    UInt64 hash = Crc64.HashToUInt64(File.ReadAllBytes(AppConfig.Xcom2JsonPath));
 
     // import seven-segment font
     [DllImport("gdi32.dll")]
@@ -322,7 +158,7 @@ namespace RosterizerLW
     Font SevenSegmentFont;
     Font SevenSegmentItalicFont;
 
-    public Rosterizer()
+    public Rosterizer(AppConfig config)
     {
       InitializeComponent();
 
@@ -345,7 +181,7 @@ namespace RosterizerLW
       SevenSegmentFont = new Font(fonts.Families[0], 16.0F);
       SevenSegmentItalicFont = new Font(fonts2.Families[0], 16.0F);
 
-      if (!x2jFile.Exists || hash != x2jHash) ShowError("invalid xcom2json exe!", x2jFile.FullName);
+      if (!x2jFile.Exists || hash != AppConfig.Xcom2JsonHash) ShowError("invalid xcom2json exe!", x2jFile.FullName);
 
       SaveFile ??= new(overrideSavePath);
       // build datatable out of csv file (directly copied from swf's id reference sheets)
@@ -379,7 +215,7 @@ namespace RosterizerLW
       jsonFilenameFull = Path.Combine(todayOutputDir, $"{execTime}.{saveFilename}.json");
 
       // run xcom2json exe on save file
-      Process.Start("cmd", $"/C {X2jPath} -o \"{jsonFilenameFull}\" \"{saveFilenameFull}\"").WaitForExit();
+      Process.Start("cmd", $"/C {AppConfig.Xcom2JsonPath} -o \"{jsonFilenameFull}\" \"{saveFilenameFull}\"").WaitForExit();
 
       // if parsing failed, cry
       if (!File.Exists(jsonFilenameFull)) ShowError("json parsing failure!", saveFilenameFull);
@@ -438,113 +274,67 @@ namespace RosterizerLW
 
     public void SetColor()
     {
-      if (darkMode)
-      {
-        Application.SetColorMode(SystemColorMode.Dark);
+      Application.SetColorMode(SystemColorMode.Classic);
 
-        rosterGridView.ColumnHeadersDefaultCellStyle.BackColor = rosterGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = darkRosterHeaderBg;
-        rosterGridView.ColumnHeadersDefaultCellStyle.ForeColor = rosterGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = darkRosterHeaderFg;
-        tableLayoutPanel3.BackColor = darkWindowBg;
-        shivCheckbox.ForeColor = deadCheckbox.ForeColor = fatiguedCheckbox.ForeColor = woundedCheckbox.ForeColor = darkWindowFg;
-        rosterGridView.DefaultCellStyle.BackColor = darkGridCellBg;
-        rosterGridView.DefaultCellStyle.ForeColor = darkGridCellFg;
-        rosterGridView.DefaultCellStyle.SelectionBackColor = darkSoldierTabUnselectedBg;
-        rosterGridView.DefaultCellStyle.SelectionForeColor = darkGridSelectedCellFg;
-        rosterGridView.CellBorderStyle = darkRosterCellBorders;
-        squadGridView.DefaultCellStyle.BackColor = darkGridCellBg;
-        squadGridView.DefaultCellStyle.ForeColor = darkGridCellFg;
-        squadGridView.DefaultCellStyle.SelectionBackColor = darkSoldierTabUnselectedBg;
-        squadGridView.DefaultCellStyle.SelectionForeColor = darkGridSelectedCellFg;
-        squadGridView.CellBorderStyle = darkRosterCellBorders;
-        squadPerkList.DefaultCellStyle.ForeColor = darkSquadRowFg;
-        squadPerkList.DefaultCellStyle.BackColor = darkSquadRowBg;
-        squadPerkList.DefaultCellStyle.SelectionForeColor = darkSquadRowFg;
-        squadPerkList.DefaultCellStyle.SelectionBackColor = darkSquadTabUnselectedBg;
-        squadPerkList.CellBorderStyle = darkSquadCellBorders;
-        soldierPerksGridView.DefaultCellStyle.ForeColor = darkGridCellFg;
-        soldierPerksGridView.DefaultCellStyle.BackColor = darkGridCellBg;
-        soldierPerksGridView.DefaultCellStyle.SelectionForeColor = darkSoldierRowFg;
-        soldierPerksGridView.DefaultCellStyle.SelectionBackColor = darkSoldierTabUnselectedBg;
-        soldierPerksGridView.CellBorderStyle = darkSoldierCellBorders;
-        checklistGridView.DefaultCellStyle.SelectionBackColor = darkGridCellBg;
-        checklistGridView.DefaultCellStyle.SelectionForeColor = darkGridCellFg;
-        checklistGridView.DefaultCellStyle.BackColor = darkGridCellBg;
-        checklistGridView.DefaultCellStyle.ForeColor = darkGridCellFg;
-        checklistGridView.CellBorderStyle = darkChecklistCellBorders;
-        panel1.BackColor = darkWindowBg;
-        panel1.ForeColor = darkWindowFg;
+      rosterGridView.ColumnHeadersDefaultCellStyle.BackColor = rosterGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = AppConfig.RosterHeaderBg;
+      rosterGridView.ColumnHeadersDefaultCellStyle.ForeColor = rosterGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = AppConfig.RosterHeaderFg;
+      tableLayoutPanel3.BackColor = AppConfig.WindowBg;
+      shivCheckbox.ForeColor = deadCheckbox.ForeColor = fatiguedCheckbox.ForeColor = woundedCheckbox.ForeColor = AppConfig.WindowFg;
+      rosterGridView.DefaultCellStyle.BackColor = AppConfig.GridCellBg;
+      rosterGridView.DefaultCellStyle.ForeColor = AppConfig.GridCellFg;
+      rosterGridView.DefaultCellStyle.SelectionBackColor = AppConfig.GridCellBg;
+      rosterGridView.DefaultCellStyle.SelectionForeColor = AppConfig.GridCellFg;
+      rosterGridView.RowHeadersDefaultCellStyle.BackColor = AppConfig.GridCellBg;
+      rosterGridView.RowHeadersDefaultCellStyle.ForeColor = AppConfig.GridCellFg;
+      rosterGridView.RowHeadersDefaultCellStyle.SelectionBackColor = AppConfig.RosterSelectedBookendBg;
+      rosterGridView.RowHeadersDefaultCellStyle.SelectionForeColor = AppConfig.WindowTitleFg;
+      rosterGridView.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      rosterGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+      rosterGridView.RowHeadersDefaultCellStyle.Padding = Padding.Empty;
+      rosterGridView.RowHeadersWidth = 15;
+      rosterGridView.BackgroundColor = AppConfig.GridBg;
+      rosterGridView.GridColor = AppConfig.GridBg;
+      squadGridView.RowHeadersDefaultCellStyle.BackColor = AppConfig.GridCellBg;
+      squadGridView.RowHeadersDefaultCellStyle.ForeColor = AppConfig.GridCellFg;
+      squadGridView.RowHeadersDefaultCellStyle.SelectionBackColor = AppConfig.RosterSelectedBookendBg;
+      squadGridView.RowHeadersDefaultCellStyle.SelectionForeColor = AppConfig.WindowTitleFg;
+      squadGridView.DefaultCellStyle.BackColor = AppConfig.GridCellBg;
+      squadGridView.DefaultCellStyle.ForeColor = AppConfig.GridCellFg;
+      squadGridView.DefaultCellStyle.SelectionBackColor = AppConfig.GridCellBg;
+      squadGridView.DefaultCellStyle.SelectionForeColor = AppConfig.GridCellFg;
+      squadGridView.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      squadGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+      squadGridView.RowHeadersDefaultCellStyle.Padding = Padding.Empty;
+      squadGridView.CellBorderStyle = shortlistGridCellBorders;
 
-        treeDataGrid.DefaultCellStyle.ForeColor = darkGridCellFg;
-        treeDataGrid.DefaultCellStyle.BackColor = darkGridCellBg;
-        treeDataGrid.DefaultCellStyle.SelectionForeColor = darkGridCellFg;
-        treeDataGrid.DefaultCellStyle.SelectionBackColor = darkGridCellBg;
+      squadGridView.RowHeadersWidth = 15;
+      rosterGridView.CellBorderStyle = rosterCellBorders;
+      squadPerkList.DefaultCellStyle.ForeColor = AppConfig.SquadRowFg;
+      squadPerkList.DefaultCellStyle.BackColor = AppConfig.SquadRowBg;
+      squadPerkList.DefaultCellStyle.SelectionForeColor = AppConfig.SquadRowFg;
+      squadPerkList.DefaultCellStyle.SelectionBackColor = AppConfig.SquadTabUnselectedBg;
+      squadPerkList.CellBorderStyle = squadCellBorders;
+      soldierPerksGridView.DefaultCellStyle.ForeColor = AppConfig.GridCellFg;
+      soldierPerksGridView.DefaultCellStyle.BackColor = AppConfig.GridCellBg;
+      soldierPerksGridView.DefaultCellStyle.SelectionForeColor = AppConfig.GridCellFg;
+      soldierPerksGridView.DefaultCellStyle.SelectionBackColor = AppConfig.GridCellBg;
+      soldierPerksGridView.CellBorderStyle = soldierCellBorders;
+      checklistGridView.DefaultCellStyle.SelectionBackColor = AppConfig.GridCellBg;
+      checklistGridView.DefaultCellStyle.SelectionForeColor = AppConfig.GridCellFg;
+      checklistGridView.DefaultCellStyle.BackColor = AppConfig.GridCellBg;
+      checklistGridView.DefaultCellStyle.ForeColor = AppConfig.GridCellFg;
+      checklistGridView.CellBorderStyle = checklistCellBorders;
+      tabPage9.BackColor = AppConfig.WindowBg;
+      panel1.BackColor = AppConfig.WindowBg;
+      panel1.ForeColor = AppConfig.WindowFg;
 
-      }
-      else
-      {
-        Application.SetColorMode(SystemColorMode.Classic);
+      treeDataGrid.DefaultCellStyle.ForeColor = AppConfig.GridCellFg;
+      treeDataGrid.DefaultCellStyle.BackColor = AppConfig.GridCellBg;
+      treeDataGrid.DefaultCellStyle.SelectionForeColor = AppConfig.GridCellFg;
+      treeDataGrid.DefaultCellStyle.SelectionBackColor = AppConfig.GridCellBg;
 
-        rosterGridView.ColumnHeadersDefaultCellStyle.BackColor = rosterGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = rosterHeaderBg;
-        rosterGridView.ColumnHeadersDefaultCellStyle.ForeColor = rosterGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = rosterHeaderFg;
-        tableLayoutPanel3.BackColor = windowBg;
-        shivCheckbox.ForeColor = deadCheckbox.ForeColor = fatiguedCheckbox.ForeColor = woundedCheckbox.ForeColor = windowFg;
-        rosterGridView.DefaultCellStyle.BackColor = gridCellBg;
-        rosterGridView.DefaultCellStyle.ForeColor = gridCellFg;
-        rosterGridView.DefaultCellStyle.SelectionBackColor = gridCellBg;
-        rosterGridView.DefaultCellStyle.SelectionForeColor = gridCellFg;
-        rosterGridView.RowHeadersDefaultCellStyle.BackColor = gridCellBg;
-        rosterGridView.RowHeadersDefaultCellStyle.ForeColor = gridCellFg;
-        rosterGridView.RowHeadersDefaultCellStyle.SelectionBackColor = rosterSelectedBookendBg;
-        rosterGridView.RowHeadersDefaultCellStyle.SelectionForeColor = windowTitleFg;
-        rosterGridView.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        rosterGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-        rosterGridView.RowHeadersDefaultCellStyle.Padding = Padding.Empty;
-        rosterGridView.RowHeadersWidth = 15;
-        rosterGridView.BackgroundColor = gridBg;
-        rosterGridView.GridColor = gridBg;
-        squadGridView.RowHeadersDefaultCellStyle.BackColor = gridCellBg;
-        squadGridView.RowHeadersDefaultCellStyle.ForeColor = gridCellFg;
-        squadGridView.RowHeadersDefaultCellStyle.SelectionBackColor = rosterSelectedBookendBg;
-        squadGridView.RowHeadersDefaultCellStyle.SelectionForeColor = windowTitleFg;
-        squadGridView.DefaultCellStyle.BackColor = gridCellBg;
-        squadGridView.DefaultCellStyle.ForeColor = gridCellFg;
-        squadGridView.DefaultCellStyle.SelectionBackColor = gridCellBg;
-        squadGridView.DefaultCellStyle.SelectionForeColor = gridCellFg;
-        squadGridView.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        squadGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-        squadGridView.RowHeadersDefaultCellStyle.Padding = Padding.Empty;
-        squadGridView.CellBorderStyle = shortlistGridCellBorders;
-
-        squadGridView.RowHeadersWidth = 15;
-        rosterGridView.CellBorderStyle = rosterCellBorders;
-        squadPerkList.DefaultCellStyle.ForeColor = squadRowFg;
-        squadPerkList.DefaultCellStyle.BackColor = squadRowBg;
-        squadPerkList.DefaultCellStyle.SelectionForeColor = squadRowFg;
-        squadPerkList.DefaultCellStyle.SelectionBackColor = squadTabUnselectedBg;
-        squadPerkList.CellBorderStyle = squadCellBorders;
-        soldierPerksGridView.DefaultCellStyle.ForeColor = gridCellFg;
-        soldierPerksGridView.DefaultCellStyle.BackColor = gridCellBg;
-        soldierPerksGridView.DefaultCellStyle.SelectionForeColor = gridCellFg;
-        soldierPerksGridView.DefaultCellStyle.SelectionBackColor = gridCellBg;
-        soldierPerksGridView.CellBorderStyle = soldierCellBorders;
-        checklistGridView.DefaultCellStyle.SelectionBackColor = gridCellBg;
-        checklistGridView.DefaultCellStyle.SelectionForeColor = gridCellFg;
-        checklistGridView.DefaultCellStyle.BackColor = gridCellBg;
-        checklistGridView.DefaultCellStyle.ForeColor = gridCellFg;
-        checklistGridView.CellBorderStyle = checklistCellBorders;
-        tabPage9.BackColor = windowBg;
-        panel1.BackColor = windowBg;
-        panel1.ForeColor = windowFg;
-
-        treeDataGrid.DefaultCellStyle.ForeColor = gridCellFg;
-        treeDataGrid.DefaultCellStyle.BackColor = gridCellBg;
-        treeDataGrid.DefaultCellStyle.SelectionForeColor = gridCellFg;
-        treeDataGrid.DefaultCellStyle.SelectionBackColor = gridCellBg;
-
-        perkFilterTextbox.BackColor = windowBg;
-        perkFilterTextbox.ForeColor = windowFg;
-      }
-
+      perkFilterTextbox.BackColor = AppConfig.WindowBg;
+      perkFilterTextbox.ForeColor = AppConfig.WindowFg;
     }
 
     public static void DefaultSorting()
@@ -836,7 +626,7 @@ namespace RosterizerLW
 
       checklistGridView.Rows.Add(["Checklist", "", ""]);
       checklistGridView.Rows[0].Frozen = true;
-      checklistGridView.Rows[0].DefaultCellStyle = new() { BackColor = rosterHeaderBg, ForeColor = rosterHeaderFg, SelectionBackColor = rosterHeaderBg, SelectionForeColor = rosterHeaderFg };
+      checklistGridView.Rows[0].DefaultCellStyle = new() { BackColor = AppConfig.RosterHeaderBg, ForeColor = AppConfig.RosterHeaderFg, SelectionBackColor = AppConfig.RosterHeaderBg, SelectionForeColor = AppConfig.RosterHeaderFg };
       checklistGridView.Rows[0].Cells[0].Style = new(checklistGridView.Rows[0].DefaultCellStyle) { Alignment = DataGridViewContentAlignment.MiddleCenter, Padding = new(20, 0, 0, 0) };
       checklistGridView.Rows[0].Height = checklistGridView.Rows[0].Height + 4;
       checklistGridView.Rows[0].DividerHeight += 4;
@@ -880,8 +670,8 @@ namespace RosterizerLW
         }
 
         cr.Cells[0].Style = cr.Cells[1].Style = cr.Cells[2].Style = thisOk
-          ? new() { BackColor = hiBg, SelectionBackColor = hiBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg }
-          : new() { BackColor = minBg, SelectionBackColor = minBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg };
+          ? new() { BackColor = AppConfig.HiBg, SelectionBackColor = AppConfig.HiBg, ForeColor = AppConfig.GridCellFg, SelectionForeColor = AppConfig.GridCellFg }
+          : new() { BackColor = AppConfig.MinBg, SelectionBackColor = AppConfig.MinBg, ForeColor = AppConfig.GridCellFg, SelectionForeColor = AppConfig.GridCellFg };
       }
 
       ChecklistPass = checklistOk == ChecklistPerks.Count;
@@ -901,7 +691,7 @@ namespace RosterizerLW
       treeDataGrid.Rows.Clear();
 
       treeDataGrid.Rows.Add("\\", "");
-      treeDataGrid.Rows[0].DefaultCellStyle = new() { BackColor = rosterHeaderBg, ForeColor = rosterHeaderFg, SelectionBackColor = rosterHeaderBg, SelectionForeColor = rosterHeaderFg };
+      treeDataGrid.Rows[0].DefaultCellStyle = new() { BackColor = AppConfig.RosterHeaderBg, ForeColor = AppConfig.RosterHeaderFg, SelectionBackColor = AppConfig.RosterHeaderBg, SelectionForeColor = AppConfig.RosterHeaderFg };
       treeDataGrid.Rows[0].Frozen = true;
 
       for (int i = 0; i <= RosterPerkTree.Length; i++)
@@ -914,10 +704,10 @@ namespace RosterizerLW
 
         treeDataGrid.Rows[i].Cells[0].Style = treeDataGrid.Rows[i].Cells[1].Style = new()
         {
-          BackColor = treeTabUnselectedBg,
-          ForeColor = treeHeaderFg,
-          SelectionBackColor = treeTabUnselectedBg,
-          SelectionForeColor = treeHeaderFg
+          BackColor = AppConfig.TreeTabUnselectedBg,
+          ForeColor = AppConfig.TreeHeaderFg,
+          SelectionBackColor = AppConfig.TreeTabUnselectedBg,
+          SelectionForeColor = AppConfig.TreeHeaderFg
         };
         treeDataGrid.Rows[i].Frozen = true;
       }
@@ -981,38 +771,58 @@ namespace RosterizerLW
 
         }
       }
-
-      if (squadUpdate && SquadPerks.Count > 0)
+      if (squadUpdate)
       {
-        squadPerkList.Rows.Add($"Soldiers: {CurrentSquadSize}{(shivCount > 0 ? $" Shivs: {shivCount}" : "")}");
-        squadPerkList.Rows[0].Height = squadPerkList.Rows[0].Height + 4;
-        squadPerkList.Rows[0].DividerHeight += 4;
-        squadPerkList.Rows[0].Frozen = true;
-        squadPerkList.Rows[0].Cells[0].Style = squadPerkList.Rows[0].Cells[1].Style = new()
+        if (SquadPerks.Count > 0)
         {
-          BackColor = squadHeaderBg,
-          ForeColor = windowTitleFg,
-          SelectionBackColor = squadHeaderBg,
-          SelectionForeColor = windowTitleFg,
-          Alignment = DataGridViewContentAlignment.MiddleCenter,
-          Font = new(Font, FontStyle.Regular),
-          Padding = new(20, 0, 0, 0)
-        };
-
-        foreach (var p in SquadPerksByName ? SquadPerks.OrderBy(x => x.Key) : SquadPerks.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
-        {
-          squadPerkList.Rows.Add([p.Key, p.Value]);
-
-          if (ChecklistPerks.ContainsKey(p.Key)) squadPerkList.Rows[^1].Cells[0].Style = squadPerkList.Rows[^1].Cells[1].Style = new()
+          squadPerkList.Rows.Add($"Soldiers: {CurrentSquadSize}{(shivCount > 0 ? $" Shivs: {shivCount}" : "")}");
+          squadPerkList.Rows[0].Height = squadPerkList.Rows[0].Height + 4;
+          squadPerkList.Rows[0].DividerHeight += 4;
+          squadPerkList.Rows[0].Frozen = true;
+          squadPerkList.Rows[0].Cells[0].Style = squadPerkList.Rows[0].Cells[1].Style = new()
           {
-            BackColor = checklistGoodTabUnselectedBg,
-            ForeColor = checklistGoodHeaderFg,
-            SelectionBackColor = checklistGoodTabUnselectedBg,
-            SelectionForeColor = checklistGoodHeaderFg,
+            BackColor = AppConfig.SquadHeaderBg,
+            ForeColor = AppConfig.WindowTitleFg,
+            SelectionBackColor = AppConfig.SquadHeaderBg,
+            SelectionForeColor = AppConfig.WindowTitleFg,
+            Alignment = DataGridViewContentAlignment.MiddleCenter,
             Font = new(Font, FontStyle.Regular),
+            Padding = new(20, 0, 0, 0)
+          };
+
+          foreach (var p in SquadPerksByName ? SquadPerks.OrderBy(x => x.Key) : SquadPerks.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+          {
+            squadPerkList.Rows.Add([p.Key, p.Value]);
+
+            if (ChecklistPerks.ContainsKey(p.Key)) squadPerkList.Rows[^1].Cells[0].Style = squadPerkList.Rows[^1].Cells[1].Style = new()
+            {
+              BackColor = AppConfig.ChecklistGoodTabUnselectedBg,
+              ForeColor = AppConfig.ChecklistGoodHeaderFg,
+              SelectionBackColor = AppConfig.ChecklistGoodTabUnselectedBg,
+              SelectionForeColor = AppConfig.ChecklistGoodHeaderFg,
+              Font = new(Font, FontStyle.Regular),
+            };
+          }
+        }
+        else
+        {
+          squadPerkList.Rows.Add($"No squad selected");
+          squadPerkList.Rows[0].Height = squadPerkList.Rows[0].Height + 4;
+          squadPerkList.Rows[0].DividerHeight += 4;
+          squadPerkList.Rows[0].Frozen = true;
+          squadPerkList.Rows[0].Cells[0].Style = squadPerkList.Rows[0].Cells[1].Style = new()
+          {
+            BackColor = AppConfig.SquadHeaderBg,
+            ForeColor = AppConfig.WindowTitleFg,
+            SelectionBackColor = AppConfig.SquadHeaderBg,
+            SelectionForeColor = AppConfig.WindowTitleFg,
+            Alignment = DataGridViewContentAlignment.MiddleCenter,
+            Font = new(Font, FontStyle.Italic),
+            Padding = new(25, 0, 0, 0)
           };
         }
       }
+
       foreach (Soldier s in rosterIn)
       {
         if (!shivCheckbox.Checked && s.IsShiv) continue;
@@ -1169,7 +979,7 @@ namespace RosterizerLW
         if (selectedRow is not null && ((selectedRow.Cells[0].Value ?? "").ToString() ?? "").Contains(f.LName) && Int64.Parse(((selectedRow.Cells[10].Value ?? "").ToString() ?? "")) == f.Xp)
           selectedRowIndex = filteredSoldierIndex;
         DataGridViewRow thisRow = rosterGridView.Rows[filteredSoldierIndex];
-        //if (f.InSquad) thisRow.Cells[0].Style = thisRow.Cells[1].Style = new() { BackColor = squadRowBg, SelectionBackColor = squadRowBg, ForeColor = squadRowFg, SelectionForeColor = squadRowFg, };
+        //if (f.InSquad) thisRow.Cells[0].Style = thisRow.Cells[1].Style = new() { BackColor = AppConfig.SquadRowBg, SelectionBackColor = AppConfig.SquadRowBg, ForeColor = AppConfig.SquadRowFg, SelectionForeColor = AppConfig.SquadRowFg, };
 
         if (!f.IsShiv && f.IsWounded && f.HoursOut > RecoverableHrs)
         {
@@ -1178,18 +988,18 @@ namespace RosterizerLW
           thisRow.Cells["HP"].Style =
           thisRow.Cells["Will"].Style =
           thisRow.Cells["Def"].Style = StatWoundBgStyle
-            ? new() { BackColor = woundBg, SelectionBackColor = woundBg, ForeColor = deadFg, SelectionForeColor = deadFg, Font = new(Font, FontStyle.Regular) }
-            : new() { BackColor = gridCellBg, SelectionBackColor = gridCellBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg, Font = new(Font, FontStyle.Regular) };
+            ? new() { BackColor = AppConfig.WoundBg, SelectionBackColor = AppConfig.WoundBg, ForeColor = AppConfig.DeadFg, SelectionForeColor = AppConfig.DeadFg, Font = new(Font, FontStyle.Regular) }
+            : new() { BackColor = AppConfig.GridCellBg, SelectionBackColor = AppConfig.GridCellBg, ForeColor = AppConfig.GridCellFg, SelectionForeColor = AppConfig.GridCellFg, Font = new(Font, FontStyle.Regular) };
 
           thisRow.Cells["SoldierClass"].Style =
           thisRow.Cells["RankName"].Style =
           thisRow.Cells["XP"].Style =
           thisRow.Cells["Next"].Style = LongWoundBgStyle
-            ? new() { BackColor = woundBg, SelectionBackColor = woundBg, ForeColor = deadFg, SelectionForeColor = deadFg, Font = new(Font, FontStyle.Regular) }
-            : new() { BackColor = gridCellBg, SelectionBackColor = gridCellBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg, Font = new(Font, FontStyle.Regular) };
+            ? new() { BackColor = AppConfig.WoundBg, SelectionBackColor = AppConfig.WoundBg, ForeColor = AppConfig.DeadFg, SelectionForeColor = AppConfig.DeadFg, Font = new(Font, FontStyle.Regular) }
+            : new() { BackColor = AppConfig.GridCellBg, SelectionBackColor = AppConfig.GridCellBg, ForeColor = AppConfig.GridCellFg, SelectionForeColor = AppConfig.GridCellFg, Font = new(Font, FontStyle.Regular) };
 
           thisRow.Cells["Number"].Style =
-            new() { BackColor = rosterGridView.BackgroundColor, SelectionBackColor = rosterGridView.BackgroundColor, ForeColor = deadFg, SelectionForeColor = deadFg, Font = SmallFont };
+            new() { BackColor = rosterGridView.BackgroundColor, SelectionBackColor = rosterGridView.BackgroundColor, ForeColor = AppConfig.DeadFg, SelectionForeColor = AppConfig.DeadFg, Font = SmallFont };
         }
         else if (f.IsShiv)
         {
@@ -1198,60 +1008,60 @@ namespace RosterizerLW
           thisRow.Cells["HP"].Style =
           thisRow.Cells["Will"].Style =
           thisRow.Cells["Def"].Style =
-            new() { BackColor = shivBg, SelectionBackColor = shivBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg, Font = new(Font, FontStyle.Regular) };
+            new() { BackColor = AppConfig.ShivBg, SelectionBackColor = AppConfig.ShivBg, ForeColor = AppConfig.GridCellFg, SelectionForeColor = AppConfig.GridCellFg, Font = new(Font, FontStyle.Regular) };
 
           thisRow.Cells["Number"].Style =
-            new() { BackColor = rosterGridView.BackgroundColor, SelectionBackColor = rosterGridView.BackgroundColor, ForeColor = deadFg, SelectionForeColor = deadFg, Font = SmallFont };
+            new() { BackColor = rosterGridView.BackgroundColor, SelectionBackColor = rosterGridView.BackgroundColor, ForeColor = AppConfig.DeadFg, SelectionForeColor = AppConfig.DeadFg, Font = SmallFont };
         }
         else
         {
           thisRow.Cells["Aim"].Style = new()
           {
-            BackColor = maxAim ? maxBg : minAim ? minBg : hiAim ? hiBg : loAim ? loBg : gridCellBg,
-            SelectionBackColor = maxAim ? maxBg : minAim ? minBg : hiAim ? hiBg : loAim ? loBg : gridCellBg,
-            ForeColor = gridCellFg,
-            SelectionForeColor = gridCellFg,
+            BackColor = maxAim ? AppConfig.MaxBg : minAim ? AppConfig.MinBg : hiAim ? AppConfig.HiBg : loAim ? AppConfig.LoBg : AppConfig.GridCellBg,
+            SelectionBackColor = maxAim ? AppConfig.MaxBg : minAim ? AppConfig.MinBg : hiAim ? AppConfig.HiBg : loAim ? AppConfig.LoBg : AppConfig.GridCellBg,
+            ForeColor = AppConfig.GridCellFg,
+            SelectionForeColor = AppConfig.GridCellFg,
           };
           thisRow.Cells["Mob"].Style = new()
           {
-            BackColor = maxMob ? maxBg : minMob ? minBg : hiMob ? hiBg : loMob ? loBg : gridCellBg,
-            SelectionBackColor = maxMob ? maxBg : minMob ? minBg : hiMob ? hiBg : loMob ? loBg : gridCellBg,
-            ForeColor = gridCellFg,
-            SelectionForeColor = gridCellFg,
+            BackColor = maxMob ? AppConfig.MaxBg : minMob ? AppConfig.MinBg : hiMob ? AppConfig.HiBg : loMob ? AppConfig.LoBg : AppConfig.GridCellBg,
+            SelectionBackColor = maxMob ? AppConfig.MaxBg : minMob ? AppConfig.MinBg : hiMob ? AppConfig.HiBg : loMob ? AppConfig.LoBg : AppConfig.GridCellBg,
+            ForeColor = AppConfig.GridCellFg,
+            SelectionForeColor = AppConfig.GridCellFg,
           };
           thisRow.Cells["HP"].Style = new()
           {
-            BackColor = maxHp ? maxBg : minHp ? minBg : hiHp ? hiBg : loHp ? loBg : gridCellBg,
-            SelectionBackColor = maxHp ? maxBg : minHp ? minBg : hiHp ? hiBg : loHp ? loBg : gridCellBg,
-            ForeColor = gridCellFg,
-            SelectionForeColor = gridCellFg,
+            BackColor = maxHp ? AppConfig.MaxBg : minHp ? AppConfig.MinBg : hiHp ? AppConfig.HiBg : loHp ? AppConfig.LoBg : AppConfig.GridCellBg,
+            SelectionBackColor = maxHp ? AppConfig.MaxBg : minHp ? AppConfig.MinBg : hiHp ? AppConfig.HiBg : loHp ? AppConfig.LoBg : AppConfig.GridCellBg,
+            ForeColor = AppConfig.GridCellFg,
+            SelectionForeColor = AppConfig.GridCellFg,
           };
           thisRow.Cells["Will"].Style = new()
           {
-            BackColor = maxWill ? maxBg : minWill ? minBg : hiWill ? hiBg : loWill ? loBg : gridCellBg,
-            SelectionBackColor = maxWill ? maxBg : minWill ? minBg : hiWill ? hiBg : loWill ? loBg : gridCellBg,
-            ForeColor = gridCellFg,
-            SelectionForeColor = gridCellFg,
+            BackColor = maxWill ? AppConfig.MaxBg : minWill ? AppConfig.MinBg : hiWill ? AppConfig.HiBg : loWill ? AppConfig.LoBg : AppConfig.GridCellBg,
+            SelectionBackColor = maxWill ? AppConfig.MaxBg : minWill ? AppConfig.MinBg : hiWill ? AppConfig.HiBg : loWill ? AppConfig.LoBg : AppConfig.GridCellBg,
+            ForeColor = AppConfig.GridCellFg,
+            SelectionForeColor = AppConfig.GridCellFg,
           };
           thisRow.Cells["Def"].Style = new()
           {
-            BackColor = maxDef ? maxBg : minDef ? minBg : hiDef ? hiBg : loDef ? loBg : gridCellBg,
-            SelectionBackColor = maxDef ? maxBg : minDef ? minBg : hiDef ? hiBg : loDef ? loBg : gridCellBg,
-            ForeColor = gridCellFg,
-            SelectionForeColor = gridCellFg,
+            BackColor = maxDef ? AppConfig.MaxBg : minDef ? AppConfig.MinBg : hiDef ? AppConfig.HiBg : loDef ? AppConfig.LoBg : AppConfig.GridCellBg,
+            SelectionBackColor = maxDef ? AppConfig.MaxBg : minDef ? AppConfig.MinBg : hiDef ? AppConfig.HiBg : loDef ? AppConfig.LoBg : AppConfig.GridCellBg,
+            ForeColor = AppConfig.GridCellFg,
+            SelectionForeColor = AppConfig.GridCellFg,
           };
           thisRow.Cells["SoldierClass"].Style =
           thisRow.Cells["RankName"].Style =
           thisRow.Cells["XP"].Style =
           thisRow.Cells["Next"].Style =
-            new() { BackColor = gridCellBg, SelectionBackColor = gridCellBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg, Font = new(Font, FontStyle.Regular) };
+            new() { BackColor = AppConfig.GridCellBg, SelectionBackColor = AppConfig.GridCellBg, ForeColor = AppConfig.GridCellFg, SelectionForeColor = AppConfig.GridCellFg, Font = new(Font, FontStyle.Regular) };
 
           thisRow.Cells["Number"].Style =
-            new() { BackColor = rosterGridView.BackgroundColor, SelectionBackColor = rosterGridView.BackgroundColor, ForeColor = deadFg, SelectionForeColor = deadFg, Font = SmallFont };
+            new() { BackColor = rosterGridView.BackgroundColor, SelectionBackColor = rosterGridView.BackgroundColor, ForeColor = AppConfig.DeadFg, SelectionForeColor = AppConfig.DeadFg, Font = SmallFont };
         }
 
-        if (f.IsShiv) thisRow.DefaultCellStyle = new() { BackColor = shivBg, SelectionBackColor = shivBg };
-        else if (f.IsDead) thisRow.Cells["Status"].Style = new() { BackColor = deadBg, SelectionBackColor = deadBg, ForeColor = deadFg, SelectionForeColor = deadFg };
+        if (f.IsShiv) thisRow.DefaultCellStyle = new() { BackColor = AppConfig.ShivBg, SelectionBackColor = AppConfig.ShivBg };
+        else if (f.IsDead) thisRow.Cells["Status"].Style = new() { BackColor = AppConfig.DeadBg, SelectionBackColor = AppConfig.DeadBg, ForeColor = AppConfig.DeadFg, SelectionForeColor = AppConfig.DeadFg };
 
         if (f.LName == "TamTam") thisRow.Cells["LName"].Value = $"TamTam ♥";
 
@@ -1282,13 +1092,13 @@ namespace RosterizerLW
         {
           if (f.HoursOut <= RecoverableHrs)
           {
-            if (f.IsWounded) thisRow.Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg, Font = new(Font, FontStyle.Bold), ForeColor = deadFg, SelectionForeColor = deadFg };
-            else if (f.IsFatigued) thisRow.Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg, Font = new(Font, FontStyle.Bold), ForeColor = gridCellFg, SelectionForeColor = gridCellFg };
+            if (f.IsWounded) thisRow.Cells["Status"].Style = new() { BackColor = AppConfig.WoundBg, SelectionBackColor = AppConfig.WoundBg, Font = new(Font, FontStyle.Bold), ForeColor = AppConfig.DeadFg, SelectionForeColor = AppConfig.DeadFg };
+            else if (f.IsFatigued) thisRow.Cells["Status"].Style = new() { BackColor = AppConfig.FatigueBg, SelectionBackColor = AppConfig.FatigueBg, Font = new(Font, FontStyle.Bold), ForeColor = AppConfig.GridCellFg, SelectionForeColor = AppConfig.GridCellFg };
           }
           else
           {
-            if (f.IsWounded) thisRow.Cells["Status"].Style = new() { BackColor = woundBg, SelectionBackColor = woundBg, ForeColor = deadFg, SelectionForeColor = deadFg };
-            else if (f.IsFatigued) thisRow.Cells["Status"].Style = new() { BackColor = fatigueBg, SelectionBackColor = fatigueBg, ForeColor = gridCellFg, SelectionForeColor = gridCellFg };
+            if (f.IsWounded) thisRow.Cells["Status"].Style = new() { BackColor = AppConfig.WoundBg, SelectionBackColor = AppConfig.WoundBg, ForeColor = AppConfig.DeadFg, SelectionForeColor = AppConfig.DeadFg };
+            else if (f.IsFatigued) thisRow.Cells["Status"].Style = new() { BackColor = AppConfig.FatigueBg, SelectionBackColor = AppConfig.FatigueBg, ForeColor = AppConfig.GridCellFg, SelectionForeColor = AppConfig.GridCellFg };
           }
         }
 
@@ -1392,8 +1202,8 @@ namespace RosterizerLW
     {
       int trueValue = 0x01;
 
-      int formHeaderBackgroundColorValue = (windowTitleBg.B << 16) | (windowTitleBg.G << 8) | windowTitleBg.R;
-      int formHeaderTextColorValue = (windowTitleFg.B << 16) | (windowTitleFg.G << 8) | windowTitleFg.R;
+      int formHeaderBackgroundColorValue = (AppConfig.WindowTitleBg.B << 16) | (AppConfig.WindowTitleBg.G << 8) | AppConfig.WindowTitleBg.R;
+      int formHeaderTextColorValue = (AppConfig.WindowTitleFg.B << 16) | (AppConfig.WindowTitleFg.G << 8) | AppConfig.WindowTitleFg.R;
 
       DwmSetWindowAttribute(Handle, 20, ref trueValue, Marshal.SizeOf(trueValue));
       DwmSetWindowAttribute(Handle, 35, ref formHeaderBackgroundColorValue, Marshal.SizeOf(formHeaderBackgroundColorValue));
@@ -1729,10 +1539,10 @@ namespace RosterizerLW
         soldierPerksGridView.Rows.Add($"{s?.LName} - {s?.RankName}");
         soldierPerksGridView.Rows[0].Cells[0].Style = new()
         {
-          BackColor = soldierTabUnselectedBg,
-          ForeColor = windowTitleFg,
-          SelectionBackColor = soldierTabUnselectedBg,
-          SelectionForeColor = windowTitleFg,
+          BackColor = AppConfig.SoldierTabUnselectedBg,
+          ForeColor = AppConfig.WindowTitleFg,
+          SelectionBackColor = AppConfig.SoldierTabUnselectedBg,
+          SelectionForeColor = AppConfig.WindowTitleFg,
           Font = new(Font, FontStyle.Regular),
           Alignment = DataGridViewContentAlignment.MiddleCenter
         };
@@ -1748,10 +1558,10 @@ namespace RosterizerLW
           {
             soldierPerksGridView.Rows[i + 1].Cells[0].Style = new()
             {
-              BackColor = checklistedPerkBg,
-              ForeColor = checklistGoodHeaderFg,
-              SelectionBackColor = checklistedPerkBg,
-              SelectionForeColor = checklistGoodHeaderFg,
+              BackColor = AppConfig.ChecklistedPerkBg,
+              ForeColor = AppConfig.ChecklistGoodHeaderFg,
+              SelectionBackColor = AppConfig.ChecklistedPerkBg,
+              SelectionForeColor = AppConfig.ChecklistGoodHeaderFg,
               Font = new(Font, FontStyle.Italic),
             };
           }
@@ -1767,10 +1577,10 @@ namespace RosterizerLW
 
             soldierPerksGridView.Rows[i + 1].Cells[0].Style = new()
             {
-              BackColor = checklistedPerkBg,
-              ForeColor = checklistGoodHeaderFg,
-              SelectionBackColor = checklistedPerkBg,
-              SelectionForeColor = checklistGoodHeaderFg,
+              BackColor = AppConfig.ChecklistedPerkBg,
+              ForeColor = AppConfig.ChecklistGoodHeaderFg,
+              SelectionBackColor = AppConfig.ChecklistedPerkBg,
+              SelectionForeColor = AppConfig.ChecklistGoodHeaderFg,
               Font = new(Font, FontStyle.Regular),
             };
           }
@@ -1936,14 +1746,14 @@ namespace RosterizerLW
       {
         if (e.RowIndex == -1 && e.ColumnIndex == -1)
         {
-          e.Graphics?.FillRectangle(new SolidBrush(ChatGemActivated is null ? Color.Black : gridBg), new(e.ClipBounds.X, e.ClipBounds.Y, e.ClipBounds.Width, e.ClipBounds.Height));
-          //e.Graphics?.FillRectangle(new SolidBrush(rosterHeaderBg), new(e.ClipBounds.X, e.ClipBounds.Y + 1, e.ClipBounds.Width, e.ClipBounds.Height));
+          e.Graphics?.FillRectangle(new SolidBrush(ChatGemActivated is null ? Color.Black : AppConfig.GridBg), new(e.ClipBounds.X, e.ClipBounds.Y, e.ClipBounds.Width, e.ClipBounds.Height));
+          //e.Graphics?.FillRectangle(new SolidBrush(AppConfig.RosterHeaderBg), new(e.ClipBounds.X, e.ClipBounds.Y + 1, e.ClipBounds.Width, e.ClipBounds.Height));
           TextRenderer.DrawText(
             e.Graphics ?? ((DataGridView)sender).CreateGraphics(),
             string.Format("{0}", "♦"),
             new Font("Tahoma", 14F, FontStyle.Regular, GraphicsUnit.Point, 0),
             new Rectangle(e.ClipBounds.X + 1, e.ClipBounds.Y - 2, e.ClipBounds.Width, e.ClipBounds.Height),
-            ChatGemActivated is null ? ChatGemPerfect : ChatGemActivated == true ? ChatGemActive : ChatGemIdle,
+            ChatGemActivated is null ? AppConfig.ChatGemPerfect : ChatGemActivated == true ? AppConfig.ChatGemActive : AppConfig.ChatGemIdle,
             TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding
           );
           e.Handled = true;
@@ -1952,9 +1762,9 @@ namespace RosterizerLW
 
       if (isSquadGrid && (e.ColumnIndex != 0 && e.ColumnIndex != 1) && e.RowIndex == (int?)(squadSizeCombx.SelectedItem))
       {
-        DrawSquadLine(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), inSquadBookendsBg);
-        if (e.ColumnIndex > 0 && e.ColumnIndex < 12) DrawSquadLine2(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), Color.FromArgb(150, gridCellBg));
-        else DrawSquadLine2(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), inSquadBookendsBg);
+        DrawSquadLine(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), AppConfig.InSquadBookendsBg);
+        if (e.ColumnIndex > 0 && e.ColumnIndex < 12) DrawSquadLine2(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), Color.FromArgb(150, AppConfig.GridCellBg));
+        else DrawSquadLine2(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), AppConfig.InSquadBookendsBg);
       }
 
       if (e.ColumnIndex == 12)
@@ -1965,16 +1775,16 @@ namespace RosterizerLW
         {
           if (e.RowIndex + 1 <= (int?)(squadSizeCombx.SelectedItem))
           {
-            bgColor = inSquadBookendsBg;
-            fgColor = squadHeaderFg;
+            bgColor = AppConfig.InSquadBookendsBg;
+            fgColor = AppConfig.SquadHeaderFg;
           }
-          else bgColor = fgColor = gridBg;
+          else bgColor = fgColor = AppConfig.GridBg;
 
         }
-        else bgColor = gridBg;
+        else bgColor = AppConfig.GridBg;
 
         e.Graphics?.FillRectangle(new SolidBrush(bgColor), new(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height));
-        e.Graphics?.DrawLine(new Pen(statLineFg, 1), new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Left, e.CellBounds.Bottom));
+        e.Graphics?.DrawLine(new Pen(AppConfig.StatLineFg, 1), new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Left, e.CellBounds.Bottom));
         TextRenderer.DrawText(
           e.Graphics ?? ((DataGridView)sender).CreateGraphics(),
           string.Format("{0}", e.FormattedValue),
@@ -1991,7 +1801,7 @@ namespace RosterizerLW
         if (e.ColumnIndex == 0)
         {
           if (((DataGridView)sender).Name == "squadGridView" && e.RowIndex < (int?)(squadSizeCombx.SelectedItem))
-            e.Graphics?.FillRectangle(new SolidBrush(inSquadBookendsBg), new(e.CellBounds.X - 15, e.CellBounds.Y, 15, 24));
+            e.Graphics?.FillRectangle(new SolidBrush(AppConfig.InSquadBookendsBg), new(e.CellBounds.X - 15, e.CellBounds.Y, 15, 24));
 
           bool hasChecklistPerk = (bool?)((DataGridView)sender).Rows[e.RowIndex].Cells[15].Value == true;
           bool hasUnselectedPerk = (bool?)((DataGridView)sender).Rows[e.RowIndex].Cells[17].Value == true;
@@ -2003,7 +1813,7 @@ namespace RosterizerLW
             Rectangle c = new(e.CellBounds.X - 13, e.CellBounds.Y + 8, 9, 9);
 
             e.Graphics?.DrawEllipse(new Pen(((DataGridView)sender).DefaultCellStyle.ForeColor, 2), c);
-            e.Graphics?.FillEllipse(new SolidBrush(checklistGoodTabUnselectedBg), r);
+            e.Graphics?.FillEllipse(new SolidBrush(AppConfig.ChecklistGoodTabUnselectedBg), r);
           }
 
           // draw dot indicating has unselected perks
@@ -2014,7 +1824,7 @@ namespace RosterizerLW
 
             e.PaintBackground(e.CellBounds, false);
             e.Graphics?.DrawEllipse(new Pen(Color.Black, 2), r2);
-            e.Graphics?.FillEllipse(new SolidBrush(unselectedSoldierPerkBg), r);
+            e.Graphics?.FillEllipse(new SolidBrush(AppConfig.UnselectedSoldierPerkBg), r);
           }
         }
         // draw shortlist/squad indicator in roster view
@@ -2033,7 +1843,7 @@ namespace RosterizerLW
 
             e.PaintBackground(e.CellBounds, false);
             e.Graphics?.DrawRectangle(new Pen(Color.Black, 2), r2);
-            e.Graphics?.FillRectangle(new SolidBrush(hiBg), r);
+            e.Graphics?.FillRectangle(new SolidBrush(AppConfig.HiBg), r);
             if (!inSquad)
             {
               TextRenderer.DrawText(
@@ -2041,7 +1851,7 @@ namespace RosterizerLW
                 isWoobie ? "♥" : "□",
                 isWoobie ? Font : SmallFont,
                 new Rectangle(e.CellBounds.X + 2, e.CellBounds.Y + 6, 12, 12),
-                isWoobie ? woobieBg : ((DataGridView)sender).DefaultCellStyle.ForeColor,
+                isWoobie ? AppConfig.WoobieBg : ((DataGridView)sender).DefaultCellStyle.ForeColor,
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
             }
           }
@@ -2052,7 +1862,7 @@ namespace RosterizerLW
             Rectangle c = new(e.CellBounds.X + 4, e.CellBounds.Y + 7, 6, 6);
 
             e.Graphics?.DrawRectangle(new Pen(((DataGridView)sender).DefaultCellStyle.ForeColor, 2), c);
-            e.Graphics?.FillRectangle(new SolidBrush(windowTitleBg), r);
+            e.Graphics?.FillRectangle(new SolidBrush(AppConfig.WindowTitleBg), r);
           }
 
           TextRenderer.DrawText(
@@ -2070,36 +1880,18 @@ namespace RosterizerLW
         {
           Color classColor = Color.FromArgb(100, 0, 0, 0);
 
-          switch (((e.FormattedValue ?? "").ToString() ?? "").ToLower())
+          classColor = ((e.FormattedValue ?? "").ToString() ?? "").ToLower() switch
           {
-            case "assault":
-              classColor = AssaultClassColor;
-              break;
-            case "engineer":
-              classColor = EngineerClassColor;
-              break;
-            case "gunner":
-              classColor = GunnerClassColor;
-              break;
-            case "infantry":
-              classColor = InfantryClassColor;
-              break;
-            case "medic":
-              classColor = MedicClassColor;
-              break;
-            case "rocketeer":
-              classColor = RocketeerClassColor;
-              break;
-            case "scout":
-              classColor = ScoutClassColor;
-              break;
-            case "sniper":
-              classColor = SniperClassColor;
-              break;
-            default:
-              classColor = ShivClassColor;
-              break;
-          }
+            "assault" => AppConfig.AssaultClassColor,
+            "engineer" => AppConfig.EngineerClassColor,
+            "gunner" => AppConfig.GunnerClassColor,
+            "infantry" => AppConfig.InfantryClassColor,
+            "medic" => AppConfig.MedicClassColor,
+            "rocketeer" => AppConfig.RocketeerClassColor,
+            "scout" => AppConfig.ScoutClassColor,
+            "sniper" => AppConfig.SniperClassColor,
+            _ => AppConfig.ShivClassColor,
+          };
 
           // define locations of graphics
           Rectangle dotRect = new(e.CellBounds.X + 1, e.CellBounds.Y + 5, 12, 12);
@@ -2107,7 +1899,7 @@ namespace RosterizerLW
           Rectangle textRect = new(e.CellBounds.X + 8, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height);
 
           e.PaintBackground(e.CellBounds, false);                                               // draw cell background
-          e.Graphics?.DrawEllipse(new Pen(ClassColorShadow, 4F), outlineRect);                   // draw shadow
+          e.Graphics?.DrawEllipse(new Pen(AppConfig.ClassColorShadow, 4F), outlineRect);                   // draw shadow
           e.Graphics?.FillEllipse(new SolidBrush(Color.FromArgb(255, 180, 180, 180)), dotRect);  // draw dot bg
           e.Graphics?.FillEllipse(new SolidBrush(classColor), dotRect);                          // draw dot
           TextRenderer.DrawText(                                                                // draw class name text
@@ -2152,13 +1944,13 @@ namespace RosterizerLW
 
               if (statHeirarchy.Count > 6 && thisStat >= statHeirarchy[1])
               {
-                bgColor = hiBg;
+                bgColor = AppConfig.HiBg;
               }
               else if (statHeirarchy.Count > 6 && thisStat <= statHeirarchy[6])
               {
-                bgColor = loBg;
+                bgColor = AppConfig.LoBg;
               }
-              else bgColor = gridCellBg;
+              else bgColor = AppConfig.GridCellBg;
 
               e.PaintBackground(e.CellBounds, false);
               e.Graphics?.FillRectangle(new SolidBrush(bgColor), e.CellBounds);
@@ -2279,10 +2071,10 @@ namespace RosterizerLW
     {
       hotStyle = new()
       {
-        ForeColor = gridCellFg,
-        SelectionForeColor = gridCellFg,
-        BackColor = gridCellBg,
-        SelectionBackColor = gridCellBg
+        ForeColor = AppConfig.GridCellFg,
+        SelectionForeColor = AppConfig.GridCellFg,
+        BackColor = AppConfig.GridCellBg,
+        SelectionBackColor = AppConfig.GridCellBg
       };
 
       if (sender is null || ((TabControl)sender).SelectedIndex == 1)
@@ -2297,10 +2089,10 @@ namespace RosterizerLW
           ListRoster([.. Shortlist.OrderBy(x => x.InSquad)]);
           hotStyle = new()
           {
-            ForeColor = gridCellFg,
-            SelectionForeColor = gridCellFg,
-            BackColor = gridCellBg,
-            SelectionBackColor = gridCellBg
+            ForeColor = AppConfig.GridCellFg,
+            SelectionForeColor = AppConfig.GridCellFg,
+            BackColor = AppConfig.GridCellBg,
+            SelectionBackColor = AppConfig.GridCellBg
           };
         }
       }
@@ -2331,7 +2123,7 @@ namespace RosterizerLW
         Alignment = StringAlignment.Center
       };
 
-      SolidBrush backColor = new(windowBg);
+      SolidBrush backColor = new(AppConfig.WindowBg);
       e.Graphics.FillRectangle(backColor, rec);
 
       for (int i = 0; i < tabControl1.TabPages.Count; i++)
@@ -2344,39 +2136,39 @@ namespace RosterizerLW
         {
           if (bSelected)
           {
-            e.Graphics.FillRectangle(new SolidBrush(treeHeaderBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(treeHeaderFg), tabTextArea, StrFormat);
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.TreeHeaderBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.TreeHeaderFg), tabTextArea, StrFormat);
           }
           else
           {
-            e.Graphics.FillRectangle(new SolidBrush(treeTabUnselectedBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(treeHeaderFg), tabTextArea, StrFormat);
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.TreeTabUnselectedBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.TreeHeaderFg), tabTextArea, StrFormat);
           }
         }
         else if (i == 1) // squad
         {
           if (bSelected)
           {
-            e.Graphics.FillRectangle(new SolidBrush(squadHeaderBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(squadHeaderFg), tabTextArea, StrFormat);
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SquadHeaderBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SquadHeaderFg), tabTextArea, StrFormat);
           }
           else
           {
-            e.Graphics.FillRectangle(new SolidBrush(squadTabUnselectedBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(squadHeaderFg), tabTextArea, StrFormat);
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SquadTabUnselectedBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SquadHeaderFg), tabTextArea, StrFormat);
           }
         }
         else if (i == 2) // soldier
         {
           if (bSelected)
           {
-            e.Graphics.FillRectangle(new SolidBrush(soldierHeaderBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(soldierHeaderFg), tabTextArea, StrFormat);
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SoldierHeaderBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SoldierHeaderFg), tabTextArea, StrFormat);
           }
           else
           {
-            e.Graphics.FillRectangle(new SolidBrush(soldierTabUnselectedBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(soldierHeaderFg), tabTextArea, StrFormat);
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SoldierTabUnselectedBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SoldierHeaderFg), tabTextArea, StrFormat);
           }
         }
         else if (i == 3) // checklist
@@ -2385,13 +2177,13 @@ namespace RosterizerLW
           {
             if (bSelected)
             {
-              e.Graphics.FillRectangle(new SolidBrush(checklistGoodHeaderBg), recBounds);
-              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(checklistGoodHeaderFg), tabTextArea, StrFormat);
+              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistGoodHeaderBg), recBounds);
+              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistGoodHeaderFg), tabTextArea, StrFormat);
             }
             else
             {
-              e.Graphics.FillRectangle(new SolidBrush(checklistGoodTabUnselectedBg), recBounds);
-              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(checklistGoodHeaderFg), tabTextArea, StrFormat);
+              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistGoodTabUnselectedBg), recBounds);
+              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistGoodHeaderFg), tabTextArea, StrFormat);
             }
           }
           else
@@ -2400,15 +2192,15 @@ namespace RosterizerLW
 
             if (bSelected)
             {
-              e.Graphics.FillRectangle(new SolidBrush(checklistBadHeaderBg), r);
-              e.Graphics.DrawRectangle(new Pen(checklistBadTabHighlight, 3), r);
-              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(checklistBadHeaderFg), tabTextArea, StrFormat);
+              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistBadHeaderBg), r);
+              e.Graphics.DrawRectangle(new Pen(AppConfig.ChecklistBadTabHighlight, 3), r);
+              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistBadHeaderFg), tabTextArea, StrFormat);
             }
             else
             {
-              e.Graphics.FillRectangle(new SolidBrush(checklistBadTabUnselectedBg), r);
-              e.Graphics.DrawRectangle(new Pen(checklistBadTabHighlight, 3), r);
-              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(checklistBadHeaderFg), tabTextArea, StrFormat);
+              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistBadTabUnselectedBg), r);
+              e.Graphics.DrawRectangle(new Pen(AppConfig.ChecklistBadTabHighlight, 3), r);
+              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistBadHeaderFg), tabTextArea, StrFormat);
             }
           }
         }
@@ -2416,13 +2208,13 @@ namespace RosterizerLW
         {
           if (bSelected)
           {
-            e.Graphics.FillRectangle(new SolidBrush(windowBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(windowFg), tabTextArea, StrFormat);
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.WindowBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.WindowFg), tabTextArea, StrFormat);
           }
           else
           {
-            e.Graphics.FillRectangle(new SolidBrush(windowBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(windowFg), tabTextArea, StrFormat);
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.WindowBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.WindowFg), tabTextArea, StrFormat);
           }
         }
       }
@@ -2479,7 +2271,7 @@ namespace RosterizerLW
 
       ChecklistPass = false;
       timerLabel.Font = SevenSegmentFont;
-      timerLabel.ForeColor = windowFg;
+      timerLabel.ForeColor = AppConfig.WindowFg;
       scoreLabel.Text = "";
       ChecklistPassTime = 0;
       Shortlist = [];
@@ -2505,7 +2297,7 @@ namespace RosterizerLW
       {
         if (ChecklistPassTime == 0) ChecklistPassTime = timer2.ElapsedMilliseconds / 1000;
         scoreLabel.Font = timerLabel.Font = SevenSegmentFont;
-        timerLabel.ForeColor = scoreLabel.ForeColor = maxBg;
+        timerLabel.ForeColor = scoreLabel.ForeColor = AppConfig.MaxBg;
         if (DateTime.Now.Millisecond < 500) timerLabel.Text = "";
         else scoreLabel.Text = $"Score: {CalculateScore()}";
         timerRunning = false;
@@ -2677,7 +2469,7 @@ namespace RosterizerLW
             for (int i = 1; i <= 3; i++) if (((treeDataGrid.Rows[i].Cells[0].Value ?? "").ToString() ?? "").Contains('\\')) treeDataGrid.Rows.RemoveAt(i);
 
             treeDataGrid.Rows[0].Frozen = true;
-            treeDataGrid.Rows[0].DefaultCellStyle = new() { BackColor = treeTabUnselectedBg, ForeColor = treeHeaderFg, SelectionBackColor = treeTabUnselectedBg, SelectionForeColor = treeHeaderFg };
+            treeDataGrid.Rows[0].DefaultCellStyle = new() { BackColor = AppConfig.TreeTabUnselectedBg, ForeColor = AppConfig.TreeHeaderFg, SelectionBackColor = AppConfig.TreeTabUnselectedBg, SelectionForeColor = AppConfig.TreeHeaderFg };
             treeDataGrid.Rows[0].Height = treeDataGrid.Rows[0].Height + 4;
             treeDataGrid.Rows[0].DividerHeight += 4;
 
@@ -2690,7 +2482,7 @@ namespace RosterizerLW
 
             for (int i = 0; i <= 1; i++)
             {
-              treeDataGrid.Rows[i].DefaultCellStyle = new() { BackColor = treeTabUnselectedBg, ForeColor = treeHeaderFg, SelectionBackColor = treeTabUnselectedBg, SelectionForeColor = treeHeaderFg };
+              treeDataGrid.Rows[i].DefaultCellStyle = new() { BackColor = AppConfig.TreeTabUnselectedBg, ForeColor = AppConfig.TreeHeaderFg, SelectionBackColor = AppConfig.TreeTabUnselectedBg, SelectionForeColor = AppConfig.TreeHeaderFg };
               treeDataGrid.Rows[i].Frozen = true;
             }
             treeDataGrid.Rows[1].Height = treeDataGrid.Rows[1].Height + 4;
@@ -2705,7 +2497,7 @@ namespace RosterizerLW
 
             for (int i = 0; i <= 2; i++)
             {
-              treeDataGrid.Rows[i].DefaultCellStyle = new() { BackColor = treeTabUnselectedBg, ForeColor = treeHeaderFg, SelectionBackColor = treeTabUnselectedBg, SelectionForeColor = treeHeaderFg };
+              treeDataGrid.Rows[i].DefaultCellStyle = new() { BackColor = AppConfig.TreeTabUnselectedBg, ForeColor = AppConfig.TreeHeaderFg, SelectionBackColor = AppConfig.TreeTabUnselectedBg, SelectionForeColor = AppConfig.TreeHeaderFg };
               treeDataGrid.Rows[i].Frozen = true;
             }
             treeDataGrid.Rows[2].Height = treeDataGrid.Rows[2].Height + 4;
@@ -2718,7 +2510,7 @@ namespace RosterizerLW
             SetPerkTree(RosterTree4);
             for (int i = 0; i <= 3; i++)
             {
-              treeDataGrid.Rows[i].DefaultCellStyle = new() { BackColor = treeTabUnselectedBg, ForeColor = treeHeaderFg, SelectionBackColor = treeTabUnselectedBg, SelectionForeColor = treeHeaderFg };
+              treeDataGrid.Rows[i].DefaultCellStyle = new() { BackColor = AppConfig.TreeTabUnselectedBg, ForeColor = AppConfig.TreeHeaderFg, SelectionBackColor = AppConfig.TreeTabUnselectedBg, SelectionForeColor = AppConfig.TreeHeaderFg };
               treeDataGrid.Rows[i].Frozen = true;
             }
             treeDataGrid.Rows[3].Height = treeDataGrid.Rows[3].Height + 4;
@@ -2729,7 +2521,7 @@ namespace RosterizerLW
         }
       }
       int perkTreeLvl = singleLvl ? 0 : RosterPerkTree.Length;
-      if ((sender.Name == "squadPerkList" && clicked.StartsWith("Soldiers:")) || (sender.Name == "soldierPerksGridView" && clickedIndex == 0)) return;
+      if ((sender.Name == "squadPerkList" && (clicked.StartsWith("Soldiers:") || clicked.StartsWith("No squad"))) || (sender.Name == "soldierPerksGridView" && clickedIndex == 0)) return;
 
       switch (perkTreeLvl)
       {
@@ -2954,10 +2746,10 @@ namespace RosterizerLW
 
             ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = ((DataGridView)sender).Rows[e.RowIndex].Cells[1].Style = squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
             {
-              ForeColor = isWoobie ? woobieFg : rosterSquadHotTrackFg,
-              SelectionForeColor = isWoobie ? woobieFg : rosterSquadHotTrackFg,
-              BackColor = isWoobie ? woobieBg : rosterSquadHotTrackBg,
-              SelectionBackColor = isWoobie ? woobieBg : rosterSquadHotTrackBg
+              ForeColor = isWoobie ? AppConfig.WoobieFg : AppConfig.RosterSquadHotTrackFg,
+              SelectionForeColor = isWoobie ? AppConfig.WoobieFg : AppConfig.RosterSquadHotTrackFg,
+              BackColor = isWoobie ? AppConfig.WoobieBg : AppConfig.RosterSquadHotTrackBg,
+              SelectionBackColor = isWoobie ? AppConfig.WoobieBg : AppConfig.RosterSquadHotTrackBg
             };
             break;
           }
@@ -2981,10 +2773,10 @@ namespace RosterizerLW
       {
         squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
       for (int i = 0; i < ((DataGridView)sender).Rows.Count; i++)
@@ -3000,10 +2792,10 @@ namespace RosterizerLW
       {
         hotStyle = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
         Cursor cu = Cursors.Default;
         Soldier? s = null;
@@ -3018,10 +2810,10 @@ namespace RosterizerLW
 
             ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = ((DataGridView)sender).Rows[e.RowIndex].Cells[1].Style = rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
             {
-              ForeColor = isWoobie ? woobieFg : rosterSquadHotTrackFg,
-              SelectionForeColor = isWoobie ? woobieFg : rosterSquadHotTrackFg,
-              BackColor = isWoobie ? woobieBg : rosterSquadHotTrackBg,
-              SelectionBackColor = isWoobie ? woobieBg : rosterSquadHotTrackBg
+              ForeColor = isWoobie ? AppConfig.WoobieFg : AppConfig.RosterSquadHotTrackFg,
+              SelectionForeColor = isWoobie ? AppConfig.WoobieFg : AppConfig.RosterSquadHotTrackFg,
+              BackColor = isWoobie ? AppConfig.WoobieBg : AppConfig.RosterSquadHotTrackBg,
+              SelectionBackColor = isWoobie ? AppConfig.WoobieBg : AppConfig.RosterSquadHotTrackBg
             };
             break;
           }
@@ -3043,10 +2835,10 @@ namespace RosterizerLW
       {
         rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
       for (int i = 0; i < ((DataGridView)sender).Rows.Count; i++)
@@ -3073,17 +2865,17 @@ namespace RosterizerLW
           Int64.Parse(((squadGridView.Rows[i].Cells[10].Value ?? "").ToString() ?? "")))))
           squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
           {
-            ForeColor = windowTitleFg,
-            SelectionForeColor = windowTitleFg,
-            BackColor = windowTitleBg,
-            SelectionBackColor = windowTitleBg
+            ForeColor = AppConfig.WindowTitleFg,
+            SelectionForeColor = AppConfig.WindowTitleFg,
+            BackColor = AppConfig.WindowTitleBg,
+            SelectionBackColor = AppConfig.WindowTitleBg
           };
         else squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
 
@@ -3105,10 +2897,10 @@ namespace RosterizerLW
             {
               rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
               {
-                ForeColor = windowTitleFg,
-                SelectionForeColor = windowTitleFg,
-                BackColor = windowTitleBg,
-                SelectionBackColor = windowTitleBg
+                ForeColor = AppConfig.WindowTitleFg,
+                SelectionForeColor = AppConfig.WindowTitleFg,
+                BackColor = AppConfig.WindowTitleBg,
+                SelectionBackColor = AppConfig.WindowTitleBg
               };
               break;
             }
@@ -3116,10 +2908,10 @@ namespace RosterizerLW
             {
               rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
               {
-                ForeColor = gridCellFg,
-                SelectionForeColor = gridCellFg,
-                BackColor = gridCellBg,
-                SelectionBackColor = gridCellBg
+                ForeColor = AppConfig.GridCellFg,
+                SelectionForeColor = AppConfig.GridCellFg,
+                BackColor = AppConfig.GridCellBg,
+                SelectionBackColor = AppConfig.GridCellBg
               };
             }
         }
@@ -3128,10 +2920,10 @@ namespace RosterizerLW
       if (((((DataGridView)sender).Rows[e.RowIndex].Cells[0].Value ?? "").ToString() ?? "").Trim().StartsWith('\\')) return;
       ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = ((DataGridView)sender).Rows[e.RowIndex].Cells[1].Style = new()
       {
-        ForeColor = windowTitleFg,
-        SelectionForeColor = windowTitleFg,
-        BackColor = windowTitleBg,
-        SelectionBackColor = windowTitleBg
+        ForeColor = AppConfig.WindowTitleFg,
+        SelectionForeColor = AppConfig.WindowTitleFg,
+        BackColor = AppConfig.WindowTitleBg,
+        SelectionBackColor = AppConfig.WindowTitleBg
       };
     }
 
@@ -3140,16 +2932,16 @@ namespace RosterizerLW
       //// hot-track tree perk list
       for (int i = 0; i < squadGridView.Rows.Count; i++)
       {
-        squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new() { BackColor = gridCellBg, SelectionBackColor = gridCellBg };
+        squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new() { BackColor = AppConfig.GridCellBg, SelectionBackColor = AppConfig.GridCellBg };
       }
       for (int i = 0; i < rosterGridView.Rows.Count; i++)
       {
         rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
       if (((((DataGridView)sender).Rows[e.RowIndex].Cells[0].Value ?? "").ToString() ?? "").Trim().StartsWith('\\')) return;
@@ -3175,17 +2967,17 @@ namespace RosterizerLW
             Int64.Parse(((squadGridView.Rows[i].Cells[10].Value ?? "").ToString() ?? "")))))
           squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
           {
-            ForeColor = windowTitleFg,
-            SelectionForeColor = windowTitleFg,
-            BackColor = windowTitleBg,
-            SelectionBackColor = windowTitleBg
+            ForeColor = AppConfig.WindowTitleFg,
+            SelectionForeColor = AppConfig.WindowTitleFg,
+            BackColor = AppConfig.WindowTitleBg,
+            SelectionBackColor = AppConfig.WindowTitleBg
           };
         else squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
 
@@ -3207,10 +2999,10 @@ namespace RosterizerLW
             {
               rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
               {
-                ForeColor = windowTitleFg,
-                SelectionForeColor = windowTitleFg,
-                BackColor = windowTitleBg,
-                SelectionBackColor = windowTitleBg
+                ForeColor = AppConfig.WindowTitleFg,
+                SelectionForeColor = AppConfig.WindowTitleFg,
+                BackColor = AppConfig.WindowTitleBg,
+                SelectionBackColor = AppConfig.WindowTitleBg
               };
               break;
             }
@@ -3218,10 +3010,10 @@ namespace RosterizerLW
             {
               rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
               {
-                ForeColor = gridCellFg,
-                SelectionForeColor = gridCellFg,
-                BackColor = gridCellBg,
-                SelectionBackColor = gridCellBg
+                ForeColor = AppConfig.GridCellFg,
+                SelectionForeColor = AppConfig.GridCellFg,
+                BackColor = AppConfig.GridCellBg,
+                SelectionBackColor = AppConfig.GridCellBg
               };
             }
         }
@@ -3230,10 +3022,10 @@ namespace RosterizerLW
       if (e.RowIndex == 0) return;
       ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = ((DataGridView)sender).Rows[e.RowIndex].Cells[1].Style = new()
       {
-        ForeColor = windowTitleFg,
-        SelectionForeColor = windowTitleFg,
-        BackColor = windowTitleBg,
-        SelectionBackColor = windowTitleBg
+        ForeColor = AppConfig.WindowTitleFg,
+        SelectionForeColor = AppConfig.WindowTitleFg,
+        BackColor = AppConfig.WindowTitleBg,
+        SelectionBackColor = AppConfig.WindowTitleBg
       };
     }
 
@@ -3242,16 +3034,16 @@ namespace RosterizerLW
       // hot-track soldier perk list
       for (int i = 0; i < squadGridView.Rows.Count; i++)
       {
-        squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new() { BackColor = gridCellBg, SelectionBackColor = gridCellBg };
+        squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new() { BackColor = AppConfig.GridCellBg, SelectionBackColor = AppConfig.GridCellBg };
       }
       for (int i = 0; i < rosterGridView.Rows.Count; i++)
       {
         rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
       if (e.RowIndex == 0) return;
@@ -3278,17 +3070,17 @@ namespace RosterizerLW
             Int64.Parse(((squadGridView.Rows[i].Cells[10].Value ?? "").ToString() ?? "")))))
           squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
           {
-            ForeColor = windowTitleFg,
-            SelectionForeColor = windowTitleFg,
-            BackColor = windowTitleBg,
-            SelectionBackColor = windowTitleBg
+            ForeColor = AppConfig.WindowTitleFg,
+            SelectionForeColor = AppConfig.WindowTitleFg,
+            BackColor = AppConfig.WindowTitleBg,
+            SelectionBackColor = AppConfig.WindowTitleBg
           };
         else squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
 
@@ -3310,10 +3102,10 @@ namespace RosterizerLW
             {
               rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
               {
-                ForeColor = windowTitleFg,
-                SelectionForeColor = windowTitleFg,
-                BackColor = windowTitleBg,
-                SelectionBackColor = windowTitleBg
+                ForeColor = AppConfig.WindowTitleFg,
+                SelectionForeColor = AppConfig.WindowTitleFg,
+                BackColor = AppConfig.WindowTitleBg,
+                SelectionBackColor = AppConfig.WindowTitleBg
               };
               break;
             }
@@ -3321,10 +3113,10 @@ namespace RosterizerLW
             {
               rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
               {
-                ForeColor = gridCellFg,
-                SelectionForeColor = gridCellFg,
-                BackColor = gridCellBg,
-                SelectionBackColor = gridCellBg
+                ForeColor = AppConfig.GridCellFg,
+                SelectionForeColor = AppConfig.GridCellFg,
+                BackColor = AppConfig.GridCellBg,
+                SelectionBackColor = AppConfig.GridCellBg
               };
             }
         }
@@ -3332,13 +3124,13 @@ namespace RosterizerLW
 
 
       if (e.RowIndex == 0) return;
-      //if (e.RowIndex == 0 || ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style.BackColor == checklistedPerkBg) return;
+      //if (e.RowIndex == 0 || ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style.BackColor == AppConfig.ChecklistedPerkBg) return;
       ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = new()
       {
-        ForeColor = windowTitleFg,
-        SelectionForeColor = windowTitleFg,
-        BackColor = windowTitleBg,
-        SelectionBackColor = windowTitleBg
+        ForeColor = AppConfig.WindowTitleFg,
+        SelectionForeColor = AppConfig.WindowTitleFg,
+        BackColor = AppConfig.WindowTitleBg,
+        SelectionBackColor = AppConfig.WindowTitleBg
       };
     }
 
@@ -3349,23 +3141,23 @@ namespace RosterizerLW
       {
         squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
       for (int i = 0; i < rosterGridView.Rows.Count; i++)
       {
         rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
-      if (e.RowIndex == 0 || ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style.BackColor == checklistGoodTabUnselectedBg) return;
+      if (e.RowIndex == 0 || ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style.BackColor == AppConfig.ChecklistGoodTabUnselectedBg) return;
       ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = hotStyle;
     }
 
@@ -3390,17 +3182,17 @@ namespace RosterizerLW
             Int64.Parse(((squadGridView.Rows[i].Cells[10].Value ?? "").ToString() ?? "")))))
           squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
           {
-            ForeColor = windowTitleFg,
-            SelectionForeColor = windowTitleFg,
-            BackColor = windowTitleBg,
-            SelectionBackColor = windowTitleBg
+            ForeColor = AppConfig.WindowTitleFg,
+            SelectionForeColor = AppConfig.WindowTitleFg,
+            BackColor = AppConfig.WindowTitleBg,
+            SelectionBackColor = AppConfig.WindowTitleBg
           };
         else squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
 
@@ -3422,10 +3214,10 @@ namespace RosterizerLW
             {
               rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
               {
-                ForeColor = windowTitleFg,
-                SelectionForeColor = windowTitleFg,
-                BackColor = windowTitleBg,
-                SelectionBackColor = windowTitleBg
+                ForeColor = AppConfig.WindowTitleFg,
+                SelectionForeColor = AppConfig.WindowTitleFg,
+                BackColor = AppConfig.WindowTitleBg,
+                SelectionBackColor = AppConfig.WindowTitleBg
               };
               break;
             }
@@ -3433,20 +3225,20 @@ namespace RosterizerLW
             {
               rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
               {
-                ForeColor = gridCellFg,
-                SelectionForeColor = gridCellFg,
-                BackColor = gridCellBg,
-                SelectionBackColor = gridCellBg
+                ForeColor = AppConfig.GridCellFg,
+                SelectionForeColor = AppConfig.GridCellFg,
+                BackColor = AppConfig.GridCellBg,
+                SelectionBackColor = AppConfig.GridCellBg
               };
             }
         }
       }
       ((DataGridView)sender).Rows[e.RowIndex].Cells[0].Style = ((DataGridView)sender).Rows[e.RowIndex].Cells[1].Style = ((DataGridView)sender).Rows[e.RowIndex].Cells[2].Style = new()
       {
-        ForeColor = windowTitleFg,
-        SelectionForeColor = windowTitleFg,
-        BackColor = windowTitleBg,
-        SelectionBackColor = windowTitleBg
+        ForeColor = AppConfig.WindowTitleFg,
+        SelectionForeColor = AppConfig.WindowTitleFg,
+        BackColor = AppConfig.WindowTitleBg,
+        SelectionBackColor = AppConfig.WindowTitleBg
       };
     }
 
@@ -3459,20 +3251,20 @@ namespace RosterizerLW
       {
         squadGridView.Rows[i].Cells[0].Style = squadGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
       for (int i = 0; i < rosterGridView.Rows.Count; i++)
       {
         rosterGridView.Rows[i].Cells[0].Style = rosterGridView.Rows[i].Cells[1].Style = new()
         {
-          ForeColor = gridCellFg,
-          SelectionForeColor = gridCellFg,
-          BackColor = gridCellBg,
-          SelectionBackColor = gridCellBg
+          ForeColor = AppConfig.GridCellFg,
+          SelectionForeColor = AppConfig.GridCellFg,
+          BackColor = AppConfig.GridCellBg,
+          SelectionBackColor = AppConfig.GridCellBg
         };
       }
 
@@ -3550,7 +3342,7 @@ namespace RosterizerLW
           {
             if (!(thisStat == 0 && i == 8))
             {
-              g?.FillRectangle(new SolidBrush(hiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+              g?.FillRectangle(new SolidBrush(AppConfig.HiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
             }
 
             TextRenderer.DrawText(
@@ -3565,7 +3357,7 @@ namespace RosterizerLW
           {
             if (!(thisStat == 0 && i == 8))
             {
-              g?.FillRectangle(new SolidBrush(loBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+              g?.FillRectangle(new SolidBrush(AppConfig.LoBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
             }
 
             TextRenderer.DrawText(
@@ -3653,7 +3445,7 @@ namespace RosterizerLW
             {
               if (!(thisStat == 0 && i == 8))
               {
-                g?.FillRectangle(new SolidBrush(hiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+                g?.FillRectangle(new SolidBrush(AppConfig.HiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
               }
 
               TextRenderer.DrawText(
@@ -3668,7 +3460,7 @@ namespace RosterizerLW
             {
               if (!(thisStat == 0 && i == 8))
               {
-                g?.FillRectangle(new SolidBrush(loBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+                g?.FillRectangle(new SolidBrush(AppConfig.LoBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
               }
 
               TextRenderer.DrawText(
@@ -3746,7 +3538,7 @@ namespace RosterizerLW
         if (DateTime.Now.Millisecond % 77 == 0)
         {
           scoreLabel.Text = "PERFECT GEM ACTIVATED";
-          scoreLabel.ForeColor = ChatGemPerfect;
+          scoreLabel.ForeColor = AppConfig.ChatGemPerfect;
           scoreLabel.BackColor = Color.Black;
           scoreLabel.Font = SevenSegmentFont;
           scoreLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -3755,7 +3547,6 @@ namespace RosterizerLW
         }
 
         int vscroll = rosterGridView.FirstDisplayedScrollingRowIndex;
-        ListRoster();
         switch (RosterPerkTree.Length)
         {
           case 0:
