@@ -17,7 +17,7 @@ namespace RosterizerLW
   public partial class Rosterizer : Form
   {
     // muted color scheme
-    static bool darkMode = false;
+    static bool darkMode = true;
 
     static readonly DataGridViewCellBorderStyle rosterCellBorders = DataGridViewCellBorderStyle.RaisedHorizontal;
     static readonly DataGridViewCellBorderStyle squadCellBorders = DataGridViewCellBorderStyle.RaisedHorizontal;
@@ -80,6 +80,7 @@ namespace RosterizerLW
 
     public static int CurrentSquadSize = 0;
     public static List<List<long>> SquadStats = [];
+    public static List<List<long>> RosterStats = [];
     public static Dictionary<string, int> ChecklistPerks = [];
     public static bool ChecklistPass = false;
     public static long ChecklistPassTime = 0;
@@ -345,11 +346,7 @@ namespace RosterizerLW
 
     public static void DoSorting(int colIndex)
     {
-      if (colIndex < 0 || colIndex > 11)
-      {
-        return;
-      }
-
+      if (colIndex < 0 || colIndex > 11) return;
       if (SortArray.Count > MaxSortDepth) SortArray = [.. SortArray.TakeLast(MaxSortDepth)];
       // looks like this
       // 0 [0,0,0,0,0,0,0,0,0,1,0,0] - sort by third-to-last column (XP)
@@ -748,8 +745,10 @@ namespace RosterizerLW
       rosterGridView.Rows.Clear();
 
       List<Soldier> filteredSoldiers = [];
+      RosterStats = [];
       int shivCount = 0;
       CurrentSquadSize = 0;
+
       foreach (Soldier s in Roster)
       {
         if (squadUpdate && Shortlist.Contains(s))
@@ -768,7 +767,6 @@ namespace RosterizerLW
               if (s.IsShiv) shivCount++;
             }
           }
-
         }
       }
       if (squadUpdate)
@@ -832,6 +830,7 @@ namespace RosterizerLW
         if (!fatiguedCheckbox.Checked && s.IsFatigued && s.HoursOut > RecoverableHrs) continue;
 
         filteredSoldiers.Add(s);
+        RosterStats.AddRange([s.Stats.Defense, s.Stats.HP, s.Stats.Mobility, s.Stats.Will, s.Stats.Aim]);
       }
 
       int filteredSoldierIndex = 0;
@@ -903,40 +902,41 @@ namespace RosterizerLW
       {
         if (filteredSoldiers.Count >= minMinMaxListSize && !f.IsShiv && !f.IsDead && !f.IsWounded)
         {
-          maxHp = f.Stats.HP == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.HP);
-          maxMob = f.Stats.Mobility == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Mobility);
-          maxAim = f.Stats.Aim == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Aim);
-          maxWill = f.Stats.Will == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Will);
-          maxDef = f.Stats.Defense == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Defense);
 
-          minHp = !maxHp && f.Stats.HP == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.HP);
-          minMob = !maxMob && f.Stats.Mobility == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Mobility);
-          minAim = !maxAim && f.Stats.Aim == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Aim);
-          minWill = !maxWill && f.Stats.Will == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Will);
-          minDef = !maxDef && f.Stats.Defense == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Defense);
+          //maxHp = f.Stats.HP == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.HP);
+          //maxMob = f.Stats.Mobility == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Mobility);
+          //maxAim = f.Stats.Aim == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Aim);
+          //maxWill = f.Stats.Will == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Will);
+          //maxDef = f.Stats.Defense == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Defense);
+          //
+          //minHp = !maxHp && f.Stats.HP == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.HP);
+          //minMob = !maxMob && f.Stats.Mobility == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Mobility);
+          //minAim = !maxAim && f.Stats.Aim == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Aim);
+          //minWill = !maxWill && f.Stats.Will == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Will);
+          //minDef = !maxDef && f.Stats.Defense == filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Defense);
 
-          if (filteredSoldiers.Count >= minHiLoListSize)
-          {
-            hiHp = !minHp && !maxHp && f.Stats.HP * hiLolow >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.HP);
-            hiMob = !minMob && !maxMob && f.Stats.Mobility * hiLo >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Mobility);
-            hiAim = !minAim && !maxAim && f.Stats.Aim * hiLoHigh >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Aim);
-            hiWill = !minWill && !maxWill && f.Stats.Will * hiLo >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Will);
-            hiDef = !minDef && !maxDef && f.Stats.Defense * hiLoLower >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Defense);
-
-            loHp = !hiHp && !minHp && !maxHp && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.HP) * indPctMobWill >= f.Stats.HP;
-            loMob = !hiMob && !minMob && !maxMob && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Mobility) * indPctMobWill >= f.Stats.Mobility;
-            loAim = !hiAim && !minAim && !maxAim && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Aim) * indPctAim >= f.Stats.Aim;
-            loWill = !hiWill && !minWill && !maxWill && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Will) * indPctAim >= f.Stats.Will;
-            loDef = !hiDef && !minDef && !maxDef && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Defense) * indPctHp >= f.Stats.Defense;
-          }
+          //if (filteredSoldiers.Count >= minHiLoListSize)
+          //{
+          //  hiHp = !minHp && !maxHp && f.Stats.HP * hiLolow >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.HP);
+          //  hiMob = !minMob && !maxMob && f.Stats.Mobility * hiLo >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Mobility);
+          //  hiAim = !minAim && !maxAim && f.Stats.Aim * hiLoHigh >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Aim);
+          //  hiWill = !minWill && !maxWill && f.Stats.Will * hiLo >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Will);
+          //  hiDef = !minDef && !maxDef && f.Stats.Defense * hiLoLower >= filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Max(x => x.Stats.Defense);
+          //
+          //  loHp = !hiHp && !minHp && !maxHp && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.HP) * indPctMobWill >= f.Stats.HP;
+          //  loMob = !hiMob && !minMob && !maxMob && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Mobility) * indPctMobWill >= f.Stats.Mobility;
+          //  loAim = !hiAim && !minAim && !maxAim && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Aim) * indPctAim >= f.Stats.Aim;
+          //  loWill = !hiWill && !minWill && !maxWill && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Will) * indPctAim >= f.Stats.Will;
+          //  loDef = !hiDef && !minDef && !maxDef && filteredSoldiers.Where(x => !x.IsShiv && !x.IsDead && !x.IsWounded).Min(x => x.Stats.Defense) * indPctHp >= f.Stats.Defense;
+          //}
         }
         else
         {
-          maxHp = hiHp = loHp = minHp = false;
-          maxMob = hiMob = loMob = minMob = false;
-          maxAim = hiAim = loAim = minAim = false;
-          maxWill = hiWill = loWill = minWill = false;
-          maxDef = hiDef = loDef = minDef = false;
+          //maxHp = hiHp = loHp = minHp = false;
+          //maxMob = hiMob = loMob = minMob = false;
+          //maxAim = hiAim = loAim = minAim = false;
+          //maxWill = hiWill = loWill = minWill = false;
+          //maxDef = hiDef = loDef = minDef = false;
         }
 
         if (!f.IsDead && (!f.IsWounded || f.HoursOut <= RecoverableHrs))
@@ -1015,41 +1015,41 @@ namespace RosterizerLW
         }
         else
         {
-          thisRow.Cells["Aim"].Style = new()
-          {
-            BackColor = maxAim ? AppConfig.MaxBg : minAim ? AppConfig.MinBg : hiAim ? AppConfig.HiBg : loAim ? AppConfig.LoBg : AppConfig.GridCellBg,
-            SelectionBackColor = maxAim ? AppConfig.MaxBg : minAim ? AppConfig.MinBg : hiAim ? AppConfig.HiBg : loAim ? AppConfig.LoBg : AppConfig.GridCellBg,
-            ForeColor = AppConfig.GridCellFg,
-            SelectionForeColor = AppConfig.GridCellFg,
-          };
-          thisRow.Cells["Mob"].Style = new()
-          {
-            BackColor = maxMob ? AppConfig.MaxBg : minMob ? AppConfig.MinBg : hiMob ? AppConfig.HiBg : loMob ? AppConfig.LoBg : AppConfig.GridCellBg,
-            SelectionBackColor = maxMob ? AppConfig.MaxBg : minMob ? AppConfig.MinBg : hiMob ? AppConfig.HiBg : loMob ? AppConfig.LoBg : AppConfig.GridCellBg,
-            ForeColor = AppConfig.GridCellFg,
-            SelectionForeColor = AppConfig.GridCellFg,
-          };
-          thisRow.Cells["HP"].Style = new()
-          {
-            BackColor = maxHp ? AppConfig.MaxBg : minHp ? AppConfig.MinBg : hiHp ? AppConfig.HiBg : loHp ? AppConfig.LoBg : AppConfig.GridCellBg,
-            SelectionBackColor = maxHp ? AppConfig.MaxBg : minHp ? AppConfig.MinBg : hiHp ? AppConfig.HiBg : loHp ? AppConfig.LoBg : AppConfig.GridCellBg,
-            ForeColor = AppConfig.GridCellFg,
-            SelectionForeColor = AppConfig.GridCellFg,
-          };
-          thisRow.Cells["Will"].Style = new()
-          {
-            BackColor = maxWill ? AppConfig.MaxBg : minWill ? AppConfig.MinBg : hiWill ? AppConfig.HiBg : loWill ? AppConfig.LoBg : AppConfig.GridCellBg,
-            SelectionBackColor = maxWill ? AppConfig.MaxBg : minWill ? AppConfig.MinBg : hiWill ? AppConfig.HiBg : loWill ? AppConfig.LoBg : AppConfig.GridCellBg,
-            ForeColor = AppConfig.GridCellFg,
-            SelectionForeColor = AppConfig.GridCellFg,
-          };
-          thisRow.Cells["Def"].Style = new()
-          {
-            BackColor = maxDef ? AppConfig.MaxBg : minDef ? AppConfig.MinBg : hiDef ? AppConfig.HiBg : loDef ? AppConfig.LoBg : AppConfig.GridCellBg,
-            SelectionBackColor = maxDef ? AppConfig.MaxBg : minDef ? AppConfig.MinBg : hiDef ? AppConfig.HiBg : loDef ? AppConfig.LoBg : AppConfig.GridCellBg,
-            ForeColor = AppConfig.GridCellFg,
-            SelectionForeColor = AppConfig.GridCellFg,
-          };
+          //thisRow.Cells["Aim"].Style = new()
+          //{
+          //  BackColor = maxAim ? AppConfig.MaxBg : minAim ? AppConfig.MinBg : hiAim ? AppConfig.HiBg : loAim ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  SelectionBackColor = maxAim ? AppConfig.MaxBg : minAim ? AppConfig.MinBg : hiAim ? AppConfig.HiBg : loAim ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  ForeColor = AppConfig.GridCellFg,
+          //  SelectionForeColor = AppConfig.GridCellFg,
+          //};
+          //thisRow.Cells["Mob"].Style = new()
+          //{
+          //  BackColor = maxMob ? AppConfig.MaxBg : minMob ? AppConfig.MinBg : hiMob ? AppConfig.HiBg : loMob ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  SelectionBackColor = maxMob ? AppConfig.MaxBg : minMob ? AppConfig.MinBg : hiMob ? AppConfig.HiBg : loMob ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  ForeColor = AppConfig.GridCellFg,
+          //  SelectionForeColor = AppConfig.GridCellFg,
+          //};
+          //thisRow.Cells["HP"].Style = new()
+          //{
+          //  BackColor = maxHp ? AppConfig.MaxBg : minHp ? AppConfig.MinBg : hiHp ? AppConfig.HiBg : loHp ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  SelectionBackColor = maxHp ? AppConfig.MaxBg : minHp ? AppConfig.MinBg : hiHp ? AppConfig.HiBg : loHp ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  ForeColor = AppConfig.GridCellFg,
+          //  SelectionForeColor = AppConfig.GridCellFg,
+          //};
+          //thisRow.Cells["Will"].Style = new()
+          //{
+          //  BackColor = maxWill ? AppConfig.MaxBg : minWill ? AppConfig.MinBg : hiWill ? AppConfig.HiBg : loWill ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  SelectionBackColor = maxWill ? AppConfig.MaxBg : minWill ? AppConfig.MinBg : hiWill ? AppConfig.HiBg : loWill ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  ForeColor = AppConfig.GridCellFg,
+          //  SelectionForeColor = AppConfig.GridCellFg,
+          //};
+          //thisRow.Cells["Def"].Style = new()
+          //{
+          //  BackColor = maxDef ? AppConfig.MaxBg : minDef ? AppConfig.MinBg : hiDef ? AppConfig.HiBg : loDef ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  SelectionBackColor = maxDef ? AppConfig.MaxBg : minDef ? AppConfig.MinBg : hiDef ? AppConfig.HiBg : loDef ? AppConfig.LoBg : AppConfig.GridCellBg,
+          //  ForeColor = AppConfig.GridCellFg,
+          //  SelectionForeColor = AppConfig.GridCellFg,
+          //};
           thisRow.Cells["SoldierClass"].Style =
           thisRow.Cells["RankName"].Style =
           thisRow.Cells["XP"].Style =
@@ -1104,6 +1104,96 @@ namespace RosterizerLW
 
         filteredSoldierIndex++;
         thisRow.Selected = (((thisRow.Cells["Id"].Value ?? "").ToString() == SoldierSelectedIdXP.Split(',').First()) && ((thisRow.Cells["XP"].Value ?? "").ToString() == SoldierSelectedIdXP.Split(',').Last()));
+      }
+
+      for (int i = 0; i < rosterGridView.RowCount; i++)
+      {
+        for (int j = 5; j <= 9; j++)
+        {
+          List<long> statHeirarchy = [];
+          Color bgColor = Color.Blue;
+
+          switch (j)
+          {
+            case 5:
+              statHeirarchy = [.. RosterStats.Select(x => x[0]).OrderByDescending(x => x).Distinct()];
+              break;
+            case 6:
+              statHeirarchy = [.. RosterStats.Select(x => x[1]).OrderByDescending(x => x).Distinct()];
+              break;
+            case 7:
+              statHeirarchy = [.. RosterStats.Select(x => x[2]).OrderByDescending(x => x).Distinct()];
+              break;
+            case 8:
+              statHeirarchy = [.. RosterStats.Select(x => x[3]).OrderByDescending(x => x).Distinct()];
+              break;
+            case 9:
+              statHeirarchy = [.. RosterStats.Select(x => x[4]).OrderByDescending(x => x).Distinct()];
+              break;
+          }
+
+          _ = Int64.TryParse((rosterGridView.Rows[i].Cells[j].Value ?? "-999").ToString() ?? "-999", out long thisStat);
+
+          int heirarchySize = statHeirarchy.Count;
+          int heirarchySplit = heirarchySize >= 15 ? 7 : heirarchySize >= 5 ? 5 : heirarchySize >= 3 ? 3 : 1;
+          int heirarchyStep = heirarchySize / heirarchySplit;
+
+          if (heirarchySplit == 7)
+          {
+            if (thisStat >= statHeirarchy[1])
+            {
+              bgColor = AppConfig.MaxBg;
+            }
+            else if (thisStat >= statHeirarchy[heirarchyStep * 2])
+            {
+              bgColor = AppConfig.HiBg;
+            }
+            else if (thisStat >= statHeirarchy[heirarchyStep * 3])
+            {
+              bgColor = AppConfig.GridCellBg;
+            }
+            else if (thisStat >= statHeirarchy[heirarchyStep * 5])
+            {
+              bgColor = AppConfig.LoBg;
+            }
+            else bgColor = AppConfig.MinBg;
+          }
+          else if (heirarchySplit == 5)
+          {
+            if (thisStat >= statHeirarchy[1])
+            {
+              bgColor = AppConfig.MaxBg;
+            }
+            else if (thisStat >= statHeirarchy[heirarchyStep * 2])
+            {
+              bgColor = AppConfig.HiBg;
+            }
+            else if (thisStat >= statHeirarchy[heirarchyStep * 3])
+            {
+              bgColor = AppConfig.GridCellBg;
+            }
+            else if (thisStat >= statHeirarchy[heirarchyStep * 4])
+            {
+              bgColor = AppConfig.LoBg;
+            }
+            else bgColor = AppConfig.MinBg;
+          }
+          else if (heirarchySplit == 3)
+          {
+            if (thisStat >= statHeirarchy[0])
+            {
+              bgColor = AppConfig.HiBg;
+            }
+            else if (thisStat >= statHeirarchy[1])
+            {
+              bgColor = AppConfig.GridCellBg;
+            }
+            else bgColor = AppConfig.LoBg;
+          }
+          else bgColor = AppConfig.GridCellBg;
+
+          rosterGridView.Rows[i].Cells[j].Style = new() { BackColor = bgColor, SelectionBackColor = bgColor };
+        }
       }
 
       PopulateChecklist();
@@ -1766,7 +1856,7 @@ namespace RosterizerLW
         if (e.ColumnIndex > 0 && e.ColumnIndex < 12) DrawSquadLine2(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), Color.FromArgb(150, AppConfig.GridCellBg));
         else DrawSquadLine2(new Point(e.CellBounds.X, e.CellBounds.Y), new Point(e.CellBounds.Right, e.CellBounds.Top), AppConfig.InSquadBookendsBg);
       }
-
+     
       if (e.ColumnIndex == 12)
       {
         Color bgColor = Color.Black;
@@ -1788,7 +1878,7 @@ namespace RosterizerLW
         TextRenderer.DrawText(
           e.Graphics ?? ((DataGridView)sender).CreateGraphics(),
           string.Format("{0}", e.FormattedValue),
-          Font,
+          isSquadGrid ? Font : SmallFont,
           e.CellBounds,
           fgColor,
           TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding
@@ -1878,9 +1968,7 @@ namespace RosterizerLW
         // draw dot for class
         else if (e.ColumnIndex == 3)
         {
-          Color classColor = Color.FromArgb(100, 0, 0, 0);
-
-          classColor = ((e.FormattedValue ?? "").ToString() ?? "").ToLower() switch
+          Color classColor = ((e.FormattedValue ?? "").ToString() ?? "").ToLower() switch
           {
             "assault" => AppConfig.AssaultClassColor,
             "engineer" => AppConfig.EngineerClassColor,
@@ -1914,57 +2002,72 @@ namespace RosterizerLW
 
         if (e.ColumnIndex > 4 && e.ColumnIndex < 10)
         {
-          if (isSquadGrid && squadGridView.Rows.Count >= (int?)(squadSizeCombx.SelectedItem))
-          {
-            if (e.RowIndex < (int?)(squadSizeCombx.SelectedItem))
-            {
-              List<long> statHeirarchy = [];
-              Color bgColor = Color.Blue;
-
-              switch (e.ColumnIndex)
-              {
-                case 5:
-                  statHeirarchy = [.. SquadStats.Select(x => x[0]).OrderByDescending(x => x)];
-                  break;
-                case 6:
-                  statHeirarchy = [.. SquadStats.Select(x => x[1]).OrderByDescending(x => x)];
-                  break;
-                case 7:
-                  statHeirarchy = [.. SquadStats.Select(x => x[2]).OrderByDescending(x => x)];
-                  break;
-                case 8:
-                  statHeirarchy = [.. SquadStats.Select(x => x[3]).OrderByDescending(x => x)];
-                  break;
-                case 9:
-                  statHeirarchy = [.. SquadStats.Select(x => x[4]).OrderByDescending(x => x)];
-                  break;
-              }
-
-              _ = Int64.TryParse((((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].Value ?? "0").ToString() ?? "0", out long thisStat);
-
-              if (statHeirarchy.Count > 6 && thisStat >= statHeirarchy[1])
-              {
-                bgColor = AppConfig.HiBg;
-              }
-              else if (statHeirarchy.Count > 6 && thisStat <= statHeirarchy[6])
-              {
-                bgColor = AppConfig.LoBg;
-              }
-              else bgColor = AppConfig.GridCellBg;
-
-              e.PaintBackground(e.CellBounds, false);
-              e.Graphics?.FillRectangle(new SolidBrush(bgColor), e.CellBounds);
-
-              TextRenderer.DrawText(
-                          e.Graphics ?? ((DataGridView)sender).CreateGraphics(),
-                          string.Format("{0}", e.FormattedValue),
-                          Font,
-                          e.CellBounds,
-                          ((DataGridView)sender).DefaultCellStyle.ForeColor,
-                          TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
-              e.Handled = true;
-            }
-          }
+          //if (!isSquadGrid)
+          //{
+            //
+            //e.PaintBackground(e.CellBounds, false);
+            //e.Graphics?.FillRectangle(new SolidBrush(bgColor), e.CellBounds);
+            //
+            //TextRenderer.DrawText(
+            //            e.Graphics ?? ((DataGridView)sender).CreateGraphics(),
+            //            string.Format("{0}", e.FormattedValue),
+            //            Font,
+            //            e.CellBounds,
+            //            ((DataGridView)sender).DefaultCellStyle.ForeColor,
+            //            TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+            //e.Handled = true;
+          //}
+          //else if (isSquadGrid && squadGridView.Rows.Count >= (int?)(squadSizeCombx.SelectedItem))
+          //{
+          //  if (e.RowIndex < (int?)(squadSizeCombx.SelectedItem))
+          //  {
+          //    List<long> statHeirarchy = [];
+          //    Color bgColor = Color.Blue;
+          //
+          //    switch (e.ColumnIndex)
+          //    {
+          //      case 5:
+          //        statHeirarchy = [.. SquadStats.Select(x => x[0]).OrderByDescending(x => x)];
+          //        break;
+          //      case 6:
+          //        statHeirarchy = [.. SquadStats.Select(x => x[1]).OrderByDescending(x => x)];
+          //        break;
+          //      case 7:
+          //        statHeirarchy = [.. SquadStats.Select(x => x[2]).OrderByDescending(x => x)];
+          //        break;
+          //      case 8:
+          //        statHeirarchy = [.. SquadStats.Select(x => x[3]).OrderByDescending(x => x)];
+          //        break;
+          //      case 9:
+          //        statHeirarchy = [.. SquadStats.Select(x => x[4]).OrderByDescending(x => x)];
+          //        break;
+          //    }
+          //
+          //    _ = Int64.TryParse((((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].Value ?? "0").ToString() ?? "0", out long thisStat);
+          //
+          //    if (statHeirarchy.Count > 6 && thisStat >= statHeirarchy[1])
+          //    {
+          //      bgColor = AppConfig.HiBg;
+          //    }
+          //    else if (statHeirarchy.Count > 6 && thisStat <= statHeirarchy[6])
+          //    {
+          //      bgColor = AppConfig.LoBg;
+          //    }
+          //    else bgColor = AppConfig.GridCellBg;
+          //
+          //    e.PaintBackground(e.CellBounds, false);
+          //    e.Graphics?.FillRectangle(new SolidBrush(bgColor), e.CellBounds);
+          //
+          //    TextRenderer.DrawText(
+          //                e.Graphics ?? ((DataGridView)sender).CreateGraphics(),
+          //                string.Format("{0}", e.FormattedValue),
+          //                Font,
+          //                e.CellBounds,
+          //                ((DataGridView)sender).DefaultCellStyle.ForeColor,
+          //                TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+          //    e.Handled = true;
+          //  }
+          //}
         }
 
         if (e.ColumnIndex == 5 || e.ColumnIndex == 10)
@@ -2100,12 +2203,27 @@ namespace RosterizerLW
       {
         if (FromSquadTab)
         {
+          switch (RosterPerkTree.Length)
+          {
+            case 0:
+              SetPerkTree(RosterTree1);
+              break;
+            case 1:
+              SetPerkTree(RosterTree2);
+              break;
+            case 2:
+              SetPerkTree(RosterTree3);
+              break;
+            case 3:
+              SetPerkTree(RosterTree4);
+              break;
+          }
+
           ListRoster(TabFlipList);
           if (TabFlipVscroll > 0 && rosterGridView.Rows.Count >= TabFlipVscroll - 1) rosterGridView.FirstDisplayedScrollingRowIndex = TabFlipVscroll;
+          else TabFlipVscroll = rosterGridView.FirstDisplayedScrollingRowIndex;
         }
-        else TabFlipVscroll = rosterGridView.FirstDisplayedScrollingRowIndex;
 
-        perkFilterTextbox.Text = TabFlipFilterLabelText;
         FromSquadTab = false;
       }
     }
@@ -2243,7 +2361,10 @@ namespace RosterizerLW
 
     private void timerStartStopButton_Click(object sender, EventArgs e)
     {
-      timer1.Interval = 200;
+
+      timerLabel.Font = SevenSegmentFont;
+      timerLabel.ForeColor = Color.Red;
+      timer1.Interval = 997;
       timer1.Start();
       if (!timerRunning)
       {
@@ -2307,8 +2428,6 @@ namespace RosterizerLW
       }
       else if (timerRunning)
       {
-        timerLabel.Font = SevenSegmentFont;
-        timerLabel.ForeColor = Color.Red;
         elapsedTime = timer2.Elapsed;
       }
     }
@@ -3401,75 +3520,79 @@ namespace RosterizerLW
       else if (e.Button == MouseButtons.Right) ToggleInShortlist(sender);
       else if (e.Button == MouseButtons.Middle)
       {
-        var point = ((DataGridView)sender).PointToClient(Cursor.Position);
-        var info = ((DataGridView)sender).HitTest(point.X, point.Y);
-        if (info.RowIndex > 0)
+        if (e.ColumnIndex >= 0)
         {
-          DataGridView dgv = ((DataGridView)sender);
-          DataGridViewRow selectedRow = dgv.Rows[info.RowIndex];
-          dgv.Rows.Remove(selectedRow);
-          dgv.Rows.Insert(0, selectedRow);
-          if (dgv.Rows.Count >= (int?)(squadSizeCombx.SelectedItem)) dgv.Rows[(int)(squadSizeCombx.SelectedItem)].Cells[19].Value = false;
-          dgv.Rows[0].Cells[0].Style = dgv.Rows[0].Cells[1].Style = hotStyle;
-          dgv.Rows[0].Cells[(dgv.SelectedCells[0].OwningColumn ?? new()).Index].Selected = true;
-          for (int i = 0; i < dgv.Rows.Count; i++) dgv.Rows[i].Cells[12].Value = i + 1;
-        }
 
-        if (info.RowIndex < (int?)(squadSizeCombx.SelectedItem) && squadGridView.Rows.Count >= (int?)(squadSizeCombx.SelectedItem))
-        {
-          List<long> statHeirarchy = [];
-          Graphics g = ((DataGridView)sender).CreateGraphics();
-
-          for (int i = 5; i < 10; i++)
+          var point = ((DataGridView)sender).PointToClient(Cursor.Position);
+          var info = ((DataGridView)sender).HitTest(point.X, point.Y);
+          if (info.RowIndex > 0)
           {
-            switch (i)
-            {
-              case 5:
-                statHeirarchy = [.. SquadStats.Select(x => x[0]).OrderByDescending(x => x)];
-                break;
-              case 6:
-                statHeirarchy = [.. SquadStats.Select(x => x[1]).OrderByDescending(x => x)];
-                break;
-              case 7:
-                statHeirarchy = [.. SquadStats.Select(x => x[2]).OrderByDescending(x => x)];
-                break;
-              case 8:
-                statHeirarchy = [.. SquadStats.Select(x => x[3]).OrderByDescending(x => x)];
-                break;
-              case 9:
-                statHeirarchy = [.. SquadStats.Select(x => x[4]).OrderByDescending(x => x)];
-                break;
-            }
-            _ = Int64.TryParse((((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].Value ?? "0").ToString() ?? "0", out long thisStat);
-            if (statHeirarchy.Count > 6 && thisStat >= statHeirarchy[1])
-            {
-              if (!(thisStat == 0 && i == 8))
-              {
-                g?.FillRectangle(new SolidBrush(AppConfig.HiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
-              }
+            DataGridView dgv = ((DataGridView)sender);
+            DataGridViewRow selectedRow = dgv.Rows[info.RowIndex];
+            dgv.Rows.Remove(selectedRow);
+            dgv.Rows.Insert(0, selectedRow);
+            if (dgv.Rows.Count >= (int?)(squadSizeCombx.SelectedItem)) dgv.Rows[(int)(squadSizeCombx.SelectedItem)].Cells[19].Value = false;
+            dgv.Rows[0].Cells[0].Style = dgv.Rows[0].Cells[1].Style = hotStyle;
+            dgv.Rows[0].Cells[(dgv.SelectedCells[0].OwningColumn ?? new()).Index].Selected = true;
+            for (int i = 0; i < dgv.Rows.Count; i++) dgv.Rows[i].Cells[12].Value = i + 1;
+          }
 
-              TextRenderer.DrawText(
-                          g ?? ((DataGridView)sender).CreateGraphics(),
-                          string.Format("{0}", ((DataGridView)sender).Rows[info.RowIndex].Cells[i].FormattedValue),
-                          Font,
-                          ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds,
-                          ((DataGridView)sender).DefaultCellStyle.ForeColor,
-                          TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
-            }
-            else if (statHeirarchy.Count > 6 && thisStat <= statHeirarchy[6])
-            {
-              if (!(thisStat == 0 && i == 8))
-              {
-                g?.FillRectangle(new SolidBrush(AppConfig.LoBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
-              }
+          if (info.RowIndex < (int?)(squadSizeCombx.SelectedItem) && squadGridView.Rows.Count >= (int?)(squadSizeCombx.SelectedItem))
+          {
+            List<long> statHeirarchy = [];
+            Graphics g = ((DataGridView)sender).CreateGraphics();
 
-              TextRenderer.DrawText(
-                          g ?? ((DataGridView)sender).CreateGraphics(),
-                          string.Format("{0}", ((DataGridView)sender).Rows[info.RowIndex].Cells[i].FormattedValue),
-                          Font,
-                          ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds,
-                          ((DataGridView)sender).DefaultCellStyle.ForeColor,
-                          TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+            for (int i = 5; i < 10; i++)
+            {
+              switch (i)
+              {
+                case 5:
+                  statHeirarchy = [.. SquadStats.Select(x => x[0]).OrderByDescending(x => x)];
+                  break;
+                case 6:
+                  statHeirarchy = [.. SquadStats.Select(x => x[1]).OrderByDescending(x => x)];
+                  break;
+                case 7:
+                  statHeirarchy = [.. SquadStats.Select(x => x[2]).OrderByDescending(x => x)];
+                  break;
+                case 8:
+                  statHeirarchy = [.. SquadStats.Select(x => x[3]).OrderByDescending(x => x)];
+                  break;
+                case 9:
+                  statHeirarchy = [.. SquadStats.Select(x => x[4]).OrderByDescending(x => x)];
+                  break;
+              }
+              _ = Int64.TryParse((((DataGridView)sender).Rows[e.RowIndex].Cells[i].Value ?? "0").ToString() ?? "0", out long thisStat);
+              if (statHeirarchy.Count > 6 && thisStat >= statHeirarchy[1])
+              {
+                if (!(thisStat == 0 && i == 8))
+                {
+                  g?.FillRectangle(new SolidBrush(AppConfig.HiBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+                }
+
+                TextRenderer.DrawText(
+                            g ?? ((DataGridView)sender).CreateGraphics(),
+                            string.Format("{0}", ((DataGridView)sender).Rows[info.RowIndex].Cells[i].FormattedValue),
+                            Font,
+                            ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds,
+                            ((DataGridView)sender).DefaultCellStyle.ForeColor,
+                            TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+              }
+              else if (statHeirarchy.Count > 6 && thisStat <= statHeirarchy[6])
+              {
+                if (!(thisStat == 0 && i == 8))
+                {
+                  g?.FillRectangle(new SolidBrush(AppConfig.LoBg), ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds);
+                }
+
+                TextRenderer.DrawText(
+                            g ?? ((DataGridView)sender).CreateGraphics(),
+                            string.Format("{0}", ((DataGridView)sender).Rows[info.RowIndex].Cells[i].FormattedValue),
+                            Font,
+                            ((DataGridView)sender).Rows[info.RowIndex].Cells[i].ContentBounds,
+                            ((DataGridView)sender).DefaultCellStyle.ForeColor,
+                            TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.LeftAndRightPadding);
+              }
             }
           }
         }
