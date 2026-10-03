@@ -63,19 +63,9 @@ namespace RosterizerLW.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] digital_7__mono_ {
+        public static byte[] sony_7_segment {
             get {
-                object obj = ResourceManager.GetObject("digital-7 (mono)", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] digital_7__mono_italic_ {
-            get {
-                object obj = ResourceManager.GetObject("digital-7 (mono italic)", resourceCulture);
+                object obj = ResourceManager.GetObject("sony-7-segment", resourceCulture);
                 return ((byte[])(obj));
             }
         }

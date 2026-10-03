@@ -28,9 +28,16 @@
       public required int Luck { get; set; }
       public int RosterNumber { get; set; }
       public required List<long> RandomPerks { get; set; }
+      public required List<Ability> Abilities { get; set; }
     }
 
-    public class SoldierStats
+    public class Ability
+    {
+      public int Id { get; set; }
+      public string Name { get; set; }
+    }
+
+  public class SoldierStats
     {
       public long Mobility { get; set; }
       public long Defense { get; set; }
@@ -169,4 +176,11 @@
       Rank
     }
 
+  public class DataGridViewDoubleBuffered : DataGridView
+  {
+    public DataGridViewDoubleBuffered()
+    {
+      DoubleBuffered = true;
+    }
+  }
 }

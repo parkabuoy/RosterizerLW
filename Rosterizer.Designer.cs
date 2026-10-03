@@ -70,7 +70,7 @@
       DataGridViewCellStyle dataGridViewCellStyle39 = new DataGridViewCellStyle();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Rosterizer));
       tableLayoutPanel1 = new TableLayoutPanel();
-      squadGridView = new DataGridView();
+      squadGridView = new DataGridViewDoubleBuffered();
       dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
       dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
       dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
@@ -91,7 +91,7 @@
       SquadHasUnselectedPerks = new DataGridViewTextBoxColumn();
       InShortlist2 = new DataGridViewTextBoxColumn();
       InSquad2 = new DataGridViewTextBoxColumn();
-      rosterGridView = new DataGridView();
+      rosterGridView = new DataGridViewDoubleBuffered();
       LName = new DataGridViewTextBoxColumn();
       NName = new DataGridViewTextBoxColumn();
       Status = new DataGridViewTextBoxColumn();
@@ -118,18 +118,18 @@
       tabPage9 = new TabPage();
       tableLayoutPanel2 = new TableLayoutPanel();
       treeSearchTextbox = new TextBox();
-      treeDataGrid = new DataGridView();
+      treeDataGrid = new DataGridViewDoubleBuffered();
       dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
       dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
       tabPage2 = new TabPage();
-      squadPerkList = new DataGridView();
+      squadPerkList = new DataGridViewDoubleBuffered();
       PerkName = new DataGridViewTextBoxColumn();
       Count = new DataGridViewTextBoxColumn();
       tabPage1 = new TabPage();
-      soldierPerksGridView = new DataGridView();
+      soldierPerksGridView = new DataGridViewDoubleBuffered();
       dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
       tabPage8 = new TabPage();
-      checklistGridView = new DataGridView();
+      checklistGridView = new DataGridViewDoubleBuffered();
       checkName = new DataGridViewTextBoxColumn();
       checkCount = new DataGridViewTextBoxColumn();
       Desired = new DataGridViewTextBoxColumn();
@@ -147,6 +147,7 @@
       label1 = new Label();
       panel1 = new Panel();
       tableLayoutPanel5 = new TableLayoutPanel();
+      scorePointsLabel = new Label();
       scoreLabel = new Label();
       timerResetButton = new Button();
       timerLabel = new Label();
@@ -260,10 +261,11 @@
       squadGridView.TabIndex = 6;
       squadGridView.Visible = false;
       squadGridView.CellMouseClick += squadGridView_CellMouseClick;
-      squadGridView.CellMouseDoubleClick += squadGridView_CellMouseDoubleClick;
       squadGridView.CellMouseEnter += squadGridView_CellMouseEnter;
       squadGridView.CellMouseLeave += squadGridView_CellMouseLeave;
       squadGridView.CellPainting += squadAndRosterGridView_CellPainting;
+      squadGridView.RowPostPaint += squadGridView_RowPostPaint;
+      squadGridView.MouseDoubleClick += rosterGridView_MouseDoubleClick;
       squadGridView.MouseWheel += squadGridView_MouseWheel;
       // 
       // dataGridViewTextBoxColumn1
@@ -545,12 +547,13 @@
       rosterGridView.Size = new Size(988, 656);
       rosterGridView.StandardTab = true;
       rosterGridView.TabIndex = 5;
-      rosterGridView.CellDoubleClick += rosterGridView_CellDoubleClick;
       rosterGridView.CellMouseClick += rosterGridView_CellMouseClick;
       rosterGridView.CellMouseDown += rosterGridView_CellMouseDown;
       rosterGridView.CellMouseEnter += rosterGridView_CellMouseEnter;
       rosterGridView.CellMouseLeave += rosterGridView_CellMouseLeave;
       rosterGridView.CellPainting += squadAndRosterGridView_CellPainting;
+      rosterGridView.RowPostPaint += rosterGridView_RowPostPaint;
+      rosterGridView.MouseDoubleClick += rosterGridView_MouseDoubleClick;
       // 
       // LName
       // 
@@ -920,6 +923,7 @@
       treeDataGrid.CellMouseClick += treeDataGrid_CellMouseClick;
       treeDataGrid.CellMouseEnter += treeDataGrid_CellMouseEnter;
       treeDataGrid.CellMouseLeave += treeDataGrid_CellMouseLeave;
+      treeDataGrid.RowPostPaint += treeDataGrid_RowPostPaint;
       treeDataGrid.MouseClick += treeDataGrid_MouseClick;
       // 
       // dataGridViewTextBoxColumn4
@@ -985,6 +989,7 @@
       squadPerkList.CellMouseClick += squadPerkList_CellMouseClick;
       squadPerkList.CellMouseEnter += squadPerkList_CellMouseEnter;
       squadPerkList.CellMouseLeave += squadPerkList_CellMouseLeave;
+      squadPerkList.RowPostPaint += squadPerkList_RowPostPaint;
       squadPerkList.MouseClick += squadPerkList_MouseClick;
       // 
       // PerkName
@@ -1045,6 +1050,7 @@
       soldierPerksGridView.CellMouseClick += soldierPerksGridView_CellMouseClick;
       soldierPerksGridView.CellMouseEnter += soldierPerksGridView_CellMouseEnter;
       soldierPerksGridView.CellMouseLeave += soldierPerksGridView_CellMouseLeave;
+      soldierPerksGridView.RowPostPaint += soldierPerksGridView_RowPostPaint;
       // 
       // dataGridViewTextBoxColumn3
       // 
@@ -1142,7 +1148,7 @@
       // 
       // tableLayoutPanel4
       // 
-      tableLayoutPanel4.BackColor = Color.Gainsboro;
+      tableLayoutPanel4.BackColor = SystemColors.ControlLightLight;
       tableLayoutPanel4.ColumnCount = 4;
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
@@ -1344,7 +1350,8 @@
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
       tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-      tableLayoutPanel5.Controls.Add(scoreLabel, 2, 2);
+      tableLayoutPanel5.Controls.Add(scorePointsLabel, 2, 2);
+      tableLayoutPanel5.Controls.Add(scoreLabel, 0, 2);
       tableLayoutPanel5.Controls.Add(timerResetButton, 0, 3);
       tableLayoutPanel5.Controls.Add(timerLabel, 2, 3);
       tableLayoutPanel5.Controls.Add(timerStartStopButton, 1, 3);
@@ -1357,21 +1364,42 @@
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
       tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+      tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
       tableLayoutPanel5.Size = new Size(270, 193);
       tableLayoutPanel5.TabIndex = 0;
       // 
+      // scorePointsLabel
+      // 
+      scorePointsLabel.AutoSize = true;
+      scorePointsLabel.Dock = DockStyle.Bottom;
+      scorePointsLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      scorePointsLabel.ForeColor = SystemColors.ControlLightLight;
+      scorePointsLabel.Location = new Point(150, 139);
+      scorePointsLabel.Margin = new Padding(0);
+      scorePointsLabel.Name = "scorePointsLabel";
+      scorePointsLabel.Padding = new Padding(3);
+      scorePointsLabel.Size = new Size(120, 24);
+      scorePointsLabel.TabIndex = 5;
+      scorePointsLabel.Text = "0";
+      scorePointsLabel.TextAlign = ContentAlignment.MiddleRight;
+      scorePointsLabel.UseMnemonic = false;
+      // 
       // scoreLabel
       // 
+      scoreLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
       scoreLabel.AutoSize = true;
-      scoreLabel.Dock = DockStyle.Fill;
-      scoreLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      tableLayoutPanel5.SetColumnSpan(scoreLabel, 2);
+      scoreLabel.Font = new Font("Tahoma", 10F);
       scoreLabel.ForeColor = SystemColors.ControlLightLight;
-      scoreLabel.Location = new Point(150, 60);
+      scoreLabel.Location = new Point(96, 140);
       scoreLabel.Margin = new Padding(0);
       scoreLabel.Name = "scoreLabel";
-      scoreLabel.Size = new Size(120, 103);
+      scoreLabel.Padding = new Padding(3);
+      scoreLabel.Size = new Size(54, 23);
       scoreLabel.TabIndex = 3;
+      scoreLabel.Text = "Score:";
       scoreLabel.TextAlign = ContentAlignment.MiddleRight;
+      scoreLabel.UseMnemonic = false;
       // 
       // timerResetButton
       // 
@@ -1390,15 +1418,16 @@
       // timerLabel
       // 
       timerLabel.BackColor = Color.Transparent;
+      timerLabel.Dock = DockStyle.Fill;
       timerLabel.Font = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
       timerLabel.ForeColor = SystemColors.ControlLightLight;
-      timerLabel.Location = new Point(154, 167);
-      timerLabel.Margin = new Padding(4, 4, 0, 0);
+      timerLabel.Location = new Point(154, 168);
+      timerLabel.Margin = new Padding(4, 5, 0, 0);
       timerLabel.Name = "timerLabel";
-      timerLabel.Size = new Size(115, 26);
+      timerLabel.Size = new Size(116, 25);
       timerLabel.TabIndex = 0;
       timerLabel.Text = "0:00:00:00";
-      timerLabel.TextAlign = ContentAlignment.MiddleLeft;
+      timerLabel.TextAlign = ContentAlignment.MiddleCenter;
       timerLabel.Paint += timerLabel_Paint;
       // 
       // timerStartStopButton
@@ -1518,7 +1547,7 @@
     #endregion
     private TableLayoutPanel tableLayoutPanel1;
     private TableLayoutPanel tableLayoutPanel3;
-    private DataGridView rosterGridView;
+    private DataGridViewDoubleBuffered rosterGridView;
     private TextBox perkFilterTextbox;
     private TextBox perkTextBox1;
     private TabPage tabPage4;
@@ -1530,7 +1559,7 @@
     private SplitContainer splitContainer1;
     private TabControl tabControl1;
     private TabPage tabPage2;
-    private DataGridView squadPerkList;
+    private DataGridViewDoubleBuffered squadPerkList;
     private DataGridViewTextBoxColumn PerkName;
     private DataGridViewTextBoxColumn Count;
     private TabPage tabPage1;
@@ -1541,11 +1570,11 @@
     private CheckBox shivCheckbox;
     private CheckBox woundedCheckbox;
     private CheckBox fatiguedCheckbox;
-    private DataGridView soldierPerksGridView;
+    private DataGridViewDoubleBuffered soldierPerksGridView;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
     private Panel panel1;
     private TabPage tabPage8;
-    private DataGridView checklistGridView;
+    private DataGridViewDoubleBuffered checklistGridView;
     private TableLayoutPanel tableLayoutPanel5;
     private System.Windows.Forms.Timer timer1;
     private Label timerLabel;
@@ -1557,10 +1586,10 @@
     private TabPage tabPage9;
     private TableLayoutPanel tableLayoutPanel2;
     private TextBox treeSearchTextbox;
-    private DataGridView treeDataGrid;
+    private DataGridViewDoubleBuffered treeDataGrid;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-    private DataGridView squadGridView;
+    private DataGridViewDoubleBuffered squadGridView;
     private DataGridViewTextBoxColumn checkName;
     private DataGridViewTextBoxColumn checkCount;
     private DataGridViewTextBoxColumn Desired;
@@ -1606,5 +1635,6 @@
     private DataGridViewTextBoxColumn InSquad;
     private ComboBox minLvlCombx;
     private ComboBox squadSizeCombx;
+    private Label scorePointsLabel;
   }
 }

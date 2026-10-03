@@ -1,12 +1,12 @@
 Enabled,Name,ID
 0,,0
-0,So Shall You Fight,1
+1,So Shall You Fight,1
 1,Precision Shot,2
 1,Squadsight,3
 1,Secondary Heart,4
 1,Low Profile,5
 1,Run and Gun,6
-0,Autopsy Required,7
+1,Autopsy Required,7
 1,Battle Scanner,8
 1,Disabling Shot,9
 1,Opportunist,10
@@ -45,7 +45,7 @@ Enabled,Name,ID
 1,Resilience,43
 1,Smoke Grenade,44
 1,Adaptive Bone Marrow,45
-0,Random Subclass,46
+1,Random Subclass,46
 1,Covering Fire,47
 1,Field Medic,48
 1,Pyrokinesis,49
@@ -73,41 +73,41 @@ Enabled,Name,ID
 1,Mind Control,71
 1,Telekinetic Field,72
 1,Rift,73
-0,Mind Merge,74
-0,Mind Merge,75
-0,Hardened,76
-0,Greater Mind Merge,77
-0,Greater Mind Merge,78
-0,Evasion,79
-0,Launch,80
+1,Mind Merge,74
+1,Mind Merge,75
+1,Hardened,76
+1,Greater Mind Merge,77
+1,Greater Mind Merge,78
+1,Evasion,79
+1,Launch,80
 1,Bombard,81
-0,Leap,82
-0,Acid Spit,83
-0,Venomous Claws,84
-0,Blood Call,85
-0,Intimidate,86
-0,Fallen Comrades,87
-0,Bloodlust,88
-0,Bull Rush,89
+1,Leap,82
+1,Acid Spit,83
+1,Venomous Claws,84
+1,Blood Call,85
+1,Intimidate,86
+1,Fallen Comrades,87
+1,Bloodlust,88
+1,Bull Rush,89
 1,HEAT Ammo,90
 1,Smoke and Mirrors,91
 1,Shock and Awe,92
 1,Mayhem,93
 1,Ranger,94
 1,Concealment,95
-0,Cluster Bomb,96
-0,Psi Lance,97
-0,Death Blossom,98
-0,Overload,99
-0,Psi Control,100
-0,Psi Drain,101
+1,Cluster Bomb,96
+1,Psi Lance,97
+1,Death Blossom,98
+1,Overload,99
+1,Psi Control,100
+1,Psi Drain,101
 1,Repair,102
-0,Cannon Fire,103
-0,Implant,104
-0,Chryssalid Spawn,105
-0,Battle Fatigue,106
-0,Range,107
-0,Range,108
+1,Cannon Fire,103
+1,Implant,104
+1,Chryssalid Spawn,105
+1,Battle Fatigue,106
+1,Range,107
+1,Range,108
 0,,109
 0,,110
 0,,111
@@ -118,28 +118,28 @@ Enabled,Name,ID
 1,Deadeye,116
 0,,117
 0,,118
-0,Psychokinetic Strike,119
+1,Psychokinetic Strike,119
 0,,120
 1,MEC Close Combat,121
 1,Stay Frosty,122
 0,,123
-0,Sentinel Module,124
+1,Sentinel Module,124
 0,Alien Grenades,125
 1,Light 'Em Up,126
-0,Stealth,127
-0,Ghost Mode,128
-0,Reaper Pack,129
-0,Disoriented,130
+1,Stealth,127
+1,Ghost Mode,128
+1,Reaper Pack,129
+1,Disoriented,130
 1,Collateral Damage,131
 1,Automated Threat Assessment,132
 1,Advanced Fire Control,133
 1,Damage Control,134
 1,Vital Point Targeting,135
-0,One For All,136
+1,One For All,136
 1,Jetboot Module,137
 1,Combined Arms,138
 1,Repair Servos,139
-0,Fortiores Una,140
+1,Fortiores Una,140
 1,Platform Stability,141
 1,Absorption Fields,142
 1,Shock-Absorbent Armor,143
@@ -148,26 +148,26 @@ Enabled,Name,ID
 1,Distortion Field,146
 1,Adrenaline Surge,147
 1,Iron Skin,148
-0,Regen Biofield,149
+1,Regen Biofield,149
 1,Field Surgeon,150
-0,EXALT Comm Hack,151
-0,Semper Vigilans,152
+1,EXALT Comm Hack,151
+1,Semper Vigilans,152
 1,Sharpshooter,153
 1,Steadfast,154
 1,Smart Macrophages,155
-0,Legio Patria Nostra,156
-0,Band of Warriors,157
-0,So Others May Live,158
+1,Legio Patria Nostra,156
+1,Band of Warriors,157
+1,So Others May Live,158
 1,Lone Wolf,159
-0,Esprit de Corps,160
-0,Into the Breach,161
+1,Esprit de Corps,160
+1,Into the Breach,161
 1,Paramedic,162
 1,Aiming Angles,163
-0,Catching Breath,164
-0,Tactical Rigging,165
-0,Strangle,166
+1,Catching Breath,164
+1,Tactical Rigging,165
+1,Strangle,166
 1,Hit and Run,167
-0,Psi Shield,168
-0,Electropulsed,169
-0,OTS Leader Bonus,170
-0,Lead By Example,171
+1,Psi Shield,168
+1,Electropulsed,169
+1,OTS Leader Bonus,170
+1,Lead By Example,171

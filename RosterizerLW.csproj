@@ -25,20 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\digital-7 %28mono italic%29.ttf" />
-    <None Remove="Resources\digital-7 %28mono%29.ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Yeehawmeld.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\digital-7 (mono).ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\digital-7 (mono italic).ttf" />
   </ItemGroup>
 
   <ItemGroup>

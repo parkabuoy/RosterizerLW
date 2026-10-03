@@ -18,6 +18,10 @@ namespace RosterizerLW
     public static ulong Xcom2JsonHash { get; set; }
     public static string XcomSavePath { get; set; }
     public static int SavesToBackup { get; set; }
+    public static bool DarkMode { get; set; }
+    public static int ToNextXPLoValue { get; set; }
+    public static int ToNextXPHiValue { get; set; }
+
     public static Color DeadBg { get; set; }
     public static Color DeadFg { get; set; }
     public static Color WoundBg { get; set; }
@@ -32,6 +36,10 @@ namespace RosterizerLW
     public static Color RosterHeaderFg { get; set; }
     public static Color RosterSquadHotTrackBg { get; set; }
     public static Color RosterSquadHotTrackFg { get; set; }
+    public static Color RosterHotTrackBg { get; set; }
+    public static Color RosterHotTrackFg { get; set; }
+    public static Color SquadHotTrackBg { get; set; }
+    public static Color SquadHotTrackFg { get; set; }
     public static Color RosterSelectedBookendBg { get; set; }
     public static Color WoobieBg { get; set; }
     public static Color WoobieFg { get; set; }
@@ -59,6 +67,7 @@ namespace RosterizerLW
     public static Color GridCellBg { get; set; }
     public static Color GridCellFg { get; set; }
     public static Color GridBg { get; set; }
+    public static Color GridFg { get; set; }
     public static Color ChecklistedPerkBg { get; set; }
     public static Color InSquadBookendsBg { get; set; }
     public static Color AssaultClassColor { get; set; }
@@ -77,10 +86,33 @@ namespace RosterizerLW
     public static Color TreeTabUnselectedBg { get; set; }
     public static Color TreeHeaderFg { get; set; }
     public static Color UnselectedSoldierPerkBg { get; set; }
+    public static Color UnselectedSoldierPerkFg { get; set; }
     public static Color StatLineFg { get; set; }
     public static Color ChatGemIdle { get; set; }
     public static Color ChatGemActive { get; set; }
     public static Color ChatGemPerfect { get; set; }
+    public static Color RowZebraOverlay { get; set; }
+
+
+    public static Color Row1ShortlistOverlay { get; set; }
+    public static Color Row2ShortlistOverlay { get; set; }
+    public static Color Row3ShortlistOverlay { get; set; }
+    public static Color Row4ShortlistOverlay { get; set; }
+    public static Color Row5ShortlistOverlay { get; set; }
+    public static Color Row6ShortlistOverlay { get; set; }
+    public static Color Row7ShortlistOverlay { get; set; }
+    public static Color Row8ShortlistOverlay { get; set; }
+    public static Color Row9ShortlistOverlay { get; set; }
+    public static Color Row10ShortlistOverlay { get; set; }
+    public static Color Row11ShortlistOverlay { get; set; }
+    public static Color Row12ShortlistOverlay { get; set; }
+    public static Color Row13ShortlistOverlay { get; set; }
+    public static Color Row14ShortlistOverlay { get; set; }
+    public static Color Row15ShortlistOverlay { get; set; }
+    public static Color Row16ShortlistOverlay { get; set; }
+    public static Color NonSquadShortlistOverlay { get; set; }
+    public static Color ToNextXPLo { get; set; }
+    public static Color ToNextXPHi { get; set; }
 
     public void GetConfigData(string configFilename)
     {
@@ -97,6 +129,12 @@ namespace RosterizerLW
       Xcom2JsonHash = GetElementInnerXml("Xcom2JsonCRC64", typeof(ulong));
       XcomSavePath = GetElementInnerXml("XcomSavePath", typeof(string));
       SavesToBackup = GetElementInnerXml("SavesToBackup", typeof(int));
+
+      ToNextXPHiValue = GetElementInnerXml("ToNextXPHiValue", typeof(int));
+      ToNextXPLoValue = GetElementInnerXml("ToNextXPLoValue", typeof(int));
+
+      DarkMode = GetElementInnerXml("DarkMode", typeof(bool));
+
       DeadBg  = GetElementInnerXml("DeadBg", typeof(Color));
       DeadFg  = GetElementInnerXml("DeadFg", typeof(Color));
       WoundBg  = GetElementInnerXml("WoundBg", typeof(Color));
@@ -111,6 +149,10 @@ namespace RosterizerLW
       RosterHeaderFg  = GetElementInnerXml("RosterHeaderFg", typeof(Color));
       RosterSquadHotTrackBg  = GetElementInnerXml("RosterSquadHotTrackBg", typeof(Color));
       RosterSquadHotTrackFg  = GetElementInnerXml("RosterSquadHotTrackFg", typeof(Color));
+      RosterHotTrackBg = GetElementInnerXml("RosterHotTrackBg", typeof(Color));
+      RosterHotTrackFg = GetElementInnerXml("RosterHotTrackFg", typeof(Color));
+      SquadHotTrackBg = GetElementInnerXml("SquadHotTrackBg", typeof(Color));
+      SquadHotTrackFg = GetElementInnerXml("SquadHotTrackFg", typeof(Color));
       RosterSelectedBookendBg  = GetElementInnerXml("RosterSelectedBookendBg", typeof(Color));
       WoobieBg  = GetElementInnerXml("WoobieBg", typeof(Color));
       WoobieFg  = GetElementInnerXml("WoobieFg", typeof(Color));
@@ -138,7 +180,8 @@ namespace RosterizerLW
       GridCellBg  = GetElementInnerXml("GridCellBg", typeof(Color));
       GridCellFg  = GetElementInnerXml("GridCellFg", typeof(Color));
       GridBg  = GetElementInnerXml("GridBg", typeof(Color));
-      ChecklistedPerkBg  = GetElementInnerXml("ChecklistedPerkBg", typeof(Color));
+      GridFg = GetElementInnerXml("GridFg", typeof(Color));
+      ChecklistedPerkBg = GetElementInnerXml("ChecklistedPerkBg", typeof(Color));
       InSquadBookendsBg  = GetElementInnerXml("InSquadBookendsBg", typeof(Color));
       AssaultClassColor  = GetElementInnerXml("AssaultClassColor", typeof(Color));
       EngineerClassColor  = GetElementInnerXml("EngineerClassColor", typeof(Color));
@@ -160,7 +203,27 @@ namespace RosterizerLW
       ChatGemIdle  = GetElementInnerXml("ChatGemIdle", typeof(Color));
       ChatGemActive  = GetElementInnerXml("ChatGemActive", typeof(Color));
       ChatGemPerfect = GetElementInnerXml("ChatGemPerfect", typeof(Color));
+      ToNextXPHi = GetElementInnerXml("ToNextXPHi", typeof(Color));
+      ToNextXPLo = GetElementInnerXml("ToNextXPLo", typeof(Color));
+      RowZebraOverlay = GetElementInnerXml("RowZebraOverlay", typeof(Color));
 
+      Row1ShortlistOverlay = GetElementInnerXml("Row1ShortlistOverlay", typeof(Color));
+      Row2ShortlistOverlay = GetElementInnerXml("Row2ShortlistOverlay", typeof(Color));
+      Row3ShortlistOverlay = GetElementInnerXml("Row3ShortlistOverlay", typeof(Color));
+      Row4ShortlistOverlay = GetElementInnerXml("Row4ShortlistOverlay", typeof(Color));
+      Row5ShortlistOverlay = GetElementInnerXml("Row5ShortlistOverlay", typeof(Color));
+      Row6ShortlistOverlay = GetElementInnerXml("Row6ShortlistOverlay", typeof(Color));
+      Row7ShortlistOverlay = GetElementInnerXml("Row7ShortlistOverlay", typeof(Color));
+      Row8ShortlistOverlay = GetElementInnerXml("Row8ShortlistOverlay", typeof(Color));
+      Row9ShortlistOverlay = GetElementInnerXml("Row9ShortlistOverlay", typeof(Color));
+      Row10ShortlistOverlay = GetElementInnerXml("Row10ShortlistOverlay", typeof(Color));
+      Row11ShortlistOverlay = GetElementInnerXml("Row11ShortlistOverlay", typeof(Color));
+      Row12ShortlistOverlay = GetElementInnerXml("Row12ShortlistOverlay", typeof(Color));
+      Row13ShortlistOverlay = GetElementInnerXml("Row13ShortlistOverlay", typeof(Color));
+      Row14ShortlistOverlay = GetElementInnerXml("Row14ShortlistOverlay", typeof(Color));
+      Row15ShortlistOverlay = GetElementInnerXml("Row15ShortlistOverlay", typeof(Color));
+      Row16ShortlistOverlay = GetElementInnerXml("Row16ShortlistOverlay", typeof(Color));
+      NonSquadShortlistOverlay = GetElementInnerXml("NonSquadShortlistOverlay", typeof(Color));
     }
 
     public dynamic GetElementInnerXml(string tagName, Type type)
