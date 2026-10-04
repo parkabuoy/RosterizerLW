@@ -685,8 +685,8 @@ namespace RosterizerLW
       }
 
       ChecklistPass = checklistOk == ChecklistPerks.Count;
-      string checkMark = ChecklistPass ? "✓" : "ⅹ";
-      (tabControl1.TabPages[3] ?? new()).Text = $"{checklistOk}/{ChecklistPerks.Count} {checkMark}";
+      //string checkMark = ChecklistPass ? "✓" : "ⅹ";
+      (tabControl1.TabPages[3] ?? new()).Text = $"Checklist {checklistOk}/{ChecklistPerks.Count}";
     }
 
     public void SetPerkTree(RelatedPerk perkIn)
@@ -2090,112 +2090,6 @@ namespace RosterizerLW
         }
 
         FromSquadTab = false;
-      }
-    }
-
-    private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
-    {
-      e.Graphics.InterpolationMode = InterpolationMode.Bilinear;
-      e.Graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
-      e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-      Rectangle rec = tabControl1.ClientRectangle;
-      StringFormat StrFormat = new()
-      {
-        LineAlignment = StringAlignment.Center,
-        Alignment = StringAlignment.Center
-      };
-
-      SolidBrush backColor = new(AppConfig.WindowBg);
-      e.Graphics.FillRectangle(backColor, rec);
-
-      for (int i = 0; i < tabControl1.TabPages.Count; i++)
-      {
-        bool bSelected = (tabControl1.SelectedIndex == i);
-        Rectangle recBounds = tabControl1.GetTabRect(i);
-        RectangleF tabTextArea = (RectangleF)tabControl1.GetTabRect(i);
-
-        if (i == 0) // tree
-        {
-          if (bSelected)
-          {
-            e.Graphics.FillRectangle(new SolidBrush(AppConfig.TreeHeaderBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.TreeHeaderFg), tabTextArea, StrFormat);
-          }
-          else
-          {
-            e.Graphics.FillRectangle(new SolidBrush(AppConfig.TreeTabUnselectedBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.TreeHeaderFg), tabTextArea, StrFormat);
-          }
-        }
-        else if (i == 1) // squad
-        {
-          if (bSelected)
-          {
-            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SquadHeaderBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SquadHeaderFg), tabTextArea, StrFormat);
-          }
-          else
-          {
-            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SquadTabUnselectedBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SquadHeaderFg), tabTextArea, StrFormat);
-          }
-        }
-        else if (i == 2) // soldier
-        {
-          if (bSelected)
-          {
-            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SoldierHeaderBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SoldierHeaderFg), tabTextArea, StrFormat);
-          }
-          else
-          {
-            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SoldierTabUnselectedBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SoldierHeaderFg), tabTextArea, StrFormat);
-          }
-        }
-        else if (i == 3) // checklist
-        {
-          if (ChecklistPass)
-          {
-            if (bSelected)
-            {
-              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistGoodHeaderBg), recBounds);
-              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistGoodHeaderFg), tabTextArea, StrFormat);
-            }
-            else
-            {
-              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistGoodTabUnselectedBg), recBounds);
-              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistGoodHeaderFg), tabTextArea, StrFormat);
-            }
-          }
-          else
-          {
-            if (bSelected)
-            {
-              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistBadHeaderBg), recBounds);
-              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistBadHeaderFg), tabTextArea, StrFormat);
-            }
-            else
-            {
-              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistBadTabUnselectedBg), recBounds);
-              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistBadHeaderFg), tabTextArea, StrFormat);
-            }
-          }
-        }
-        else if (i == 4) // options
-        {
-          if (bSelected)
-          {
-            e.Graphics.FillRectangle(new SolidBrush(AppConfig.WindowBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.WindowFg), tabTextArea, StrFormat);
-          }
-          else
-          {
-            e.Graphics.FillRectangle(new SolidBrush(AppConfig.WindowBg), recBounds);
-            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.WindowFg), tabTextArea, StrFormat);
-          }
-        }
       }
     }
 
@@ -3612,6 +3506,114 @@ namespace RosterizerLW
       if (ChecklistPerks.ContainsKey((((DataGridView)sender).Rows[e.RowIndex].Cells[0].Value ?? "").ToString() ?? ""))
       {
         e.Graphics?.FillRectangle(new SolidBrush(Color.FromArgb(96, AppConfig.ChecklistedPerkBg)), e.RowBounds);
-      }    }
+      }
+    }
+
+    private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
+    {
+      e.Graphics.InterpolationMode = InterpolationMode.Bilinear;
+      e.Graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
+      e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+      Rectangle rec = tabControl1.ClientRectangle;
+      StringFormat StrFormat = new()
+      {
+        LineAlignment = StringAlignment.Center,
+        Alignment = StringAlignment.Center
+      };
+
+      SolidBrush backColor = new(AppConfig.WindowBg);
+      e.Graphics.FillRectangle(backColor, rec);
+
+      for (int i = 0; i < tabControl1.TabPages.Count; i++)
+      {
+        bool bSelected = (tabControl1.SelectedIndex == i);
+        Rectangle recBounds = tabControl1.GetTabRect(i);
+        RectangleF tabTextArea = (RectangleF)tabControl1.GetTabRect(i);
+
+        if (i == 0) // tree
+        {
+          if (bSelected)
+          {
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.TreeHeaderBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.TreeHeaderFg), tabTextArea, StrFormat);
+          }
+          else
+          {
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.TreeTabUnselectedBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.TreeHeaderFg), tabTextArea, StrFormat);
+          }
+        }
+        else if (i == 1) // squad
+        {
+          if (bSelected)
+          {
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SquadHeaderBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SquadHeaderFg), tabTextArea, StrFormat);
+          }
+          else
+          {
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SquadTabUnselectedBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SquadHeaderFg), tabTextArea, StrFormat);
+          }
+        }
+        else if (i == 2) // soldier
+        {
+          if (bSelected)
+          {
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SoldierHeaderBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SoldierHeaderFg), tabTextArea, StrFormat);
+          }
+          else
+          {
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.SoldierTabUnselectedBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.SoldierHeaderFg), tabTextArea, StrFormat);
+          }
+        }
+        else if (i == 3) // checklist
+        {
+          if (ChecklistPass)
+          {
+            if (bSelected)
+            {
+              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistGoodHeaderBg), recBounds);
+              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistGoodHeaderFg), tabTextArea, StrFormat);
+            }
+            else
+            {
+              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistGoodTabUnselectedBg), recBounds);
+              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistGoodHeaderFg), tabTextArea, StrFormat);
+            }
+          }
+          else
+          {
+            if (bSelected)
+            {
+              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistBadHeaderBg), recBounds);
+              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistBadHeaderFg), tabTextArea, StrFormat);
+            }
+            else
+            {
+              e.Graphics.FillRectangle(new SolidBrush(AppConfig.ChecklistBadTabUnselectedBg), recBounds);
+              e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.ChecklistBadHeaderFg), tabTextArea, StrFormat);
+            }
+          }
+        }
+        else if (i == 4) // options
+        {
+          if (bSelected)
+          {
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.FatigueBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.WindowFg), tabTextArea, StrFormat);
+          }
+          else
+          {
+            e.Graphics.FillRectangle(new SolidBrush(AppConfig.FatigueBg), recBounds);
+            e.Graphics.DrawString(tabControl1.TabPages[i].Text, new(e.Font ?? Font, FontStyle.Regular), new SolidBrush(AppConfig.WindowFg), tabTextArea, StrFormat);
+          }
+        }
+      }
+    }
+
   }
 }

@@ -835,6 +835,8 @@
       tabControl1.Controls.Add(tabPage7);
       tabControl1.Dock = DockStyle.Fill;
       tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
+      tabControl1.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+      tabControl1.HotTrack = true;
       tabControl1.ItemSize = new Size(53, 24);
       tabControl1.Location = new Point(0, 0);
       tabControl1.Margin = new Padding(0);
@@ -844,7 +846,7 @@
       tabControl1.RightToLeft = RightToLeft.No;
       tabControl1.SelectedIndex = 0;
       tabControl1.Size = new Size(270, 478);
-      tabControl1.SizeMode = TabSizeMode.Fixed;
+      tabControl1.SizeMode = TabSizeMode.FillToRight;
       tabControl1.TabIndex = 18;
       tabControl1.DrawItem += tabControl1_DrawItem;
       tabControl1.SelectedIndexChanged += tabControl1_TabIndexChanged;
@@ -854,12 +856,13 @@
       tabPage9.BackColor = Color.Transparent;
       tabPage9.BorderStyle = BorderStyle.Fixed3D;
       tabPage9.Controls.Add(tableLayoutPanel2);
+      tabPage9.Font = new Font("Tahoma", 8F);
       tabPage9.Location = new Point(4, 28);
       tabPage9.Name = "tabPage9";
       tabPage9.Padding = new Padding(3);
       tabPage9.Size = new Size(262, 446);
       tabPage9.TabIndex = 6;
-      tabPage9.Text = "Perks";
+      tabPage9.Text = "Perk";
       // 
       // tableLayoutPanel2
       // 
@@ -889,7 +892,7 @@
       treeSearchTextbox.Margin = new Padding(4);
       treeSearchTextbox.MaxLength = 128;
       treeSearchTextbox.Name = "treeSearchTextbox";
-      treeSearchTextbox.Size = new Size(244, 22);
+      treeSearchTextbox.Size = new Size(244, 20);
       treeSearchTextbox.TabIndex = 25;
       treeSearchTextbox.KeyDown += treeSearchTextbox_KeyDown;
       // 
@@ -953,6 +956,7 @@
       // 
       tabPage2.BorderStyle = BorderStyle.Fixed3D;
       tabPage2.Controls.Add(squadPerkList);
+      tabPage2.Font = new Font("Tahoma", 8F);
       tabPage2.Location = new Point(4, 28);
       tabPage2.Margin = new Padding(1);
       tabPage2.Name = "tabPage2";
@@ -1014,6 +1018,7 @@
       // 
       tabPage1.BorderStyle = BorderStyle.Fixed3D;
       tabPage1.Controls.Add(soldierPerksGridView);
+      tabPage1.Font = new Font("Tahoma", 8F);
       tabPage1.Location = new Point(4, 28);
       tabPage1.Margin = new Padding(1);
       tabPage1.Name = "tabPage1";
@@ -1065,6 +1070,7 @@
       // 
       tabPage8.BorderStyle = BorderStyle.Fixed3D;
       tabPage8.Controls.Add(checklistGridView);
+      tabPage8.Font = new Font("Tahoma", 8F);
       tabPage8.Location = new Point(4, 28);
       tabPage8.Margin = new Padding(1);
       tabPage8.Name = "tabPage8";
@@ -1135,20 +1141,20 @@
       // 
       // tabPage7
       // 
-      tabPage7.BorderStyle = BorderStyle.Fixed3D;
       tabPage7.Controls.Add(tableLayoutPanel4);
+      tabPage7.Font = new Font("Tahoma", 8F);
       tabPage7.Location = new Point(4, 28);
       tabPage7.Margin = new Padding(4, 1, 1, 1);
       tabPage7.Name = "tabPage7";
       tabPage7.Padding = new Padding(3);
       tabPage7.Size = new Size(262, 446);
       tabPage7.TabIndex = 4;
-      tabPage7.Text = "Config";
+      tabPage7.Text = "Cfg";
       tabPage7.UseVisualStyleBackColor = true;
       // 
       // tableLayoutPanel4
       // 
-      tableLayoutPanel4.BackColor = SystemColors.ControlLightLight;
+      tableLayoutPanel4.BackColor = SystemColors.GrayText;
       tableLayoutPanel4.ColumnCount = 4;
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
       tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
@@ -1176,7 +1182,7 @@
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
       tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-      tableLayoutPanel4.Size = new Size(252, 436);
+      tableLayoutPanel4.Size = new Size(256, 440);
       tableLayoutPanel4.TabIndex = 0;
       // 
       // darkCheckbox
@@ -1189,7 +1195,7 @@
       darkCheckbox.Margin = new Padding(0);
       darkCheckbox.Name = "darkCheckbox";
       darkCheckbox.Padding = new Padding(10, 0, 0, 0);
-      darkCheckbox.Size = new Size(126, 20);
+      darkCheckbox.Size = new Size(128, 20);
       darkCheckbox.TabIndex = 28;
       darkCheckbox.TabStop = false;
       darkCheckbox.Text = "Dark Mode";
@@ -1207,7 +1213,7 @@
       nonRosterPerksCheckbox.Margin = new Padding(0);
       nonRosterPerksCheckbox.Name = "nonRosterPerksCheckbox";
       nonRosterPerksCheckbox.Padding = new Padding(10, 0, 0, 0);
-      nonRosterPerksCheckbox.Size = new Size(252, 20);
+      nonRosterPerksCheckbox.Size = new Size(256, 20);
       nonRosterPerksCheckbox.TabIndex = 25;
       nonRosterPerksCheckbox.TabStop = false;
       nonRosterPerksCheckbox.Text = "Show Non-Roster Perks";
@@ -1220,11 +1226,11 @@
       tableLayoutPanel4.SetColumnSpan(deadCheckbox, 2);
       deadCheckbox.Dock = DockStyle.Fill;
       deadCheckbox.FlatStyle = FlatStyle.Flat;
-      deadCheckbox.Location = new Point(126, 20);
+      deadCheckbox.Location = new Point(128, 20);
       deadCheckbox.Margin = new Padding(0);
       deadCheckbox.Name = "deadCheckbox";
       deadCheckbox.Padding = new Padding(10, 0, 0, 0);
-      deadCheckbox.Size = new Size(126, 20);
+      deadCheckbox.Size = new Size(128, 20);
       deadCheckbox.TabIndex = 17;
       deadCheckbox.TabStop = false;
       deadCheckbox.Text = "Dead";
@@ -1241,7 +1247,7 @@
       shivCheckbox.Margin = new Padding(0);
       shivCheckbox.Name = "shivCheckbox";
       shivCheckbox.Padding = new Padding(10, 0, 0, 0);
-      shivCheckbox.Size = new Size(126, 20);
+      shivCheckbox.Size = new Size(128, 20);
       shivCheckbox.TabIndex = 16;
       shivCheckbox.TabStop = false;
       shivCheckbox.Text = "Shiv";
@@ -1256,11 +1262,11 @@
       tableLayoutPanel4.SetColumnSpan(woundedCheckbox, 2);
       woundedCheckbox.Dock = DockStyle.Fill;
       woundedCheckbox.FlatStyle = FlatStyle.Flat;
-      woundedCheckbox.Location = new Point(126, 0);
+      woundedCheckbox.Location = new Point(128, 0);
       woundedCheckbox.Margin = new Padding(0);
       woundedCheckbox.Name = "woundedCheckbox";
       woundedCheckbox.Padding = new Padding(10, 0, 0, 0);
-      woundedCheckbox.Size = new Size(126, 20);
+      woundedCheckbox.Size = new Size(128, 20);
       woundedCheckbox.TabIndex = 15;
       woundedCheckbox.TabStop = false;
       woundedCheckbox.Text = "Wounded";
@@ -1279,7 +1285,7 @@
       fatiguedCheckbox.Margin = new Padding(0);
       fatiguedCheckbox.Name = "fatiguedCheckbox";
       fatiguedCheckbox.Padding = new Padding(10, 0, 0, 0);
-      fatiguedCheckbox.Size = new Size(126, 20);
+      fatiguedCheckbox.Size = new Size(128, 20);
       fatiguedCheckbox.TabIndex = 14;
       fatiguedCheckbox.TabStop = false;
       fatiguedCheckbox.Text = "Fatigued";
@@ -1291,9 +1297,9 @@
       minLvlCombx.DropDownStyle = ComboBoxStyle.DropDownList;
       minLvlCombx.FlatStyle = FlatStyle.Flat;
       minLvlCombx.FormattingEnabled = true;
-      minLvlCombx.Location = new Point(192, 91);
+      minLvlCombx.Location = new Point(195, 91);
       minLvlCombx.Name = "minLvlCombx";
-      minLvlCombx.Size = new Size(57, 22);
+      minLvlCombx.Size = new Size(57, 21);
       minLvlCombx.TabIndex = 30;
       minLvlCombx.SelectedValueChanged += minLvlCombx_ValueChanged;
       // 
@@ -1302,9 +1308,9 @@
       squadSizeCombx.DropDownStyle = ComboBoxStyle.DropDownList;
       squadSizeCombx.FlatStyle = FlatStyle.Flat;
       squadSizeCombx.FormattingEnabled = true;
-      squadSizeCombx.Location = new Point(66, 91);
+      squadSizeCombx.Location = new Point(67, 91);
       squadSizeCombx.Name = "squadSizeCombx";
-      squadSizeCombx.Size = new Size(57, 22);
+      squadSizeCombx.Size = new Size(57, 21);
       squadSizeCombx.TabIndex = 29;
       squadSizeCombx.SelectedValueChanged += squadSizeCombx_ValueChanged;
       // 
@@ -1313,9 +1319,9 @@
       minLvlLabel.Anchor = AnchorStyles.Top;
       minLvlLabel.AutoSize = true;
       minLvlLabel.FlatStyle = FlatStyle.Flat;
-      minLvlLabel.Location = new Point(130, 88);
+      minLvlLabel.Location = new Point(136, 88);
       minLvlLabel.Name = "minLvlLabel";
-      minLvlLabel.Size = new Size(54, 28);
+      minLvlLabel.Size = new Size(47, 26);
       minLvlLabel.TabIndex = 22;
       minLvlLabel.Text = "Minimum level:";
       minLvlLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -1325,9 +1331,9 @@
       label1.Anchor = AnchorStyles.Top;
       label1.AutoSize = true;
       label1.FlatStyle = FlatStyle.Flat;
-      label1.Location = new Point(11, 88);
+      label1.Location = new Point(13, 88);
       label1.Name = "label1";
-      label1.Size = new Size(41, 28);
+      label1.Size = new Size(37, 26);
       label1.TabIndex = 26;
       label1.Text = "Squad size:";
       label1.TextAlign = ContentAlignment.MiddleRight;
